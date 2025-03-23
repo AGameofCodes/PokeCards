@@ -1,0 +1,36 @@
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins/breakpoints';
+
+@include media-breakpoint-down(sm) {
+  .mobile-hidden-sm {
+    display: none;
+  }
+}
+@include media-breakpoint-up(sm) {
+  .mobile-show-sm {
+    display: none;
+  }
+}
+
+@include media-breakpoint-down(md) {
+  .mobile-hidden-md {
+    display: none;
+  }
+}
+@include media-breakpoint-up(md) {
+  .mobile-show-md {
+    display: none;
+  }
+}
+
+@include media-breakpoint-down(lg) {
+  .mobile-hidden-lg {
+    display: none;
+  }
+}
+@include media-breakpoint-up(lg) {
+  .mobile-show-lg {
+    display: none;
+  }
+}

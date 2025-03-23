@@ -1,0 +1,16 @@
+{
+  "entryFile": "src/main.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": [
+    "src/controllers/**/*Controller.ts"
+  ],
+  "spec": {
+    "name": "pokecards-api",
+    "outputDirectory": "..",
+    "specVersion": 3
+  },
+  "routes": {
+    "routesDir": "src/tsoa.gen",
+    "iocModule": "src/ioc.ts"
+  }
+}

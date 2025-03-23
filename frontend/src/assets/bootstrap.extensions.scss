@@ -1,0 +1,12 @@
+@use 'sass:map';
+@import '~bootstrap/scss/bootstrap';
+@import '~bootstrap/scss/variables';
+@import '~bootstrap/scss/mixins';
+
+.c-pointer {
+  cursor: pointer;
+}
+
+* > .form-group {
+  margin-bottom: map-get($spacers, 3);
+}

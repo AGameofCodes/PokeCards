@@ -1,0 +1,126 @@
+{{>licenseInfo}}
+{{#models}}
+{{#model}}
+{{#tsImports}}
+import { {{classname}} } from '{{filename}}{{extensionForDeno}}';
+{{/tsImports}}
+import { HttpFile } from '../http/http{{extensionForDeno}}';
+
+{{#description}}
+/**
+* {{{.}}}
+*/
+{{/description}}
+{{^isEnum}}
+export interface I{{classname}} {{#parent}}extends I{{{.}}} {{/parent}}{
+{{#vars}}
+{{#description}}
+    /**
+    * {{{.}}}
+    */
+{{/description}}
+    '{{name}}'?: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}};
+{{/vars}}
+}
+
+export class {{classname}} {{#parent}}extends {{{.}}} {{/parent}}implements I{{classname}} {
+{{#vars}}
+{{#description}}
+    /**
+    * {{{.}}}
+    */
+{{/description}}
+    '{{name}}'{{#required}}!{{/required}}{{^required}}?{{/required}}: {{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}};
+{{/vars}}
+
+    {{#discriminator}}
+    static readonly discriminator: string | undefined = "{{discriminatorName}}";
+    {{/discriminator}}
+    {{^discriminator}}
+    static readonly discriminator: string | undefined = undefined;
+    {{/discriminator}}
+
+    {{^isArray}}
+    static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string, required?: boolean, minLength?: number, maxLength?: number, min?: number, max?: number, pattern?: RegExp}> = [
+        {{#vars}}
+        {
+            "name": "{{name}}",
+            "baseName": "{{baseName}}",
+            "type": "{{#isEnum}}{{{datatypeWithEnum}}}{{/isEnum}}{{^isEnum}}{{{dataType}}}{{/isEnum}}",
+            "format": "{{dataFormat}}"
+            {{#required}},"required": {{required}}{{/required}}
+            {{#minLength}},"minLength": {{minLength}}{{/minLength}}
+            {{#maxLength}},"maxLength": {{maxLength}}{{/maxLength}}
+            {{#min}},"min": {{min}}{{/min}}
+            {{#max}},"max": {{max}}{{/max}}
+            {{#pattern}},"pattern": {{pattern}}{{/pattern}}
+        }{{^-last}},
+        {{/-last}}
+        {{/vars}}
+    ];
+
+    static getAttributeTypeMap() {
+        {{#parent}}
+        return super.getAttributeTypeMap().concat({{classname}}.attributeTypeMap);
+        {{/parent}}
+        {{^parent}}
+        return {{classname}}.attributeTypeMap;
+        {{/parent}}
+    }
+    {{/isArray}}
+
+    public constructor(json?: I{{classname}} | any) {
+        {{#parent}}
+        super();
+        {{/parent}}
+        {{#allVars}}
+        {{#discriminatorValue}}
+        this.{{name}} = "{{discriminatorValue}}";
+        {{/discriminatorValue}}
+        {{/allVars}}
+        {{#discriminatorName}}
+        this.{{discriminatorName}} = "{{classname}}";
+        {{/discriminatorName}}
+        this.init(json);
+    }
+
+    {{^isArray}}
+    static fromJson(json?: I{{classname}} | any): {{classname}} {
+        return new {{classname}}().init(json);
+    }
+
+    init(json?: I{{classname}} | any): this {
+        {{#parent}}
+        super.init(json);
+        {{/parent}}
+        {{#vars}}
+        this['{{name}}'] = {{#isDateTime}}(json && (['number', 'string'].includes(typeof json['{{name}}']) || json['{{name}}'] instanceof Date)) ? new Date(json['{{name}}'] as any){{/isDateTime}}{{^isDateTime}}json ? {{#isModel}}{{dataType}}.fromJson(json['{{name}}']){{/isModel}}{{^isModel}}json['{{name}}']{{/isModel}}{{/isDateTime}} : {{defaultValue}} as any;
+        {{/vars}}
+        return this;
+    }
+
+    toJson(): any {
+        const ret: any = {};
+        {{#vars}}
+        ret['{{name}}'] = {{#isDateTime}}this.{{name}} instanceof Date ? this.{{name}}.toISOString() : this.{{name}}{{/isDateTime}}{{^isDateTime}}this['{{name}}']{{#isModel}}?.toJson(){{/isModel}}{{/isDateTime}};
+        {{/vars}}
+        return ret;
+    }
+    {{/isArray}}
+}
+
+{{#hasEnums}}
+
+{{#vars}}
+{{#isEnum}}
+export type {{classname}}{{enumName}} ={{#allowableValues}}{{#values}} "{{.}}" {{^-last}}|{{/-last}}{{/values}}{{/allowableValues}};
+{{/isEnum}}
+{{/vars}}
+
+{{/hasEnums}}
+{{/isEnum}}
+{{#isEnum}}
+export type {{classname}} ={{#allowableValues}}{{#values}} "{{.}}" {{^-last}}|{{/-last}}{{/values}}{{/allowableValues}};
+{{/isEnum}}
+{{/model}}
+{{/models}}

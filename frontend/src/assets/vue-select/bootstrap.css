@@ -1,0 +1,29 @@
+.v-select,
+.vs__dropdown-menu {
+  --controls-alpha: 0.5;
+
+  --vs-controls-color: var(--bs-body-color);
+  --vs-border-color: var(--bs-border-color);
+
+  --vs-dropdown-bg: var(--bs-body-bg);
+  --vs-dropdown-color: var(--bs-body-color);
+  --vs-dropdown-option-color: var(--bs-body-color);
+
+  --vs-selected-bg: var(--bs-body-bg);
+  --vs-selected-color: var(--bs-body-color);
+
+  --vs-search-input-bg: var(--bs-body-bg);
+  --vs-search-input-color: var(--bs-body-color);
+
+  --vs-dropdown-option--active-bg: var(--bs-primary);
+  --vs-dropdown-option--active-color: var(--bs-body-bg);
+}
+
+.v-select .vs__clear svg {
+  fill-opacity: var(--controls-alpha);
+}
+
+.v-select .vs__open-indicator {
+  cursor: pointer;
+  fill-opacity: var(--controls-alpha);
+}

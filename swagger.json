@@ -1,0 +1,800 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"UUID": {
+				"type": "string",
+				"format": "uuid",
+				"pattern": "[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{4}-[0-9A-Fa-f]{12}"
+			},
+			"UserSessionInfoVmV1": {
+				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserInfoVmV1": {
+				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"createdBy": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedBy": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 32
+					},
+					"email": {
+						"type": "string",
+						"format": "email",
+						"maxLength": 255
+					},
+					"displayName": {
+						"type": "string",
+						"maxLength": 255
+					}
+				},
+				"required": [
+					"id",
+					"createdAt",
+					"createdBy",
+					"updatedAt",
+					"updatedBy",
+					"name",
+					"displayName"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdatePasswordRequestV1": {
+				"properties": {
+					"userId": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"password": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"userId",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CardVmV1": {
+				"properties": {
+					"id": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"createdBy": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedBy": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"description": {
+						"type": "string",
+						"maxLength": 32767
+					},
+					"unit": {
+						"type": "string",
+						"maxLength": 32
+					},
+					"color": {
+						"type": "string",
+						"maxLength": 32
+					},
+					"minReference": {
+						"type": "number",
+						"format": "double"
+					},
+					"maxReference": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"createdAt",
+					"createdBy",
+					"updatedAt",
+					"updatedBy",
+					"name",
+					"description",
+					"unit",
+					"color",
+					"minReference",
+					"maxReference"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RegisterResponseVmV1": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserInfoVmV1"
+					},
+					"session": {
+						"$ref": "#/components/schemas/UserSessionInfoVmV1"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RegisterRequestVmV1": {
+				"properties": {
+					"username": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 32
+					},
+					"password": {
+						"type": "string",
+						"maxLength": 255
+					}
+				},
+				"required": [
+					"username",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginResponseVmV1": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserInfoVmV1"
+					},
+					"session": {
+						"$ref": "#/components/schemas/UserSessionInfoVmV1"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LoginRequestVmV1": {
+				"properties": {
+					"username": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 32
+					},
+					"password": {
+						"type": "string",
+						"maxLength": 255
+					}
+				},
+				"required": [
+					"username",
+					"password"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"VerifyResponseVmV1": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserInfoVmV1"
+					},
+					"session": {
+						"$ref": "#/components/schemas/UserSessionInfoVmV1"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LogoutResponseVmV1": {
+				"properties": {
+					"success": {
+						"type": "boolean"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "pokecards-api",
+		"version": "1.0.0",
+		"contact": {}
+	},
+	"paths": {
+		"/api/v1/usersessions": {
+			"get": {
+				"operationId": "List",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/UserSessionInfoVmV1"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"usersessions"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/v1/usersessions/{id}": {
+			"delete": {
+				"operationId": "Remove",
+				"responses": {
+					"204": {
+						"description": "Deleted"
+					},
+					"401": {
+						"description": "Unauthorized"
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"usersessions"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/users": {
+			"get": {
+				"operationId": "List",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/UserInfoVmV1"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"users"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Add",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserInfoVmV1"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Forbidden"
+					},
+					"409": {
+						"description": "Conflict"
+					}
+				},
+				"tags": [
+					"users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserInfoVmV1"
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserInfoVmV1"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"409": {
+						"description": "Conflict"
+					}
+				},
+				"tags": [
+					"users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserInfoVmV1"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/users/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserInfoVmV1"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "Remove",
+				"responses": {
+					"204": {
+						"description": "Deleted"
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/users/password": {
+			"put": {
+				"operationId": "UpdatePassword",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserInfoVmV1"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdatePasswordRequestV1"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/cards": {
+			"get": {
+				"operationId": "List",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/CardVmV1"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"cards"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Add",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CardVmV1"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "Conflict"
+					}
+				},
+				"tags": [
+					"cards"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CardVmV1"
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CardVmV1"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					},
+					"409": {
+						"description": "Conflict"
+					}
+				},
+				"tags": [
+					"cards"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CardVmV1"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/cards/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CardVmV1"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"cards"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "Remove",
+				"responses": {
+					"204": {
+						"description": "Deleted"
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"cards"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/auth/register": {
+			"post": {
+				"operationId": "Register",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RegisterResponseVmV1"
+								}
+							}
+						}
+					},
+					"403": {
+						"description": "Forbidden"
+					},
+					"409": {
+						"description": "Conflict"
+					}
+				},
+				"tags": [
+					"auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RegisterRequestVmV1"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/auth/login": {
+			"post": {
+				"operationId": "Login",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LoginResponseVmV1"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized"
+					}
+				},
+				"tags": [
+					"auth"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LoginRequestVmV1"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/auth/verify": {
+			"post": {
+				"operationId": "Verify",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/VerifyResponseVmV1"
+								}
+							}
+						}
+					},
+					"401": {
+						"description": "Unauthorized"
+					}
+				},
+				"tags": [
+					"auth"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/v1/auth/logout": {
+			"post": {
+				"operationId": "Logout",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LogoutResponseVmV1"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"auth"
+				],
+				"security": [],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}
