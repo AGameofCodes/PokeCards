@@ -105,10 +105,8 @@
 					"updatedBy": {
 						"$ref": "#/components/schemas/UUID"
 					},
-					"cardId": {
-						"type": "string",
-						"minLength": 1,
-						"maxLength": 255
+					"cardUid": {
+						"$ref": "#/components/schemas/UUID"
 					}
 				},
 				"required": [
@@ -117,111 +115,16 @@
 					"createdBy",
 					"updatedAt",
 					"updatedBy",
-					"cardId"
+					"cardUid"
 				],
 				"type": "object",
 				"additionalProperties": false
 			},
-			"CardMarket": {
-				"properties": {
-					"prices": {
-						"properties": {
-							"reverseHoloAvg30": {
-								"type": "number",
-								"format": "double"
-							},
-							"reverseHoloAvg7": {
-								"type": "number",
-								"format": "double"
-							},
-							"reverseHoloAvg1": {
-								"type": "number",
-								"format": "double"
-							},
-							"avg30": {
-								"type": "number",
-								"format": "double"
-							},
-							"avg7": {
-								"type": "number",
-								"format": "double"
-							},
-							"avg1": {
-								"type": "number",
-								"format": "double"
-							},
-							"lowPriceExPlus": {
-								"type": "number",
-								"format": "double"
-							},
-							"reverseHoloTrend": {
-								"type": "number",
-								"format": "double"
-							},
-							"reverseHoloLow": {
-								"type": "number",
-								"format": "double"
-							},
-							"reverseHoloSell": {
-								"type": "number",
-								"format": "double"
-							},
-							"suggestedPrice": {
-								"type": "number",
-								"format": "double"
-							},
-							"germanProLow": {
-								"type": "number",
-								"format": "double"
-							},
-							"trendPrice": {
-								"type": "number",
-								"format": "double"
-							},
-							"lowPrice": {
-								"type": "number",
-								"format": "double"
-							},
-							"averageSellPrice": {
-								"type": "number",
-								"format": "double"
-							}
-						},
-						"required": [
-							"reverseHoloAvg30",
-							"reverseHoloAvg7",
-							"reverseHoloAvg1",
-							"avg30",
-							"avg7",
-							"avg1",
-							"lowPriceExPlus",
-							"reverseHoloTrend",
-							"reverseHoloLow",
-							"reverseHoloSell",
-							"suggestedPrice",
-							"germanProLow",
-							"trendPrice",
-							"lowPrice",
-							"averageSellPrice"
-						],
-						"type": "object"
-					},
-					"updatedAt": {
-						"type": "string"
-					},
-					"url": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"prices",
-					"updatedAt",
-					"url"
-				],
-				"type": "object"
-			},
 			"CardVmV1": {
 				"properties": {
+					"uid": {
+						"$ref": "#/components/schemas/UUID"
+					},
 					"id": {
 						"type": "string",
 						"minLength": 1,
@@ -242,38 +145,25 @@
 						"minLength": 1,
 						"maxLength": 255
 					},
-					"rarity": {
+					"image": {
 						"type": "string",
 						"minLength": 1,
 						"maxLength": 255
 					},
-					"images": {
-						"properties": {
-							"large": {
-								"type": "string"
-							},
-							"small": {
-								"type": "string"
-							}
-						},
-						"required": [
-							"large",
-							"small"
-						],
-						"type": "object"
-					},
-					"cardmarket": {
-						"$ref": "#/components/schemas/CardMarket"
+					"language": {
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 15
 					}
 				},
 				"required": [
+					"uid",
 					"id",
 					"name",
 					"setId",
 					"number",
-					"rarity",
-					"images",
-					"cardmarket"
+					"image",
+					"language"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -294,12 +184,18 @@
 						"type": "string",
 						"minLength": 1,
 						"maxLength": 255
+					},
+					"language": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 15
 					}
 				},
 				"required": [
 					"id",
 					"name",
-					"image"
+					"image",
+					"language"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -884,9 +780,9 @@
 				]
 			}
 		},
-		"/api/v1/cards/{id}": {
+		"/api/v1/cards/{uid}": {
 			"get": {
-				"operationId": "GetById",
+				"operationId": "GetByUid",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -907,6 +803,48 @@
 				],
 				"security": [],
 				"parameters": [
+					{
+						"in": "path",
+						"name": "uid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/cards/{language}/{id}": {
+			"get": {
+				"operationId": "GetByLanguageAndId",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/CardVmV1"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"cards"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "language",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
 					{
 						"in": "path",
 						"name": "id",

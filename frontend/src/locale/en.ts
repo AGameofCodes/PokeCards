@@ -53,6 +53,20 @@ export const messagesEn = {
     settings: 'Settings',
     currentlyNoSettings: 'Currently there are no settings.',
   },
+  userCard: {
+    add: {
+      modal: {
+        title: 'Track card',
+        addUserCard: 'Track',
+      },
+    },
+    model: {
+      id: 'Id',
+      name: 'Name',
+      number: 'Number',
+      language: 'Language',
+    }
+  },
   userinfo: {
     model: {
       displayName: 'Display name',

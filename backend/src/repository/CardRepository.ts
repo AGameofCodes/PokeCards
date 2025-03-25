@@ -1,25 +1,29 @@
 import Card from '../models/db/Card';
 import type {TransactionOrKnex} from 'objection';
-import {UUID} from 'node:crypto';
+import {UUID} from '../models/api/uuid';
 
 export default class CardRepository {
-  async getAll(createdBy: UUID, trx?: TransactionOrKnex): Promise<Card[]> {
-    return Card.query(trx).where('createdBy', createdBy);
+  async getAll(trx?: TransactionOrKnex): Promise<Card[]> {
+    return Card.query(trx);
   }
 
-  async getById(id: UUID, createdBy: UUID, trx?: TransactionOrKnex): Promise<Card | undefined> {
-    return Card.query(trx).where('createdBy', createdBy).findById(id);
+  async getByUid(uid: UUID, trx?: TransactionOrKnex): Promise<Card | undefined> {
+    return Card.query(trx).findById(uid);
   }
 
-  async add(label: Card, trx?: TransactionOrKnex): Promise<Card> {
-    return Card.query(trx).insert(label);
+  async getByLanguageAndId(language: string, id: string, trx?: TransactionOrKnex): Promise<Card | undefined> {
+    return Card.query(trx).where('language', language).where('id', id).first();
   }
 
-  async update(label: Card, trx?: TransactionOrKnex): Promise<boolean> {
-    return await Card.query(trx).findById(label.id).update(label) === 1;
+  async add(card: Card, trx?: TransactionOrKnex): Promise<Card> {
+    return Card.query(trx).insert(card);
   }
 
-  async remove(id: UUID, createdBy: UUID, trx?: TransactionOrKnex): Promise<boolean> {
-    return await Card.query(trx).where('createdBy', createdBy).findById(id).delete() === 1;
+  async update(card: Card, trx?: TransactionOrKnex): Promise<boolean> {
+    return await Card.query(trx).findById(card.id).update(card) === 1;
+  }
+
+  async remove(id: string, trx?: TransactionOrKnex): Promise<boolean> {
+    return await Card.query(trx).findById(id).delete() === 1;
   }
 }

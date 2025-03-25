@@ -1,48 +1,80 @@
-import BaseModelCreatedUpdated from '../../models/db/BaseModelCreatedUpdated';
-import {mergeDeep} from '../../util/merge';
-import type {JSONSchema} from 'objection';
+import type {JSONSchema, ModelOptions, Pojo, StaticHookArguments} from 'objection';
 import {UUID} from 'node:crypto';
+import BaseModel from './BaseModel';
 
-export default class Card extends BaseModelCreatedUpdated {
-  name!: string; //min 1, max length 255, unique with createdBy
-  description!: string; //max length 32767
-  unit!: string; //max length 32
-  color!: string; //max length 32
-  minReference!: number;
-  maxReference!: number;
+export default class Card extends BaseModel {
+  uid!: UUID;
+  id!: string; //min 1, max length 255
+  name!: string; //min 1, max length 255
+  setId!: string; //min 1, max length 255
+  number!: string; //min 1, max length 255
+  image!: string; //min 1, max length 255
+  language!: string; //min 2, max length 15
+  updatedAt!: Date;
 
-  static new(id: UUID, name: string, description: string, unit: string, color: string,
-             minReference: number, maxReference: number, createdBy: UUID): Card {
+  static new(uid: UUID, id: string, name: string, setId: string, number: string, image: string, language: string): Card {
     const ret = new Card();
+    ret.uid = uid;
     ret.id = id;
     ret.name = name;
-    ret.description = description;
-    ret.unit = unit;
-    ret.color = color;
-    ret.minReference = minReference;
-    ret.maxReference = maxReference;
-    ret.createdBy = createdBy;
-    ret.updatedBy = createdBy;
+    ret.setId = setId;
+    ret.number = number;
+    ret.image = image;
+    ret.language = language;
+    ret.updatedAt = new Date();
     return ret;
   }
 
   static override get tableName(): string {
-    return 'labels';
+    return 'cards';
   }
 
   static override get jsonSchemaWithReferences(): JSONSchema {
-    return mergeDeep({}, super.jsonSchemaWithReferences, {
-      $id: 'Label',
-      required: ['name', 'description', 'unit', 'color', 'minReference', 'maxReference'],
+    return {
+      $id: 'Card',
+      type: 'object',
+      required: ['uid', 'id', 'name', 'setId', 'number', 'image', 'language', 'updatedAt'],
 
       properties: {
+        uid: {type: 'string', format: 'uuid'},
+        id: {type: 'string', minLength: 1, maxLength: 255}, //max length 255
         name: {type: 'string', minLength: 1, maxLength: 255}, //max length 255
-        description: {type: 'string', maxLength: 32767}, //max length 32767
-        unit: {type: 'string', maxLength: 32}, //max length 32
-        color: {type: 'string', maxLength: 32}, //max length 32
-        minReference: {type: 'number'},
-        maxReference: {type: 'number'},
+        setId: {type: 'string', minLength: 1, maxLength: 255}, //max length 255
+        number: {type: 'string', minLength: 1, maxLength: 255}, //max length 255
+        image: {type: 'string', minLength: 1, maxLength: 255}, //max length 255
+        language: {type: 'string', minLength: 2, maxLength: 15}, //max length 255
+        updatedAt: {type: 'string', format: 'date-time'},
       },
+    };
+  }
+
+  override $beforeInsert(): void {
+    this.updatedAt = new Date();
+  }
+
+  override $beforeUpdate(): void {
+    this.updatedAt = new Date();
+  }
+
+  static override afterFind(args: StaticHookArguments<Card>): void {
+    args.result.forEach((card: Card) => {
+      card.updatedAt = card.updatedAt && new Date(card.updatedAt);
     });
+  }
+
+  override $beforeValidate(jsonSchema: JSONSchema, json: Pojo, opt: ModelOptions): JSONSchema {
+    if (['number', 'object'].includes(typeof json.updatedAt)) {
+      json.updatedAt = json.updatedAt && new Date(json.updatedAt).toISOString() as any;
+    }
+    return super.$beforeValidate(jsonSchema, json, opt);
+  }
+
+  override $set(obj: Pojo): this {
+    super.$set(obj);
+
+    if (['number', 'string'].includes(typeof obj.updatedAt)) {
+      this.updatedAt = new Date(obj.updatedAt);
+    }
+    return this;
   }
 }

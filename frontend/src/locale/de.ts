@@ -50,6 +50,20 @@ export const messagesDe = {
     settings: 'Einstellungen',
     currentlyNoSettings: 'Aktuell gibt es keine Einstellungen.',
   },
+  userCard: {
+    add: {
+      modal: {
+        title: 'Karte tracken',
+        addUserCard: 'Tracken',
+      },
+    },
+    model: {
+      id: 'Id',
+      name: 'Name',
+      number: 'Nummer',
+      language: 'Sprache',
+    }
+  },
   userinfo: {
     model: {
       displayName: 'Anzeigename',

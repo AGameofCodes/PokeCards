@@ -6,6 +6,7 @@ import {
   CardsApi,
   RequestContext,
   UsersApi,
+  UserCardsApi,
 } from 'pokecards-oas';
 
 @Store({
@@ -24,6 +25,7 @@ export class ApiStore extends Pinia {
   //api
   private readonly _authApi = new AuthApi(this._config);
   private readonly _cardApi = new CardsApi(this._config);
+  private readonly _userCardApi = new UserCardsApi(this._config);
   private readonly _userApi = new UsersApi(this._config);
 
   get authApi(): AuthApi {
@@ -36,5 +38,9 @@ export class ApiStore extends Pinia {
 
   get userApi(): UsersApi {
     return this._userApi;
+  }
+
+  get userCardApi(): UserCardsApi {
+    return this._userCardApi;
   }
 }

@@ -4,9 +4,12 @@ import {CardsStore} from '@/stores/CardsStore';
 import {ApiStore} from '@/stores/ApiStore';
 import 'vue3-colorpicker/style.css';
 import Spinner from '@/components/Spinner.vue';
+import UserCardAddModal from '@/components/search/UserCardAddModal.vue';
+import {CardBriefVmV1} from 'pokecards-oas';
 
 @Component({
   components: {
+    UserCardAddModal,
     Spinner,
   },
   directives: {},
@@ -30,8 +33,9 @@ export default class CardSearch extends Vue {
     }
   }
 
-  openCard(card: CardBriefVmV1): void {
-
+  async openCard(cardBrief: CardBriefVmV1): Promise<void> {
+    const card = await this.api.cardApi.getByLanguageAndId(cardBrief.language, cardBrief.id);
+    await (this.$refs.addModal as UserCardAddModal).open(card);
   }
 }
 </script>
@@ -46,7 +50,7 @@ export default class CardSearch extends Vue {
            :key="card.id"
            class="col-3 col-lg-3 col-md-4 col-sm-6 pe-1 pb-1">
         <div class="card c-pointer" @click="openCard(card)">
-          <img :src="card.image + '/low.png'" class="card-img-top" alt="card img">
+          <img :src="card.image + '/low.webp'" class="card-img-top" alt="card img">
           <div class="card-body">
             <h5 class="card-title">{{ card.name }}</h5>
             Id: {{ card.id }}
@@ -54,6 +58,7 @@ export default class CardSearch extends Vue {
         </div>
       </div>
     </div>
+    <UserCardAddModal ref="addModal"/>
   </div>
 </template>
 
