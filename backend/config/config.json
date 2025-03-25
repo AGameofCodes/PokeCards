@@ -20,8 +20,7 @@
       },
       "rolling": true,
       "proxy": false
-    },
-    "pokemontcg-api-key": "<insert api key here>"
+    }
   },
   "database": {
     "use": "sqlite",
