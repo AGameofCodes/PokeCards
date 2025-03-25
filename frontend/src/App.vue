@@ -26,7 +26,7 @@ export default class App extends Vue {
   <DocumentLocaleSetter/>
   <div class="h-100 w-100 overflow-hidden">
     <div class="h-100 w-100 d-flex flex-row">
-      <SideBar ref="sidebar" class="overflow-hidden" style="height: 100vh" :toggled="sidebarToggled"
+      <SideBar ref="sidebar" class="overflow-hidden flex-shrink-0" style="height: 100vh" :toggled="sidebarToggled"
                @close="sidebarToggled=false"/>
       <div class="flex-grow-1 overflow-hidden">
         <div class="d-flex flex-column w-100 h-100">
