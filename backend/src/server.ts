@@ -8,7 +8,6 @@ import ConfigWatcher from './config/configwatcher';
 import {isDevEnv} from './util/env';
 import type http from 'http';
 import path from 'path';
-// import {fileURLToPath} from 'url';
 import {apiErrorHandler} from './middleware/apierror';
 import {errorLogHandler} from './middleware/errorlog';
 import DbStore from './session/store';
@@ -18,8 +17,6 @@ import {seedDb} from './DbSeed';
 import {uncaughtErrorHandler} from './middleware/UncaughtErrorHandler';
 import compression from 'compression';
 import {iocContainer} from './ioc';
-
-// const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export default class Server {
   // @ts-ignore TS6133
