@@ -3,25 +3,29 @@ import {UniqueViolationError} from 'db-errors';
 import {randomUUID} from 'crypto';
 import CardRepository from '../../../repository/CardRepository';
 import Card from '../../../models/db/Card';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Middlewares,
-  Path,
-  Post,
-  Put,
-  Request,
-  Response,
-  Route,
-  SuccessResponse,
-  Tags,
-} from 'tsoa';
+import {Controller, Get, Middlewares, Path, Query, Request, Response, Route, SuccessResponse, Tags} from 'tsoa';
 import {isAuthenticatedMiddleware} from '../../../middleware/auth';
 import {UUID} from '../../../models/api/uuid';
 import ApiBaseModelCreatedUpdated from '../../../models/api/ApiBaseModelCreatedUpdated';
 import {UUID as nodeUUID} from 'node:crypto';
+
+interface CardBriefVmV1 {
+  /**
+   * @minLength 1
+   * @maxLength 255
+   */
+  id: string;
+  /**
+   * @minLength 1
+   * @maxLength 255
+   */
+  name: string;
+  /**
+   * @minLength 1
+   * @maxLength 255
+   */
+  image: string;
+}
 
 interface CardVmV1 extends ApiBaseModelCreatedUpdated {
   /**
@@ -55,6 +59,20 @@ export class CardController extends Controller {
   @SuccessResponse(200, 'Ok')
   async list(@Request() req: Req): Promise<CardVmV1[]> {
     return this.repo.getAll(req.session.user!.id);
+  }
+
+  @Get('search')
+  @SuccessResponse(200, 'Ok')
+  async search(@Query('q') searchText: string, @Request() req: Req): Promise<CardBriefVmV1[]> {
+    const byId: CardBriefVmV1[] = await fetch('https://api.tcgdex.net/v2/en/cards?id=like:' + searchText).then(res => res.json());
+    const byName: CardBriefVmV1[] = await fetch('https://api.tcgdex.net/v2/en/cards?name=like:' + searchText).then(res => res.json());
+    const cards = [...byId];
+    for (const card of byName) {
+      if (!cards.find(e => e.id === card.id)) {
+        cards.push(card);
+      }
+    }
+    return cards;
   }
 
   @Get('{id}')

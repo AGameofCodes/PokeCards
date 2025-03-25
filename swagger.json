@@ -86,7 +86,7 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"CardVmV1": {
+			"UserCardVmV1": {
 				"properties": {
 					"id": {
 						"$ref": "#/components/schemas/UUID"
@@ -105,30 +105,10 @@
 					"updatedBy": {
 						"$ref": "#/components/schemas/UUID"
 					},
-					"name": {
+					"cardId": {
 						"type": "string",
 						"minLength": 1,
 						"maxLength": 255
-					},
-					"description": {
-						"type": "string",
-						"maxLength": 32767
-					},
-					"unit": {
-						"type": "string",
-						"maxLength": 32
-					},
-					"color": {
-						"type": "string",
-						"maxLength": 32
-					},
-					"minReference": {
-						"type": "number",
-						"format": "double"
-					},
-					"maxReference": {
-						"type": "number",
-						"format": "double"
 					}
 				},
 				"required": [
@@ -137,12 +117,189 @@
 					"createdBy",
 					"updatedAt",
 					"updatedBy",
+					"cardId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CardMarket": {
+				"properties": {
+					"prices": {
+						"properties": {
+							"reverseHoloAvg30": {
+								"type": "number",
+								"format": "double"
+							},
+							"reverseHoloAvg7": {
+								"type": "number",
+								"format": "double"
+							},
+							"reverseHoloAvg1": {
+								"type": "number",
+								"format": "double"
+							},
+							"avg30": {
+								"type": "number",
+								"format": "double"
+							},
+							"avg7": {
+								"type": "number",
+								"format": "double"
+							},
+							"avg1": {
+								"type": "number",
+								"format": "double"
+							},
+							"lowPriceExPlus": {
+								"type": "number",
+								"format": "double"
+							},
+							"reverseHoloTrend": {
+								"type": "number",
+								"format": "double"
+							},
+							"reverseHoloLow": {
+								"type": "number",
+								"format": "double"
+							},
+							"reverseHoloSell": {
+								"type": "number",
+								"format": "double"
+							},
+							"suggestedPrice": {
+								"type": "number",
+								"format": "double"
+							},
+							"germanProLow": {
+								"type": "number",
+								"format": "double"
+							},
+							"trendPrice": {
+								"type": "number",
+								"format": "double"
+							},
+							"lowPrice": {
+								"type": "number",
+								"format": "double"
+							},
+							"averageSellPrice": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"required": [
+							"reverseHoloAvg30",
+							"reverseHoloAvg7",
+							"reverseHoloAvg1",
+							"avg30",
+							"avg7",
+							"avg1",
+							"lowPriceExPlus",
+							"reverseHoloTrend",
+							"reverseHoloLow",
+							"reverseHoloSell",
+							"suggestedPrice",
+							"germanProLow",
+							"trendPrice",
+							"lowPrice",
+							"averageSellPrice"
+						],
+						"type": "object"
+					},
+					"updatedAt": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"prices",
+					"updatedAt",
+					"url"
+				],
+				"type": "object"
+			},
+			"CardVmV1": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"setId": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"number": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"rarity": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"images": {
+						"properties": {
+							"large": {
+								"type": "string"
+							},
+							"small": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"large",
+							"small"
+						],
+						"type": "object"
+					},
+					"cardmarket": {
+						"$ref": "#/components/schemas/CardMarket"
+					}
+				},
+				"required": [
+					"id",
 					"name",
-					"description",
-					"unit",
-					"color",
-					"minReference",
-					"maxReference"
+					"setId",
+					"number",
+					"rarity",
+					"images",
+					"cardmarket"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CardBriefVmV1": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"image": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"image"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -518,6 +675,156 @@
 				}
 			}
 		},
+		"/api/v1/usercards": {
+			"get": {
+				"operationId": "List",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/UserCardVmV1"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"userCards"
+				],
+				"security": [],
+				"parameters": []
+			},
+			"post": {
+				"operationId": "Add",
+				"responses": {
+					"201": {
+						"description": "Created",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserCardVmV1"
+								}
+							}
+						}
+					},
+					"409": {
+						"description": "Conflict"
+					}
+				},
+				"tags": [
+					"userCards"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserCardVmV1"
+							}
+						}
+					}
+				}
+			},
+			"put": {
+				"operationId": "Update",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserCardVmV1"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"userCards"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UserCardVmV1"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v1/usercards/{id}": {
+			"get": {
+				"operationId": "GetById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserCardVmV1"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"userCards"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			},
+			"delete": {
+				"operationId": "Remove",
+				"responses": {
+					"204": {
+						"description": "Deleted"
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"userCards"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
 		"/api/v1/cards": {
 			"get": {
 				"operationId": "List",
@@ -541,75 +848,40 @@
 				],
 				"security": [],
 				"parameters": []
-			},
-			"post": {
-				"operationId": "Add",
-				"responses": {
-					"201": {
-						"description": "Created",
-						"content": {
-							"application/json": {
-								"schema": {
-									"$ref": "#/components/schemas/CardVmV1"
-								}
-							}
-						}
-					},
-					"409": {
-						"description": "Conflict"
-					}
-				},
-				"tags": [
-					"cards"
-				],
-				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/CardVmV1"
-							}
-						}
-					}
-				}
-			},
-			"put": {
-				"operationId": "Update",
+			}
+		},
+		"/api/v1/cards/search": {
+			"get": {
+				"operationId": "Search",
 				"responses": {
 					"200": {
 						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/CardVmV1"
+									"items": {
+										"$ref": "#/components/schemas/CardBriefVmV1"
+									},
+									"type": "array"
 								}
 							}
 						}
-					},
-					"404": {
-						"description": "Not Found"
-					},
-					"409": {
-						"description": "Conflict"
 					}
 				},
 				"tags": [
 					"cards"
 				],
 				"security": [],
-				"parameters": [],
-				"requestBody": {
-					"required": true,
-					"content": {
-						"application/json": {
-							"schema": {
-								"$ref": "#/components/schemas/CardVmV1"
-							}
+				"parameters": [
+					{
+						"in": "query",
+						"name": "q",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
-				}
+				]
 			}
 		},
 		"/api/v1/cards/{id}": {
@@ -640,32 +912,7 @@
 						"name": "id",
 						"required": true,
 						"schema": {
-							"$ref": "#/components/schemas/UUID"
-						}
-					}
-				]
-			},
-			"delete": {
-				"operationId": "Remove",
-				"responses": {
-					"204": {
-						"description": "Deleted"
-					},
-					"404": {
-						"description": "Not Found"
-					}
-				},
-				"tags": [
-					"cards"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"in": "path",
-						"name": "id",
-						"required": true,
-						"schema": {
-							"$ref": "#/components/schemas/UUID"
+							"type": "string"
 						}
 					}
 				]
