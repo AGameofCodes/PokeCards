@@ -10,6 +10,7 @@ import useEmitter from '@/composables/emitter';
 import {nextTick} from 'vue';
 import ProfileView from '@/views/ProfileView.vue';
 import SettingsView from '@/views/SettingsView.vue';
+import LabelsView from '@/views/LabelsView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,6 +36,11 @@ const router = createRouter({
       path: '/cards',
       name: 'cards',
       component: CardsView,
+    },
+    {
+      path: '/labels',
+      name: 'labels',
+      component: LabelsView,
     },
     {
       path: '/userCards',

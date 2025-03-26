@@ -37,10 +37,37 @@ export const messagesDe = {
     saving: 'Wird gespeichert ...',
     search: 'Suche',
   },
+  label: {
+    create: {
+      button: 'Erstellen',
+      modalTitle: 'Label erstellen',
+    },
+    edit: {
+      button: 'Speichern',
+      modalTitle: 'Label bearbeiten',
+    },
+    delete: {
+      reallyDelete: 'Dieses Label wirklich löschen?',
+    },
+    list: {
+      actions: 'Aktionen',
+    },
+    model: {
+      color: 'Farbe',
+      enumValues: 'Werte',
+      name: 'Name',
+      type: 'Typ',
+      typeOptions: {
+        enum: 'Aufzählung',
+        boolean: 'Ja/Nein',
+      },
+    },
+  },
   locale: 'Sprache',
   locales: messagesEn.locales,
   menu: {
     about: 'Über',
+    labels: 'Labels',
     cards: 'Karten',
     main: 'Dashboard',
     profile: 'Profil',
@@ -80,6 +107,19 @@ export const messagesDe = {
     password: 'Passwort',
     passwordRepeat: 'Passwort (wiederholen)',
     passwordsDoNotMatch: 'Passwörter stimmen nicht überein',
+  },
+  validation: {
+    patternMismatch: 'Eingabe entspricht nicht dem Muster! "{pattern}".',
+    rangeOverflow: 'Eingabe ist zu groß! Maximaler Wert: {max}.',
+    rangeUnderflow: 'Eingabe ist zu klein! Minimaler Wert: {min}.',
+    tooLong: 'Eingabe ist zu lang! Maximale Länge: {maxLength}.',
+    tooShort: 'Eingabe ist zu kurz! Minimale Länge: {minLength}.',
+    typeMismatch: {
+      email: 'Bitte gebe eine gültige Emailadresse ein!',
+      unknown: 'Ungültige Eingabe für Type {type}!',
+    },
+    unknown: 'Unbekannter Validierungsfehler!',
+    valueMissing: 'Dieses Feld ist notwendig!',
   },
 };
 

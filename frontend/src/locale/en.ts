@@ -35,6 +35,32 @@ export const messagesEn = {
     saving: 'Saving ...',
     search: 'Search',
   },
+  label: {
+    create: {
+      button: 'Create',
+      modalTitle: 'Create label',
+    },
+    edit: {
+      button: 'Save',
+      modalTitle: 'Edit label',
+    },
+    delete: {
+      reallyDelete: 'Really delete this label?',
+    },
+    list: {
+      actions: 'Actions',
+    },
+    model: {
+      color: 'Color',
+      enumValues: 'Values',
+      name: 'Name',
+      type: 'Type',
+      typeOptions: {
+        enum: 'Enum',
+        boolean: 'Boolean',
+      },
+    },
+  },
   locale: 'Language',
   locales: {
     'de': 'Deutsch',
@@ -82,6 +108,19 @@ export const messagesEn = {
     password: 'Password',
     passwordRepeat: 'Password (repeat)',
     passwordsDoNotMatch: 'Passwords do not match',
+  },
+  validation: {
+    patternMismatch: 'Input does not match pattern! "{pattern}".',
+    rangeOverflow: 'Input is too large! Maximum value {max}.',
+    rangeUnderflow: 'Input is too small! Minimum value {min}.',
+    tooLong: 'Input is too long! Maximum length {maxLength}.',
+    tooShort: 'Input is too short! Minimum length {minLength}.',
+    typeMismatch: {
+      email: 'Please enter a valid email address!',
+      unknown: 'Invalid input for type {type}!'
+    },
+    unknown: 'Unknown validation error!',
+    valueMissing: 'This field is required!',
   },
 };
 
