@@ -8,7 +8,7 @@ export default class CardRepository {
   }
 
   async getByUid(uid: UUID, trx?: TransactionOrKnex): Promise<Card | undefined> {
-    return Card.query(trx).findById(uid);
+    return Card.query(trx).where('uid', uid).first();
   }
 
   async getByLanguageAndId(language: string, id: string, trx?: TransactionOrKnex): Promise<Card | undefined> {
@@ -20,10 +20,10 @@ export default class CardRepository {
   }
 
   async update(card: Card, trx?: TransactionOrKnex): Promise<boolean> {
-    return await Card.query(trx).findById(card.id).update(card) === 1;
+    return await Card.query(trx).where('uid', card.uid).update(card) === 1;
   }
 
-  async remove(id: string, trx?: TransactionOrKnex): Promise<boolean> {
-    return await Card.query(trx).findById(id).delete() === 1;
+  async remove(uid: string, trx?: TransactionOrKnex): Promise<boolean> {
+    return await Card.query(trx).where('uid', uid).delete() === 1;
   }
 }

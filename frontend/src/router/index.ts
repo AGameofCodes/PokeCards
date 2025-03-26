@@ -2,6 +2,7 @@ import {createRouter, createWebHistory, type RouteLocationNormalized} from 'vue-
 import AboutView from '@/views/AboutView.vue';
 import HomeView from '@/views/HomeView.vue';
 import CardsView from '@/views/CardsView.vue';
+import UserCardsView from '@/views/UserCardsView.vue';
 import LoginView from '@/views/auth/LoginView.vue';
 import RegisterView from '@/views/auth/RegisterView.vue';
 import {SessionStore} from '@/stores/SessionStore';
@@ -34,6 +35,11 @@ const router = createRouter({
       path: '/cards',
       name: 'cards',
       component: CardsView,
+    },
+    {
+      path: '/userCards',
+      name: 'userCards',
+      component: UserCardsView,
     },
     {
       path: '/profile',

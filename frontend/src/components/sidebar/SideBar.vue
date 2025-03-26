@@ -41,9 +41,9 @@ export default class SideBar extends Vue {
       <ul class="nav flex-column">
         <SideBarNavLink v-if="loggedIn" :text="$t('menu.main')" to="/" faIcon="fa-chart-line"
                         @click="$emit('close')"/>
-        <SideBarNavLink v-if="loggedIn" :text="$t('menu.labels')" to="/labels" faIcon="fa-ribbon"
+        <SideBarNavLink v-if="loggedIn" :text="$t('menu.userCards')" to="/userCards" faIcon="fa-file"
                         @click="$emit('close')"/>
-        <SideBarNavLink v-if="loggedIn" :text="$t('menu.reports')" to="/reports" faIcon="fa-file"
+        <SideBarNavLink v-if="loggedIn" :text="$t('menu.labels')" to="/labels" faIcon="fa-ribbon"
                         @click="$emit('close')"/>
         <SideBarNavLink v-if="loggedIn" :text="$t('menu.values')" to="/values" faIcon="fa-database"
                         @click="$emit('close')"/>

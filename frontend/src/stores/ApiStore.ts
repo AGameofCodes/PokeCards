@@ -32,7 +32,7 @@ export class ApiStore extends Pinia {
     return this._authApi;
   }
 
-  get cardApi(): LabelsApi {
+  get cardApi(): CardsApi {
     return this._cardApi;
   }
 

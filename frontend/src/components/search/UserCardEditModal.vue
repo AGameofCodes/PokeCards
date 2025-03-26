@@ -14,27 +14,25 @@ import {savedToast} from "@/util/toast";
     Spinner,
   },
 })
-export default class UserCardAddModal extends Vue {
+export default class UserCardEditModal extends Vue {
   card: CardVmV1 | null = null;
+  userCard: UserCardVmV1 | null = null;
   saving = false;
 
   readonly api = new ApiStore();
   readonly store = new UserCardsStore();
 
-  open(card: CardVmV1): Promise<void> {
-    this.card = card;
-    return (this.$refs.modal as BootstrapModal).open();
+  get isNewUserCard(): boolean {
+    return !this.userCard?.id
+        || this.userCard.id === emptyUUID();
   }
 
-  dismiss(): Promise<void> {
-    this.card = null;
-    return (this.$refs.modal as BootstrapModal).dismiss();
-  }
+  open(card: CardVmV1, userCard: UserCardVmV1 | null): Promise<void> {
+    this.card = CardVmV1.fromJson(card);
+    this.userCard = UserCardVmV1.fromJson(userCard);
 
-  async addUserCard(): Promise<void> {
-    this.saving = true;
-    try {
-      let userCard = UserCardVmV1.fromJson({
+    if (this.isNewUserCard) {
+      this.userCard = UserCardVmV1.fromJson({
         id: emptyUUID(),
         createdAt: new Date(),
         createdBy: emptyUUID(),
@@ -42,11 +40,31 @@ export default class UserCardAddModal extends Vue {
         updatedBy: emptyUUID(),
         cardUid: this.card!.uid
       } as UserCardVmV1);
-      userCard = await this.api.userCardApi.add(userCard);
-      this.store.addCard(userCard);
+    }
+
+    return (this.$refs.modal as BootstrapModal).open();
+  }
+
+  dismiss(): Promise<void> {
+    this.card = null;
+    this.userCard = null;
+    return (this.$refs.modal as BootstrapModal).dismiss();
+  }
+
+  async save(): Promise<void> {
+    this.saving = true;
+    try {
+      if (this.isNewUserCard) {
+        const userCard = await this.api.userCardApi.add(this.userCard);
+        this.store.addCard(userCard);
+      } else {
+        const userCard = await this.api.userCardApi.update(this.userCard);
+        this.store.updateCard(userCard);
+      }
       savedToast(this.$i18n);
       await this.dismiss();
     } catch (err) {
+      console.log(err)
       handleError(this.$i18n, err);
     } finally {
       this.saving = false;
@@ -58,7 +76,8 @@ export default class UserCardAddModal extends Vue {
 <template>
   <BootstrapModal ref="modal" :scrollable="true">
     <template #modal-title>
-      {{ $t('userCard.add.modal.title') }}
+      <template v-if="isNewUserCard"> {{ $t('userCard.edit.modal.title.add') }}</template>
+      <template v-else> {{ $t('userCard.edit.modal.title.update') }}</template>
     </template>
     <template #default v-if="card">
       <div class="d-flex flex-row">
@@ -75,9 +94,10 @@ export default class UserCardAddModal extends Vue {
       <button class="btn btn-secondary" type="button" @click="dismiss" :disabled="saving">
         {{ $t('general.cancel') }}
       </button>
-      <button class="btn btn-primary" type="button" @click="addUserCard" :disabled="saving">
+      <button class="btn btn-primary" type="button" @click="save" :disabled="saving">
         <Spinner v-if="saving" :style="'text-light'" size="1" class="me-1"/>
-        {{ $t('userCard.add.modal.addUserCard') }}
+        <template v-if="isNewUserCard"> {{ $t('userCard.edit.modal.save.add') }}</template>
+        <template v-else> {{ $t('userCard.edit.modal.save.update') }}</template>
       </button>
     </template>
   </BootstrapModal>

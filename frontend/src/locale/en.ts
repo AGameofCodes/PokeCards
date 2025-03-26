@@ -47,17 +47,23 @@ export const messagesEn = {
     profile: 'Profile',
     reports: 'Reports',
     settings: 'Settings',
-    values: 'Values',
+    userCards: 'My cards',
   },
   settings: {
     settings: 'Settings',
     currentlyNoSettings: 'Currently there are no settings.',
   },
   userCard: {
-    add: {
+    edit: {
       modal: {
-        title: 'Track card',
-        addUserCard: 'Track',
+        title: {
+          add: 'Add card',
+          update: 'Edit card',
+        },
+        save: {
+          add: 'Add',
+          update: 'Save',
+        },
       },
     },
     model: {

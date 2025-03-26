@@ -44,6 +44,7 @@ export const messagesDe = {
     cards: 'Karten',
     main: 'Dashboard',
     profile: 'Profil',
+    userCards: 'Meine Karten',
     settings: 'Einstellungen',
   },
   settings: {
@@ -51,10 +52,16 @@ export const messagesDe = {
     currentlyNoSettings: 'Aktuell gibt es keine Einstellungen.',
   },
   userCard: {
-    add: {
+    edit: {
       modal: {
-        title: 'Karte tracken',
-        addUserCard: 'Tracken',
+        title: {
+          add: 'Karte hinzufügen',
+          update: 'Karte bearbeiten',
+        },
+        save: {
+          add: 'Hinzufügen',
+          update: 'Speichern',
+        },
       },
     },
     model: {
@@ -62,7 +69,7 @@ export const messagesDe = {
       name: 'Name',
       number: 'Nummer',
       language: 'Sprache',
-    }
+    },
   },
   userinfo: {
     model: {

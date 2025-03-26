@@ -1,4 +1,4 @@
 import useEmitter from '@/composables/emitter';
-import {CardsStore} from '@/stores/CardsStore';
+import {UserCardsStore} from '@/stores/UserCardsStore';
 
-useEmitter().on('authChanged', () => new CardsStore().reload(true));
+useEmitter().on('authChanged', () => new UserCardsStore().reload(true));

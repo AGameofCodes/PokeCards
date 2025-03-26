@@ -24,6 +24,10 @@ export class CardsStore extends Pinia {
     return this._cards;
   }
 
+  get cardsByUid(): Map<string, CardVmV1> {
+    return new Map(this.cards.map(e => [e.uid, e]));
+  }
+
   //actions
   clear(): void {
     this._cards.splice(0);
@@ -54,24 +58,33 @@ export class CardsStore extends Pinia {
     }
   }
 
-  async reload(force: boolean = false): Promise<void> {
-    if (this._loadingPromise) {
-      await this._loadingPromise;
-      if (!force) {// when force is true, wait for the current operation to complete, then reload
-        return;
-      }
-    }
-
+  async reloadCardByUid(uid: string): Promise<void> {
     try {
-      this._loadingPromise = this.apiStore.cardApi.list();
-      const cards = await this._loadingPromise;
-      this.setCards(cards);
-    } catch (err) {
-      this.clear();
-    } finally {
-      this._loadingPromise = null;
+      const card = await this.apiStore.cardApi.getByUid(uid);
+      this.updateCard(card);
+    } catch (e) {
+      console.error(e);
     }
   }
+
+  // async reload(force: boolean = false): Promise<void> {
+  //   if (this._loadingPromise) {
+  //     await this._loadingPromise;
+  //     if (!force) {// when force is true, wait for the current operation to complete, then reload
+  //       return;
+  //     }
+  //   }
+  //
+  //   try {
+  //     this._loadingPromise = this.apiStore.cardApi.list();
+  //     const cards = await this._loadingPromise;
+  //     this.setCards(cards);
+  //   } catch (err) {
+  //     this.clear();
+  //   } finally {
+  //     this._loadingPromise = null;
+  //   }
+  // }
 
   async loadIfAbsent(): Promise<void> {
     if (this._cards.length > 0) {
