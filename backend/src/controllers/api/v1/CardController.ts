@@ -3,8 +3,8 @@ import CardRepository from '../../../repository/CardRepository';
 import Card from '../../../models/db/Card';
 import {Controller, Get, Middlewares, Path, Query, Request, Response, Route, SuccessResponse, Tags} from 'tsoa';
 import {isAuthenticatedMiddleware} from '../../../middleware/auth';
-import TcgCardBrief from '../../../models/tcgApi/TcgCard';
-import TcgCard from '../../../models/tcgApi/TcgCardBrief';
+import TcgCardBrief from '../../../models/tcgApi/TcgCardBrief';
+import TcgCard from '../../../models/tcgApi/TcgCard';
 import {randomUUID} from 'crypto';
 import {UUID} from '../../../models/api/uuid';
 
