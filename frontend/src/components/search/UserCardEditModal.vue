@@ -113,7 +113,7 @@ export default class UserCardEditModal extends Vue {
       <template v-if="isNewUserCard"> {{ $t('userCard.edit.modal.title.add') }}</template>
       <template v-else> {{ $t('userCard.edit.modal.title.update') }}</template>
     </template>
-    <template #default v-if="card">
+    <template #default v-if="card && userCard">
       <div class="d-flex flex-row">
         <img :src="card.image + '/high.webp'" height="400" alt="card img">
         <div class="ms-2">
