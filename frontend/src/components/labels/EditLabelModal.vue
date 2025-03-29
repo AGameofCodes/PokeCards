@@ -16,6 +16,7 @@ import {checkValidity, resetValidity} from '@/util/validation';
 import {findNewColor} from "@/util/label";
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+import '@/assets/vue-select/bootstrap.css';
 
 @Component({
   name: 'EditLabelModal',
