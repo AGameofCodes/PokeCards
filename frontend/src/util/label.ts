@@ -23,3 +23,30 @@ export function findNewColor(usedColors: string[]): string {
   }
   return '#' + Math.floor(Math.random() * 256 * 256 * 256).toString(16);
 }
+
+export function findForegroundColor(backgroundColor: string): string | undefined {
+  const bg = parseColor(backgroundColor);
+  if (!bg) {
+    return undefined;
+  }
+  const brightnessSquared = bg[0] * bg[0] + bg[1] * bg[1] + bg[2] * bg[2];
+  const maxBrightness = 255 * 255 * 3;
+  return brightnessSquared < maxBrightness / 2 ? '#fff' : '#000';
+}
+
+function parseColor(input: string): [number, number, number] | undefined {
+  const div = document.createElement('div');
+  const regex = /^rgb\s*\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/i;
+  div.style.color = input;
+  let m = getComputedStyle(div).color.match(regex);
+  if (m)
+    return [m[1], m[2], m[3]];
+  else {
+    //firefox apparently converts the style prop automatically but does not set the computed style???
+    m = div.style.color.match(regex);
+    if (m)
+      return [m[1], m[2], m[3]];
+    else
+      return undefined;
+  }
+}

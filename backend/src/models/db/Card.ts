@@ -29,6 +29,10 @@ export default class Card extends BaseModel {
     return 'cards';
   }
 
+  static override get idColumn():string {
+    return 'uid';
+  }
+
   static override get jsonSchemaWithReferences(): JSONSchema {
     return {
       $id: 'Card',

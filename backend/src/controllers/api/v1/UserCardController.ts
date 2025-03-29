@@ -21,9 +21,21 @@ import {isAuthenticatedMiddleware} from '../../../middleware/auth';
 import {UUID} from '../../../models/api/uuid';
 import ApiBaseModelCreatedUpdated from '../../../models/api/ApiBaseModelCreatedUpdated';
 import {UUID as nodeUUID} from 'node:crypto';
+import ApiBaseModelId from '../../../models/api/ApiBaseModelId';
+import {setEqual} from '../../../util/set';
+
+interface UserCardLabelVmV1 extends ApiBaseModelId {
+  labelId: UUID;
+  userCardId: UUID;
+  /**
+   * @maxLength 255
+   */
+  value: string | null | undefined;
+}
 
 interface UserCardVmV1 extends ApiBaseModelCreatedUpdated {
   cardUid: UUID;
+  labels: UserCardLabelVmV1[];
 }
 
 @Route('api/v1/usercards')
@@ -68,6 +80,7 @@ export class UserCardController extends Controller {
 
   @Put()
   @SuccessResponse(200, 'Ok')
+  @Response(400, 'BadRequest')
   @Response(404, 'Not Found')
   async update(@Body() body: UserCardVmV1, @Request() req: Req): Promise<UserCardVmV1> {
     const card = UserCard.fromJson(body);
@@ -79,8 +92,20 @@ export class UserCardController extends Controller {
       return undefined as any;
     }
 
+    //validate labels
+    const cardLabelIds = new Set(card.labels.map(e => e.id).filter(e => e !== '00000000-0000-0000-0000-000000000000'));
+    const dbCardLabelIds = new Set(dbCard.labels.map(e => e.id));
+    if (!setEqual(cardLabelIds, dbCardLabelIds)) { // ensure that all labels which are to be updated (have an id) exist on the dbCard
+      this.setStatus(400);
+      return undefined as any;
+    }
+
+    card.labels.forEach(e => e.userCardId = card.id);
+    card.labels = card.labels.filter(e => !!e.value?.trim()); // drop empty labels
+
     //update props
     dbCard.cardUid = card.cardUid;
+    dbCard.labels = card.labels;
     dbCard.updatedBy = req.session.user!.id;
 
     //save

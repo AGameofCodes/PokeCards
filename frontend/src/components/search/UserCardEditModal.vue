@@ -2,16 +2,24 @@
 import {Component, Vue} from 'vue-facing-decorator';
 import BootstrapModal from '@/components/modals/BootstrapModal.vue';
 import Spinner from '@/components/Spinner.vue';
-import {CardVmV1, UserCardVmV1} from 'pokecards-oas';
+import {CardVmV1, UserCardLabelVmV1, UserCardVmV1} from 'pokecards-oas';
 import {ApiStore} from "@/stores/ApiStore";
 import {emptyUUID, handleError} from "@/util/util";
 import {UserCardsStore} from "@/stores/UserCardsStore";
 import {savedToast} from "@/util/toast";
+import {LabelStore} from "@/stores/LabelStore";
+import {getCurrentInstance} from "vue";
+import vSelect from 'vue-select';
+import 'vue-select/dist/vue-select.css';
+import '@/assets/vue-select/bootstrap.css';
+import {findForegroundColor} from "@/util/label";
 
 @Component({
+  methods: {findForegroundColor},
   components: {
     BootstrapModal,
     Spinner,
+    vSelect,
   },
 })
 export default class UserCardEditModal extends Vue {
@@ -20,11 +28,16 @@ export default class UserCardEditModal extends Vue {
   saving = false;
 
   readonly api = new ApiStore();
-  readonly store = new UserCardsStore();
+  readonly userCardStore = new UserCardsStore();
+  readonly labelStore = new LabelStore();
 
   get isNewUserCard(): boolean {
     return !this.userCard?.id
         || this.userCard.id === emptyUUID();
+  }
+
+  get uid(): number {
+    return getCurrentInstance()?.uid!;
   }
 
   open(card: CardVmV1, userCard: UserCardVmV1 | null): Promise<void> {
@@ -38,7 +51,8 @@ export default class UserCardEditModal extends Vue {
         createdBy: emptyUUID(),
         updatedAt: new Date(),
         updatedBy: emptyUUID(),
-        cardUid: this.card!.uid
+        cardUid: this.card!.uid,
+        labels: []
       } as UserCardVmV1);
     }
 
@@ -51,15 +65,32 @@ export default class UserCardEditModal extends Vue {
     return (this.$refs.modal as BootstrapModal).dismiss();
   }
 
+  getUserCardLabelByLabelId(labelId: string): UserCardLabelVmV1 {
+    if (!this.userCard) {
+      return new UserCardLabelVmV1();
+    }
+
+    let ret = this.userCard.labels.find(e => e.labelId === labelId);
+    if (!ret) {
+      ret = UserCardLabelVmV1.fromJson({id: emptyUUID(), userCardId: this.userCard.id, labelId: labelId, value: ''});
+      this.userCard.labels.push(ret);
+    }
+    return ret;
+  }
+
   async save(): Promise<void> {
+    if (!this.userCard) {
+      return;
+    }
+
     this.saving = true;
     try {
       if (this.isNewUserCard) {
         const userCard = await this.api.userCardApi.add(this.userCard);
-        this.store.addCard(userCard);
+        this.userCardStore.addCard(userCard);
       } else {
         const userCard = await this.api.userCardApi.update(this.userCard);
-        this.store.updateCard(userCard);
+        this.userCardStore.updateCard(userCard);
       }
       savedToast(this.$i18n);
       await this.dismiss();
@@ -87,6 +118,35 @@ export default class UserCardEditModal extends Vue {
           <div>{{ $t('userCard.model.name') }}: {{ card.name }}</div>
           <div>{{ $t('userCard.model.number') }}: {{ card.number }}</div>
           <div>{{ $t('userCard.model.language') }}: {{ card.language }}</div>
+
+          <div v-for="label in labelStore.labels" :key="label.id">
+            <template v-if="label.type === 'boolean'">
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" :id="uid + '_' + label.id"
+                       :checked="getUserCardLabelByLabelId(label.id).value === 'true'"
+                       @input="getUserCardLabelByLabelId(label.id).value = $event.target.checked ? 'true': ''">
+                <span class="badge rounded-pill"
+                      :style="{background: label.color, color: findForegroundColor(label.color) ?? 'black'}">
+                  <label class="form-check-label" :for="uid + '_' + label.id">
+                    {{ label.name }}
+                  </label>
+                </span>
+              </div>
+            </template>
+            <div class="d-flex flex-row align-items-baseline" v-if="label.type === 'enum'">
+              <span class="badge rounded-pill me-2"
+                    :style="{background: label.color, color: findForegroundColor(label.color) ?? 'black'}">
+                <label :for="uid + '_type'" class="form-label mb-0">
+                  {{ $t('label.model.type') }}
+                </label>
+              </span>
+              <vSelect :id="uid + '_type'"
+                       v-model="getUserCardLabelByLabelId(label.id).value"
+                       :options="label.enumValues?.split(',').map(e => e.trim()).filter(e => !!e)"
+                       :clearable="true"
+                       theme="bootstrap"/>
+            </div>
+          </div>
         </div>
       </div>
     </template>
@@ -102,3 +162,15 @@ export default class UserCardEditModal extends Vue {
     </template>
   </BootstrapModal>
 </template>
+
+<style>
+.vc-color-wrap {
+  width: 100% !important;
+  height: 2.375em !important;
+  margin-right: 0 !important;
+  display: block !important;
+  border-radius: var(--bs-border-radius);
+  border: var(--bs-border-width) solid var(--bs-border-color);
+}
+</style>
+

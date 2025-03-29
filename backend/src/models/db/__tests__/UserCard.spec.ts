@@ -32,9 +32,23 @@ describe('UserCard model', () => {
         updatedAt: {type: 'string', format: 'date-time'},
         updatedBy: {type: 'string', format: 'uuid'}, //User.id
         cardUid: {type: 'string', format: 'uuid'},
+        labels: {type: 'array', items: {$ref: '#/definitions/UserCardLabel'}},
       },
 
-      definitions: {},
+      definitions: {
+        UserCardLabel: {
+          $id: 'UserCardLabel',
+          type: 'object',
+          required: ['id', 'labelId', 'userCardId'],
+
+          properties: {
+            id: {format: 'uuid', type: 'string'},
+            labelId: {format: 'uuid', type: 'string'},
+            userCardId: {format: 'uuid', type: 'string'},
+            value: {maxLength: 255, nullable: true, type: 'string'},
+          },
+        },
+      },
     });
   });
 });
