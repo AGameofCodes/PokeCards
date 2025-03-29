@@ -54,6 +54,7 @@ export default class UserCardEditModal extends Vue {
         updatedAt: new Date(),
         updatedBy: emptyUUID(),
         cardUid: this.card!.uid,
+        variants: {},
         labels: []
       } as any);
     }
@@ -120,6 +121,22 @@ export default class UserCardEditModal extends Vue {
           <div>{{ $t('userCard.model.name') }}: {{ card.name }}</div>
           <div>{{ $t('userCard.model.number') }}: {{ card.number }}</div>
           <div>{{ $t('userCard.model.language') }}: {{ card.language }}</div>
+          <div>{{ $t('userCard.model.rarity') }}: {{ card.rarity ?? '?' }}</div>
+          <div>
+            {{ $t('userCard.model.variants.variant') }}:
+            <template v-for="variant in Object.keys(card.variants)">
+              <div class="form-check" v-if="(card.variants as any)[variant]" :key="variant">
+                <input class="form-check-input" type="radio"
+                       :id="uid + '_' + variant"
+                       :name="uid + '_variants'"
+                       :value="variant"
+                       v-model="userCard.variant">
+                <label class="form-check-label" :for="uid + '_' + variant">
+                  {{ $t('userCard.model.variants.' + variant) }}
+                </label>
+              </div>
+            </template>
+          </div>
 
           <div v-for="label in labelStore.labels" :key="label.id">
             <template v-if="label.type === 'boolean'">

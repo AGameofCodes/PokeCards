@@ -2,6 +2,7 @@ import {describe, expect, test} from '@jest/globals';
 import {initGlobals} from '../../../util/GlobalInit';
 import UserCard from '../UserCard';
 import {randomUUID} from 'crypto';
+import {randomString} from '../../../util/string';
 
 describe('UserCard model', () => {
   test('fromJSON/toJSON works', () => {
@@ -10,6 +11,7 @@ describe('UserCard model', () => {
     const userCard = new UserCard();
     userCard.id = randomUUID();
     userCard.cardUid = randomUUID();
+    userCard.variant = randomString(10);
     userCard.createdAt = new Date();
     userCard.createdBy = randomUUID();
     userCard.updatedAt = new Date();
@@ -32,6 +34,7 @@ describe('UserCard model', () => {
         updatedAt: {type: 'string', format: 'date-time'},
         updatedBy: {type: 'string', format: 'uuid'}, //User.id
         cardUid: {type: 'string', format: 'uuid'},
+        variant: {type: 'string', maxLength: 255},
         labels: {type: 'array', items: {$ref: '#/definitions/UserCardLabel'}},
       },
 

@@ -6,12 +6,14 @@ import UserCardLabel from './UserCardLabel';
 
 export default class UserCard extends BaseModelCreatedUpdated {
   cardUid!: UUID;
+  variant!: string | null | undefined; // max length 255
   labels!: UserCardLabel[];
 
-  static new(id: UUID, cardUid: UUID, labels: UserCardLabel[], createdBy: UUID): UserCard {
+  static new(id: UUID, cardUid: UUID, variant: string | null | undefined, labels: UserCardLabel[], createdBy: UUID): UserCard {
     const ret = new UserCard();
     ret.id = id;
     ret.cardUid = cardUid;
+    ret.variant = variant;
     ret.labels = labels;
     ret.createdBy = createdBy;
     ret.updatedBy = createdBy;
@@ -42,6 +44,7 @@ export default class UserCard extends BaseModelCreatedUpdated {
 
       properties: {
         cardUid: {type: 'string', format: 'uuid'},
+        variant: {type: 'string', maxLength: 255},
         labels: {type: 'array', items: {$ref: '#/definitions/UserCardLabel'}},
       },
     });

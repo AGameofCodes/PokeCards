@@ -63,6 +63,17 @@ interface CardVmV1 {
    */
   image: string;
   /**
+   * @maxLength 255
+   */
+  rarity: string | null | undefined;
+  variants: {
+    firstEdition?: boolean,
+    holo?: boolean,
+    normal?: boolean,
+    reverse?: boolean,
+    wPromo?: boolean,
+  };
+  /**
    * @minLength 2
    * @maxLength 15
    */
@@ -162,7 +173,7 @@ export class CardController extends Controller {
   }
 
   private mapTcgCard2Card(card: TcgCard, language: string): Card {
-    return Card.new(randomUUID(), card.id, card.name, card.set.id, card.localId, card.image ?? '', language);
+    return Card.new(randomUUID(), card.id, card.name, card.set.id, card.localId, card.image ?? '', card.rarity, card.variants, language);
   }
 
   private async validateTcpApiResponse(res: Response): Promise<Response> {

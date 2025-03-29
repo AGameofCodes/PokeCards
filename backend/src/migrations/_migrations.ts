@@ -5,6 +5,7 @@ import * as M20250325153857_cards from './20250325153857_cards';
 import * as M20250325193334_usercards from './20250325193334_usercards';
 import * as M20250326195417_labels from './20250326195417_labels';
 import * as M20250326201010_usercardLabels from './20250326201010_usercardLabels';
+import * as M20250329115036_variants_rarity from './20250329115036_variants_rarity';
 
 export type Migration = {
   name: string,
@@ -18,5 +19,6 @@ export const Migrations: Migration[] = [
   {name: '20250325193334_usercards', migration: M20250325193334_usercards},
   {name: '20250326195417_labels', migration: M20250326195417_labels},
   {name: '20250326201010_usercardLabels', migration: M20250326201010_usercardLabels},
+  {name: '20250329115036_variants_rarity', migration: M20250329115036_variants_rarity},
 ];
 //TODO use glob import

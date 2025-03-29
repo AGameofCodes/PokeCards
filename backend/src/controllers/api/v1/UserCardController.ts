@@ -35,6 +35,7 @@ interface UserCardLabelVmV1 extends ApiBaseModelId {
 
 interface UserCardVmV1 extends ApiBaseModelCreatedUpdated {
   cardUid: UUID;
+  variant: string | null | undefined;
   labels: UserCardLabelVmV1[];
 }
 
@@ -105,6 +106,7 @@ export class UserCardController extends Controller {
 
     //update props
     dbCard.cardUid = card.cardUid;
+    dbCard.variant = card.variant;
     dbCard.labels = card.labels;
     dbCard.updatedBy = req.session.user!.id;
 

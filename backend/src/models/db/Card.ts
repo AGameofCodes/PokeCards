@@ -2,6 +2,14 @@ import type {JSONSchema, ModelOptions, Pojo, StaticHookArguments} from 'objectio
 import {UUID} from 'node:crypto';
 import BaseModel from './BaseModel';
 
+export type Variants = {
+  firstEdition?: boolean,
+  holo?: boolean,
+  normal?: boolean,
+  reverse?: boolean,
+  wPromo?: boolean,
+};
+
 export default class Card extends BaseModel {
   uid!: UUID;
   id!: string; //min 1, max length 255
@@ -9,10 +17,13 @@ export default class Card extends BaseModel {
   setId!: string; //min 1, max length 255
   number!: string; //min 1, max length 255
   image!: string; //min 1, max length 255
+  rarity!: string | null | undefined; //max length 255
+  variants!: Variants;
   language!: string; //min 2, max length 15
   updatedAt!: Date;
 
-  static new(uid: UUID, id: string, name: string, setId: string, number: string, image: string, language: string): Card {
+  static new(uid: UUID, id: string, name: string, setId: string, number: string, image: string,
+             rarity: string | null | undefined, variants: Variants, language: string): Card {
     const ret = new Card();
     ret.uid = uid;
     ret.id = id;
@@ -20,6 +31,8 @@ export default class Card extends BaseModel {
     ret.setId = setId;
     ret.number = number;
     ret.image = image;
+    ret.rarity = rarity;
+    ret.variants = variants;
     ret.language = language;
     ret.updatedAt = new Date();
     return ret;
@@ -37,7 +50,7 @@ export default class Card extends BaseModel {
     return {
       $id: 'Card',
       type: 'object',
-      required: ['uid', 'id', 'name', 'setId', 'number', 'image', 'language', 'updatedAt'],
+      required: ['uid', 'id', 'name', 'setId', 'number', 'image', 'variants', 'language', 'updatedAt'],
 
       properties: {
         uid: {type: 'string', format: 'uuid'},
@@ -46,6 +59,17 @@ export default class Card extends BaseModel {
         setId: {type: 'string', minLength: 1, maxLength: 255}, //max length 255
         number: {type: 'string', minLength: 1, maxLength: 255}, //max length 255
         image: {type: 'string', minLength: 1, maxLength: 255}, //max length 255
+        rarity: {type: 'string', maxLength: 255}, //max length 255
+        variants: {
+          type: 'object',
+          properties: {
+            firstEdition: {type: 'boolean'},
+            holo: {type: 'boolean'},
+            normal: {type: 'boolean'},
+            reverse: {type: 'boolean'},
+            wPromo: {type: 'boolean'},
+          },
+        },
         language: {type: 'string', minLength: 2, maxLength: 15}, //max length 255
         updatedAt: {type: 'string', format: 'date-time'},
       },

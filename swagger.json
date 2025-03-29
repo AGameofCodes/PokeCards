@@ -133,6 +133,10 @@
 					"cardUid": {
 						"$ref": "#/components/schemas/UUID"
 					},
+					"variant": {
+						"type": "string",
+						"nullable": true
+					},
 					"labels": {
 						"items": {
 							"$ref": "#/components/schemas/UserCardLabelVmV1"
@@ -233,6 +237,31 @@
 						"minLength": 1,
 						"maxLength": 255
 					},
+					"rarity": {
+						"type": "string",
+						"nullable": true,
+						"maxLength": 255
+					},
+					"variants": {
+						"properties": {
+							"wPromo": {
+								"type": "boolean"
+							},
+							"reverse": {
+								"type": "boolean"
+							},
+							"normal": {
+								"type": "boolean"
+							},
+							"holo": {
+								"type": "boolean"
+							},
+							"firstEdition": {
+								"type": "boolean"
+							}
+						},
+						"type": "object"
+					},
 					"language": {
 						"type": "string",
 						"minLength": 2,
@@ -246,6 +275,7 @@
 					"setId",
 					"number",
 					"image",
+					"variants",
 					"language"
 				],
 				"type": "object",

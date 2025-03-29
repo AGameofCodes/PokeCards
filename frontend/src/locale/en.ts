@@ -97,6 +97,13 @@ export const messagesEn = {
       name: 'Name',
       number: 'Number',
       language: 'Language',
+      rarity: 'Rarity',
+      variants: {
+        holo: 'Holo',
+        normal: 'Normal',
+        reverse: 'Reverse Holo',
+        variant: 'Variant',
+      },
     }
   },
   userinfo: {
