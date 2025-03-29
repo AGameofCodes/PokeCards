@@ -85,11 +85,11 @@ export class CardsStore extends Pinia {
   //     this._loadingPromise = null;
   //   }
   // }
-
-  async loadIfAbsent(): Promise<void> {
-    if (this._cards.length > 0) {
-      return;
-    }
-    return await this.reload();
-  }
+  //
+  // async loadIfAbsent(): Promise<void> {
+  //   if (this._cards.length > 0) {
+  //     return;
+  //   }
+  //   return await this.reload();
+  // }
 }

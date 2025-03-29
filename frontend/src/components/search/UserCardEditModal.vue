@@ -15,7 +15,7 @@ import '@/assets/vue-select/bootstrap.css';
 import {findForegroundColor} from "@/util/label";
 
 @Component({
-  methods: {findForegroundColor},
+  methods: {},
   components: {
     BootstrapModal,
     Spinner,
@@ -30,6 +30,8 @@ export default class UserCardEditModal extends Vue {
   readonly api = new ApiStore();
   readonly userCardStore = new UserCardsStore();
   readonly labelStore = new LabelStore();
+
+  findForegroundColor = findForegroundColor;
 
   get isNewUserCard(): boolean {
     return !this.userCard?.id
@@ -53,7 +55,7 @@ export default class UserCardEditModal extends Vue {
         updatedBy: emptyUUID(),
         cardUid: this.card!.uid,
         labels: []
-      } as UserCardVmV1);
+      } as any);
     }
 
     return (this.$refs.modal as BootstrapModal).open();
@@ -124,7 +126,7 @@ export default class UserCardEditModal extends Vue {
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" :id="uid + '_' + label.id"
                        :checked="getUserCardLabelByLabelId(label.id).value === 'true'"
-                       @input="getUserCardLabelByLabelId(label.id).value = $event.target.checked ? 'true': ''">
+                       @change="getUserCardLabelByLabelId(label.id).value = ($event.target! as HTMLInputElement).checked ? 'true': ''">
                 <span class="badge rounded-pill"
                       :style="{background: label.color, color: findForegroundColor(label.color) ?? 'black'}">
                   <label class="form-check-label" :for="uid + '_' + label.id">

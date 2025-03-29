@@ -40,12 +40,12 @@ function parseColor(input: string): [number, number, number] | undefined {
   div.style.color = input;
   let m = getComputedStyle(div).color.match(regex);
   if (m)
-    return [m[1], m[2], m[3]];
+    return [parseInt(m[1]), parseInt(m[2]), parseInt(m[3])];
   else {
     //firefox apparently converts the style prop automatically but does not set the computed style???
     m = div.style.color.match(regex);
     if (m)
-      return [m[1], m[2], m[3]];
+      return [parseInt(m[1]), parseInt(m[2]), parseInt(m[3])];
     else
       return undefined;
   }

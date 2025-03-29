@@ -44,7 +44,7 @@ export default class UserCards extends Vue {
     return null;
   }
 
-  async openCard(card: CardBriefVmV1, userCard: UserCardVmV1): Promise<void> {
+  async openCard(card: CardVmV1, userCard: UserCardVmV1): Promise<void> {
     await (this.$refs.editModal as UserCardEditModal).open(card, userCard);
   }
 }
@@ -66,7 +66,7 @@ export default class UserCards extends Vue {
                   :key="userCard.id"
                   :card="card"
                   class="col-3 col-lg-3 col-md-4 col-sm-6 pe-1 pb-1 c-pointer"
-                  @click="openCard(card, userCard)"/>
+                  @click="card && openCard(card, userCard)"/>
     </div>
 
     <UserCardEditModal ref="editModal"/>

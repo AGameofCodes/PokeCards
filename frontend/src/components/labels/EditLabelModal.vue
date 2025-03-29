@@ -121,7 +121,7 @@ export default class EditLabelModal extends Vue {
                    v-model="label.type"
                    :options="types"
                    label="label"
-                   :reduce="(option: {type: string}) => option.type"
+                   :reduce="(option: any) => option.type"
                    :clearable="false"/>
         </div>
         <div class="mb-3" v-if="label.type === 'enum'">

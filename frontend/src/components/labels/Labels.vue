@@ -31,7 +31,7 @@ export default class Labels extends Vue {
       field: 'type',
       thClass: 'mobile-hidden-md',
       tdClass: 'mobile-hidden-md',
-      formatFn: (value) => this.$t('label.model.typeOptions.' + value)
+      formatFn: (value: string) => this.$t('label.model.typeOptions.' + value)
     }, {
       label: this.$t('label.model.color'),
       field: 'color',
@@ -64,11 +64,6 @@ export default class Labels extends Vue {
 
   onDelete(label: LabelVmV1): void {
     (this.$refs.deleteModal as LabelDeleteConfirmModal).open(label);
-  }
-
-  isLabelMissingInfo(label: LabelVmV1): boolean {
-    return label.unit.trim().length === 0
-        || (label.minReference === 0 && label.maxReference === 0);
   }
 }
 </script>
