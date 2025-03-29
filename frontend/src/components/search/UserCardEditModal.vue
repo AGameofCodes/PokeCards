@@ -108,7 +108,7 @@ export default class UserCardEditModal extends Vue {
 </script>
 
 <template>
-  <BootstrapModal ref="modal" :scrollable="true">
+  <BootstrapModal ref="modal" :scrollable="true" size="lg">
     <template #modal-title>
       <template v-if="isNewUserCard"> {{ $t('userCard.edit.modal.title.add') }}</template>
       <template v-else> {{ $t('userCard.edit.modal.title.update') }}</template>
