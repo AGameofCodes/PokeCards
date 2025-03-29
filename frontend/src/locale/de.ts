@@ -21,6 +21,9 @@ export const messagesDe = {
         variant: 'Variante',
       },
     },
+    search: {
+      noCardsFound: 'Keine Karten gefunden',
+    },
   },
   design: 'Design',
   error: {

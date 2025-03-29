@@ -7,9 +7,11 @@ import UserCardEditModal from '@/components/search/UserCardEditModal.vue';
 import {CardBriefVmV1} from 'pokecards-oas';
 import CardBsCard from "@/components/search/CardBsCard.vue";
 import {getCurrentInstance} from "vue";
+import CenterOnParent from "@/components/CenterOnParent.vue";
 
 @Component({
   components: {
+    CenterOnParent,
     CardBsCard,
     Spinner,
     UserCardEditModal,
@@ -64,6 +66,9 @@ export default class CardSearch extends Vue {
       </div>
     </div>
     <Spinner v-if="loading"/>
+    <CenterOnParent v-else-if="!searchResults.length">
+      {{ $t('card.search.noCardsFound') }}
+    </CenterOnParent>
     <div v-else class="flex-grow-1 d-flex flex-row flex-wrap overflow-auto">
       <div v-for="card in searchResults" :key="card.id"
            class="col-3 col-lg-3 col-md-4 col-sm-6 pe-1 pb-1">

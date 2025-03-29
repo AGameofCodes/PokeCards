@@ -19,6 +19,9 @@ export const messagesEn = {
         variant: 'Variant',
       },
     },
+    search: {
+      noCardsFound: 'No card found',
+    }
   },
   design: 'Design',
   error: {
