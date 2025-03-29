@@ -94,27 +94,39 @@ export class CardController extends Controller {
 
   @Get('search')
   @SuccessResponse(200, 'Ok')
-  async search(@Query('q') searchText: string, @Request() req: Req): Promise<CardBriefVmV1[]> {
-    const byId: CardBriefVmV1[] = await fetch('https://api.tcgdex.net/v2/en/cards?id=like:' + searchText)
-      .then(res => this.validateTcpApiResponse(res))
-      .then(res => res.json())
-      .then(res => res.map((e: TcgCardBrief) => this.mapTcgCardBrief2CardBriefVmV1(e, 'en')))
-      .catch(e => {
-        console.error('Failed to search card by id for ' + searchText, e);
-        return [];
-      });
-    const byName: CardBriefVmV1[] = await fetch('https://api.tcgdex.net/v2/en/cards?name=like:' + searchText)
-      .then(res => this.validateTcpApiResponse(res))
-      .then(res => res.json())
-      .then(res => res.map((e: TcgCardBrief) => this.mapTcgCardBrief2CardBriefVmV1(e, 'en')))
-      .catch(e => {
-        console.error('Failed to search card by name for ' + searchText, e);
-        return [];
-      });
-    const cards = [...byId];
-    for (const card of byName) {
-      if (!cards.find(e => e.id === card.id)) {
-        cards.push(card);
+  async search(@Query('q') searchText: string, @Query('lang') languages: string[], @Request() req: Req): Promise<CardBriefVmV1[]> {
+    //bug in openapi/tsoa see https://github.com/lukeautry/tsoa/issues/219
+    if (languages.length === 1 && languages[0]!.includes(',')) {
+      languages = languages[0]!.split(',');
+    }
+
+    const cards: CardBriefVmV1[] = [];
+    for (let language of languages) {
+      const byId: CardBriefVmV1[] = await fetch('https://api.tcgdex.net/v2/' + language + '/cards?id=like:' + searchText)
+        .then(res => this.validateTcpApiResponse(res))
+        .then(res => res.json())
+        .then(res => res.map((e: TcgCardBrief) => this.mapTcgCardBrief2CardBriefVmV1(e, language)))
+        .catch(e => {
+          console.error('Failed to search card by id for ' + searchText, e);
+          return [];
+        });
+      const byName: CardBriefVmV1[] = await fetch('https://api.tcgdex.net/v2/' + language + '/cards?name=like:' + searchText)
+        .then(res => this.validateTcpApiResponse(res))
+        .then(res => res.json())
+        .then(res => res.map((e: TcgCardBrief) => this.mapTcgCardBrief2CardBriefVmV1(e, language)))
+        .catch(e => {
+          console.error('Failed to search card by name for ' + searchText, e);
+          return [];
+        });
+      for (const card of byId) {
+        if (!cards.find(e => e.id === card.id && e.language === card.language)) {
+          cards.push(card);
+        }
+      }
+      for (const card of byName) {
+        if (!cards.find(e => e.id === card.id && e.language === card.language)) {
+          cards.push(card);
+        }
       }
     }
     return cards;
@@ -155,7 +167,7 @@ export class CardController extends Controller {
       .then(res => res.json())
       .catch(e => console.error('Failed to fetch card ' + language + '/' + id, e));
     if (apiCard !== undefined) {
-      card = this.mapTcgCard2Card(apiCard, 'en');
+      card = this.mapTcgCard2Card(apiCard, language);
       await this.repo.add(card);
       return card;
     }
