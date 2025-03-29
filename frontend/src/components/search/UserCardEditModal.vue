@@ -6,7 +6,7 @@ import {CardVmV1, UserCardLabelVmV1, UserCardVmV1} from 'pokecards-oas';
 import {ApiStore} from "@/stores/ApiStore";
 import {emptyUUID, handleError} from "@/util/util";
 import {UserCardsStore} from "@/stores/UserCardsStore";
-import {savedToast} from "@/util/toast";
+import {deletedToast, savedToast} from "@/util/toast";
 import {LabelStore} from "@/stores/LabelStore";
 import {getCurrentInstance} from "vue";
 import vSelect from 'vue-select';
@@ -26,6 +26,7 @@ export default class UserCardEditModal extends Vue {
   card: CardVmV1 | null = null;
   userCard: UserCardVmV1 | null = null;
   saving = false;
+  deleting = false;
 
   readonly api = new ApiStore();
   readonly userCardStore = new UserCardsStore();
@@ -79,6 +80,26 @@ export default class UserCardEditModal extends Vue {
       this.userCard.labels.push(ret);
     }
     return ret;
+  }
+
+  async deleteUserCard(): Promise<void> {
+    if (!this.userCard || this.isNewUserCard) {
+      return;
+    }
+
+    this.deleting = true;
+    try {
+      const userCard = this.userCard;
+      await this.api.userCardApi.remove(userCard.id);
+      this.userCardStore.forgetCard(userCard);
+      deletedToast(this.$i18n);
+      await this.dismiss();
+    } catch (err) {
+      console.log(err)
+      handleError(this.$i18n, err);
+    } finally {
+      this.deleting = false;
+    }
   }
 
   async save(): Promise<void> {
@@ -173,10 +194,15 @@ export default class UserCardEditModal extends Vue {
       </div>
     </template>
     <template #modal-footer>
-      <button class="btn btn-secondary" type="button" @click="dismiss" :disabled="saving">
+      <button class="btn btn-danger" type="button" @click="deleteUserCard" :disabled="saving || deleting"
+              v-if="!this.isNewUserCard">
+        <Spinner v-if="deleting" :style="'text-light'" size="1" class="me-1"/>
+        {{ $t('general.delete') }}
+      </button>
+      <button class="btn btn-secondary" type="button" @click="dismiss" :disabled="saving || deleting">
         {{ $t('general.cancel') }}
       </button>
-      <button class="btn btn-primary" type="button" @click="save" :disabled="saving">
+      <button class="btn btn-primary" type="button" @click="save" :disabled="saving || deleting">
         <Spinner v-if="saving" :style="'text-light'" size="1" class="me-1"/>
         <template v-if="isNewUserCard"> {{ $t('userCard.edit.modal.save.add') }}</template>
         <template v-else> {{ $t('userCard.edit.modal.save.update') }}</template>
