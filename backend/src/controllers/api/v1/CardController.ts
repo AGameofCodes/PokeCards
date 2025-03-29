@@ -7,6 +7,7 @@ import TcgCardBrief from '../../../models/tcgApi/TcgCardBrief';
 import TcgCard from '../../../models/tcgApi/TcgCard';
 import {randomUUID} from 'crypto';
 import {UUID} from '../../../models/api/uuid';
+import {validateTcpApiResponse} from './util';
 
 interface CardBriefVmV1 {
   /**
@@ -103,7 +104,7 @@ export class CardController extends Controller {
     const cards: CardBriefVmV1[] = [];
     for (let language of languages) {
       const byId: CardBriefVmV1[] = await fetch('https://api.tcgdex.net/v2/' + language + '/cards?id=like:' + searchText)
-        .then(res => this.validateTcpApiResponse(res))
+        .then(res => validateTcpApiResponse(res))
         .then(res => res.json())
         .then(res => res.map((e: TcgCardBrief) => this.mapTcgCardBrief2CardBriefVmV1(e, language)))
         .catch(e => {
@@ -111,7 +112,7 @@ export class CardController extends Controller {
           return [];
         });
       const byName: CardBriefVmV1[] = await fetch('https://api.tcgdex.net/v2/' + language + '/cards?name=like:' + searchText)
-        .then(res => this.validateTcpApiResponse(res))
+        .then(res => validateTcpApiResponse(res))
         .then(res => res.json())
         .then(res => res.map((e: TcgCardBrief) => this.mapTcgCardBrief2CardBriefVmV1(e, language)))
         .catch(e => {
@@ -163,7 +164,7 @@ export class CardController extends Controller {
 
     //from api
     const apiCard = await fetch('https://api.tcgdex.net/v2/' + language + '/cards/' + id)
-      .then(res => this.validateTcpApiResponse(res))
+      .then(res => validateTcpApiResponse(res))
       .then(res => res.json())
       .catch(e => console.error('Failed to fetch card ' + language + '/' + id, e));
     if (apiCard !== undefined) {
@@ -190,18 +191,10 @@ export class CardController extends Controller {
     return Card.new(randomUUID(), card.id, card.name, card.set.id, card.localId, card.image ?? '', card.rarity, card.variants, language);
   }
 
-  private async validateTcpApiResponse(res: Response): Promise<Response> {
-    if (200 <= res.status && res.status < 300) {
-      return res;
-    } else {
-      throw new Error('TcgApi returned non-ok status code with body: ' + await res.text());
-    }
-  }
-
   private async updateIfNeeded(card: Card): Promise<Card> {
     if (card.updatedAt.getTime() + 24 * 60 * 60 * 1000 < Date.now()) {
       const apiCard = await fetch('https://api.tcgdex.net/v2/' + card.language + '/cards/' + card.id)
-        .then(res => this.validateTcpApiResponse(res))
+        .then(res => validateTcpApiResponse(res))
         .then(res => res.json())
         .catch(e => console.error('updateIfNeeded: Failed to fetch card ' + card.language + '/' + card.id, e));
       if (apiCard !== undefined) {

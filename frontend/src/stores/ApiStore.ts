@@ -5,7 +5,7 @@ import {
   createConfiguration,
   HttpMethod,
   LabelsApi,
-  RequestContext,
+  RequestContext, SetsApi,
   UserCardsApi,
   UsersApi,
 } from 'pokecards-oas';
@@ -27,6 +27,7 @@ export class ApiStore extends Pinia {
   private readonly _authApi = new AuthApi(this._config);
   private readonly _cardApi = new CardsApi(this._config);
   private readonly _labelApi = new LabelsApi(this._config);
+  private readonly _setApi = new SetsApi(this._config);
   private readonly _userCardApi = new UserCardsApi(this._config);
   private readonly _userApi = new UsersApi(this._config);
 
@@ -40,6 +41,10 @@ export class ApiStore extends Pinia {
 
   get labelApi(): LabelsApi {
     return this._labelApi;
+  }
+
+  get setApi(): SetsApi {
+    return this._setApi;
   }
 
   get userApi(): UsersApi {

@@ -156,6 +156,65 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"SetVmV1": {
+				"properties": {
+					"uid": {
+						"$ref": "#/components/schemas/UUID"
+					},
+					"id": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"name": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"serieId": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"logo": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"symbol": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"releaseDate": {
+						"type": "string",
+						"format": "date"
+					},
+					"abbreviation": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"language": {
+						"type": "string",
+						"minLength": 2,
+						"maxLength": 15
+					}
+				},
+				"required": [
+					"uid",
+					"id",
+					"name",
+					"serieId",
+					"logo",
+					"symbol",
+					"releaseDate",
+					"abbreviation",
+					"language"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"LabelVmV1": {
 				"properties": {
 					"id": {
@@ -832,6 +891,107 @@
 						"required": true,
 						"schema": {
 							"$ref": "#/components/schemas/UUID"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/sets": {
+			"get": {
+				"operationId": "List",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/SetVmV1"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"sets"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/v1/sets/{uid}": {
+			"get": {
+				"operationId": "GetByUid",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SetVmV1"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"sets"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "uid",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/sets/{language}/{id}": {
+			"get": {
+				"operationId": "GetByLanguageAndId",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SetVmV1"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"sets"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "language",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
 						}
 					}
 				]
