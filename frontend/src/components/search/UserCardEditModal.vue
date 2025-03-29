@@ -165,7 +165,7 @@ export default class UserCardEditModal extends Vue {
                          v-model="getUserCardLabelByLabelId(label.id).value"
                          :options="label.enumValues?.split(',').map(e => e.trim()).filter(e => !!e)"
                          :clearable="true"
-                         theme="bootstrap"/>
+                         style="min-width: 10em"/>
               </div>
             </div>
           </div>
