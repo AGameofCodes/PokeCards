@@ -17,6 +17,8 @@ export default class UserCardRepository {
     return await UserCard.transaction(trx!, async trx => {
       const insertedUserCard = await UserCard.query(trx).insert(userCard);
       for (let i = 0; i < userCard.labels.length; i++) {
+        userCard.labels[i]!.id = randomUUID();
+        userCard.labels[i]!.userCardId = insertedUserCard.id;
         await UserCardLabel.query(trx).insert(userCard.labels[i]!);
       }
       return (await this.getById(insertedUserCard.id, insertedUserCard.createdBy, trx))!;
