@@ -127,6 +127,7 @@ export class CardController extends Controller {
     //from cache
     let card = await this.repo.getByUid(uid);
     if (card !== undefined) {
+      card = await this.updateIfNeeded(card);
       return card;
     }
 
@@ -144,6 +145,7 @@ export class CardController extends Controller {
     //from cache
     let card = await this.repo.getByLanguageAndId(language, id);
     if (card !== undefined) {
+      card = await this.updateIfNeeded(card);
       return card;
     }
 
@@ -182,5 +184,21 @@ export class CardController extends Controller {
     } else {
       throw new Error('TcgApi returned non-ok status code with body: ' + await res.text());
     }
+  }
+
+  private async updateIfNeeded(card: Card): Promise<Card> {
+    if (card.updatedAt.getTime() + 24 * 60 * 60 * 1000 < Date.now()) {
+      const apiCard = await fetch('https://api.tcgdex.net/v2/' + card.language + '/cards/' + card.id)
+        .then(res => this.validateTcpApiResponse(res))
+        .then(res => res.json())
+        .catch(e => console.error('updateIfNeeded: Failed to fetch card ' + card.language + '/' + card.id, e));
+      if (apiCard !== undefined) {
+        const updatedCard = this.mapTcgCard2Card(apiCard, card.language);
+        updatedCard.uid = card.uid;
+        await this.repo.update(updatedCard);
+        return updatedCard;
+      }
+    }
+    return card;
   }
 }
