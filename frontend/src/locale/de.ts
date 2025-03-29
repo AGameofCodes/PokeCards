@@ -7,6 +7,21 @@ export const messagesDe = {
     register: 'Registrieren',
     logout: 'Ausloggen',
   },
+  card: {
+    model: {
+      id: 'Id',
+      name: 'Name',
+      number: 'Nummer',
+      language: 'Sprache',
+      rarity: 'Seltenheit',
+      variants: {
+        holo: 'Holo',
+        normal: 'Normal',
+        reverse: 'Reverse Holo',
+        variant: 'Variante',
+      },
+    },
+  },
   design: 'Design',
   error: {
     badRequest: 'Ungültige Anforderung',
@@ -92,18 +107,7 @@ export const messagesDe = {
       },
     },
     model: {
-      id: 'Id',
-      name: 'Name',
-      number: 'Nummer',
       labels: 'Labels',
-      language: 'Sprache',
-      rarity: 'Seltenheit',
-      variants: {
-        holo: 'Holo',
-        normal: 'Normal',
-        reverse: 'Reverse Holo',
-        variant: 'Variante',
-      },
     },
   },
   userinfo: {

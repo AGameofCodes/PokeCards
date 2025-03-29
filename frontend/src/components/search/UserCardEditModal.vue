@@ -117,13 +117,13 @@ export default class UserCardEditModal extends Vue {
       <div class="d-flex flex-row">
         <img :src="card.image + '/high.webp'" height="400" alt="card img">
         <div class="ms-2">
-          <div>{{ $t('userCard.model.id') }}: {{ card.id }}</div>
-          <div>{{ $t('userCard.model.name') }}: {{ card.name }}</div>
-          <div>{{ $t('userCard.model.number') }}: {{ card.number }}</div>
-          <div>{{ $t('userCard.model.language') }}: {{ card.language }}</div>
-          <div>{{ $t('userCard.model.rarity') }}: {{ card.rarity ?? '?' }}</div>
+          <div>{{ $t('card.model.id') }}: {{ card.id }}</div>
+          <div>{{ $t('card.model.name') }}: {{ card.name }}</div>
+          <div>{{ $t('card.model.number') }}: {{ card.number }}</div>
+          <div>{{ $t('card.model.language') }}: {{ card.language }}</div>
+          <div>{{ $t('card.model.rarity') }}: {{ card.rarity ?? '?' }}</div>
           <div>
-            {{ $t('userCard.model.variants.variant') }}:
+            {{ $t('card.model.variants.variant') }}:
             <template v-for="variant in Object.keys(card.variants)">
               <div class="form-check" v-if="(card.variants as any)[variant]" :key="variant">
                 <input class="form-check-input" type="radio"
@@ -132,7 +132,7 @@ export default class UserCardEditModal extends Vue {
                        :value="variant"
                        v-model="userCard.variant">
                 <label class="form-check-label" :for="uid + '_' + variant">
-                  {{ $t('userCard.model.variants.' + variant) }}
+                  {{ $t('card.model.variants.' + variant) }}
                 </label>
               </div>
             </template>

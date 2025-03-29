@@ -5,6 +5,21 @@ export const messagesEn = {
     register: 'Register',
     logout: 'Log out',
   },
+  card: {
+    model: {
+      id: 'Id',
+      name: 'Name',
+      number: 'Number',
+      language: 'Language',
+      rarity: 'Rarity',
+      variants: {
+        holo: 'Holo',
+        normal: 'Normal',
+        reverse: 'Reverse Holo',
+        variant: 'Variant',
+      },
+    },
+  },
   design: 'Design',
   error: {
     badRequest: 'Bad request',
@@ -93,19 +108,8 @@ export const messagesEn = {
       },
     },
     model: {
-      id: 'Id',
-      name: 'Name',
-      number: 'Number',
       labels: 'Labels',
-      language: 'Language',
-      rarity: 'Rarity',
-      variants: {
-        holo: 'Holo',
-        normal: 'Normal',
-        reverse: 'Reverse Holo',
-        variant: 'Variant',
-      },
-    }
+    },
   },
   userinfo: {
     model: {
