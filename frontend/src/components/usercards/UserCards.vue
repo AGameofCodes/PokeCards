@@ -31,7 +31,7 @@ export default class UserCards extends Vue {
     return this.userCardsStore.userCards.map(e => ({
       userCard: e,
       card: this.getOrFetchCard(e.cardUid),
-    }))
+    }));
   }
 
   getOrFetchCard(uid: string): CardVmV1 | null {
