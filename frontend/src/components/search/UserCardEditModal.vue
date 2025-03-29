@@ -138,32 +138,35 @@ export default class UserCardEditModal extends Vue {
             </template>
           </div>
 
-          <div v-for="label in labelStore.labels" :key="label.id">
-            <template v-if="label.type === 'boolean'">
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" :id="uid + '_' + label.id"
-                       :checked="getUserCardLabelByLabelId(label.id).value === 'true'"
-                       @change="getUserCardLabelByLabelId(label.id).value = ($event.target! as HTMLInputElement).checked ? 'true': ''">
-                <span class="badge rounded-pill"
-                      :style="{background: label.color, color: findForegroundColor(label.color) ?? 'black'}">
+          <div>
+            {{ $t('userCard.model.labels') }}:
+            <div v-for="label in labelStore.labels" :key="label.id">
+              <template v-if="label.type === 'boolean'">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" :id="uid + '_' + label.id"
+                         :checked="getUserCardLabelByLabelId(label.id).value === 'true'"
+                         @change="getUserCardLabelByLabelId(label.id).value = ($event.target! as HTMLInputElement).checked ? 'true': ''">
+                  <span class="badge rounded-pill"
+                        :style="{background: label.color, color: findForegroundColor(label.color) ?? 'black'}">
                   <label class="form-check-label" :for="uid + '_' + label.id">
                     {{ label.name }}
                   </label>
                 </span>
-              </div>
-            </template>
-            <div class="d-flex flex-row align-items-baseline" v-if="label.type === 'enum'">
+                </div>
+              </template>
+              <div class="d-flex flex-row align-items-baseline" v-if="label.type === 'enum'">
               <span class="badge rounded-pill me-2"
                     :style="{background: label.color, color: findForegroundColor(label.color) ?? 'black'}">
                 <label :for="uid + '_type'" class="form-label mb-0">
                   {{ $t('label.model.type') }}
                 </label>
               </span>
-              <vSelect :id="uid + '_type'"
-                       v-model="getUserCardLabelByLabelId(label.id).value"
-                       :options="label.enumValues?.split(',').map(e => e.trim()).filter(e => !!e)"
-                       :clearable="true"
-                       theme="bootstrap"/>
+                <vSelect :id="uid + '_type'"
+                         v-model="getUserCardLabelByLabelId(label.id).value"
+                         :options="label.enumValues?.split(',').map(e => e.trim()).filter(e => !!e)"
+                         :clearable="true"
+                         theme="bootstrap"/>
+              </div>
             </div>
           </div>
         </div>

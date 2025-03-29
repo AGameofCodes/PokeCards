@@ -95,6 +95,7 @@ export const messagesDe = {
       id: 'Id',
       name: 'Name',
       number: 'Nummer',
+      labels: 'Labels',
       language: 'Sprache',
       rarity: 'Seltenheit',
       variants: {
