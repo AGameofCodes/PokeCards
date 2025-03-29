@@ -42,7 +42,7 @@ export default class Card extends BaseModel {
     return 'cards';
   }
 
-  static override get idColumn():string {
+  static override get idColumn(): string {
     return 'uid';
   }
 
