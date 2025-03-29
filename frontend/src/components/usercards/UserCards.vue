@@ -62,11 +62,11 @@ export default class UserCards extends Vue {
 
     <Loading v-if="userCardsStore.loading"/>
     <div v-else class="flex-grow-1 d-flex flex-row flex-wrap overflow-auto">
-      <CardBsCard v-for="{userCard, card} in cards"
-                  :key="userCard.id"
-                  :card="card"
-                  class="col-3 col-lg-3 col-md-4 col-sm-6 pe-1 pb-1 c-pointer"
-                  @click="card && openCard(card, userCard)"/>
+      <div v-for="{userCard, card} in cards"
+           :key="userCard.id"
+           class="col-3 col-lg-3 col-md-4 col-sm-6 pe-1 pb-1">
+        <CardBsCard :card="card" class="c-pointer" @click="card && openCard(card, userCard)"/>
+      </div>
     </div>
 
     <UserCardEditModal ref="editModal"/>

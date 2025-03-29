@@ -18,13 +18,11 @@ export default class CardBsCard extends Vue {
 </script>
 
 <template>
-  <div>
-    <div class="card">
-      <img :src="image" class="card-img-top" :alt="card?.name">
-      <div class="card-body">
-        <h5 class="card-title">{{ card?.name }}</h5>
-        Id: {{ card?.id }}
-      </div>
+  <div class="card">
+    <img :src="image" class="card-img-top" :alt="card?.name">
+    <div class="card-body">
+      <h5 class="card-title">{{ card?.name }}</h5>
+      Id: {{ card?.id }}
     </div>
   </div>
 </template>

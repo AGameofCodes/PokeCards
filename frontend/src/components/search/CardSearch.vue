@@ -65,11 +65,10 @@ export default class CardSearch extends Vue {
     </div>
     <Spinner v-if="loading"/>
     <div v-else class="flex-grow-1 d-flex flex-row flex-wrap overflow-auto">
-      <CardBsCard v-for="card in searchResults"
-                  :key="card.id"
-                  :card="card"
-                  class="col-3 col-lg-3 col-md-4 col-sm-6 pe-1 pb-1 c-pointer"
-                  @click="openCard(card)"/>
+      <div v-for="card in searchResults" :key="card.id"
+           class="col-3 col-lg-3 col-md-4 col-sm-6 pe-1 pb-1">
+        <CardBsCard :card="card" class="c-pointer" @click="openCard(card)"/>
+      </div>
     </div>
     <UserCardEditModal ref="addModal"/>
   </div>
