@@ -1,13 +1,14 @@
 import type {Request as Req} from 'express';
 import CardRepository from '../../../repository/CardRepository';
 import Card from '../../../models/db/Card';
+import SetModel from '../../../models/db/Set';
 import {Controller, Get, Middlewares, Path, Query, Request, Response, Route, SuccessResponse, Tags} from 'tsoa';
 import {isAuthenticatedMiddleware} from '../../../middleware/auth';
 import {UUID} from '../../../models/api/uuid';
 import {fetchCard, fetchCards, mapApiTcgCard2Card} from '../../../tcgApi/TcgApiCardApi';
-import {validateTcpApiResponse} from './util';
+import SetRepository from '../../../repository/SetRepository';
 
-interface CardBriefVmV1 {
+export interface CardBriefVmV1 {
   /**
    * @minLength 1
    * @maxLength 255
@@ -84,6 +85,7 @@ interface CardVmV1 {
 @Tags('cards')
 export class CardController extends Controller {
   private repo = new CardRepository();
+  private setRepo = new SetRepository();
 
   @Get()
   @SuccessResponse(200, 'Ok')
@@ -99,18 +101,62 @@ export class CardController extends Controller {
       languages = languages[0]!.split(',');
     }
 
+    let filter: string[] = [];
+
+    const searchTerms = searchText.split(' ').map(e => ({term: e, number: parseInt(e)}));
+    const searchNumbers = searchTerms.filter(e => !isNaN(e.number)).map(e => e.number);
+    const searchTexts = searchTerms.filter(e => isNaN(e.number)).map(e => e.term);
+
+    //find sets
+    const searchSets: SetModel[] = [];
+    const sets = await this.setRepo.getAll();
+    for (let [i, text] of searchTexts.entries()) {
+      const foundSetsForText = sets.filter(e => text.toLowerCase() === e.abbreviation.toLowerCase());
+      if (foundSetsForText.length > 0) {
+        searchTexts.splice(i, 1);
+        searchSets.push(...foundSetsForText);
+      }
+    }
+
+    //find ids
+    if (searchNumbers.length > 0) {
+      const paddedNumbers = ['' + searchNumbers[0],
+        ('' + searchNumbers[0]).padStart(2, '0'),
+        ('' + searchNumbers[0]).padStart(3, '0'),
+        ('' + searchNumbers[0]).padStart(4, '0'),
+      ];
+      filter.push('localId=eq:' + paddedNumbers.join('|'));
+    }
+
     const cards: CardBriefVmV1[] = [];
     for (let language of languages) {
-      const byId = (await fetchCards(language, ['id=like:' + searchText])) ?? [];
-      const byName = (await fetchCards(language, ['name=like:' + searchText])) ?? [];
-      for (const card of byId) {
-        if (!cards.find(e => e.id === card.id && e.language === card.language)) {
-          cards.push(card);
+      //prepare filter for this language
+      const languageSpecificFilter = [...filter];
+      if (searchSets.length > 0) {
+        const setIds = [...new Set(searchSets.filter(e => e.language === language).map(e => e.id))];
+        if (setIds.length > 0) {
+          languageSpecificFilter.push('set.id=eq:' + setIds.join('|'));
+        } else {
+          //sets where found but not for this language so we don't search for this language
+          continue;
         }
       }
-      for (const card of byName) {
-        if (!cards.find(e => e.id === card.id && e.language === card.language)) {
-          cards.push(card);
+      if (searchTexts.length > 0) {
+        languageSpecificFilter.push('name=' + searchTexts.join(' '));
+      }
+
+      //no search params -> no search
+      if (!languageSpecificFilter.length) {
+        continue;
+      }
+
+      //fetch cards
+      const apiCards = await fetchCards(language, languageSpecificFilter);
+      if (apiCards) {
+        for (const card of apiCards) {
+          if (!cards.find(e => e.id === card.id && e.language === card.language)) {
+            cards.push(card);
+          }
         }
       }
     }

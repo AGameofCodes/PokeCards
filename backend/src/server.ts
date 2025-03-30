@@ -17,6 +17,7 @@ import {seedDb} from './DbSeed';
 import {uncaughtErrorHandler} from './middleware/UncaughtErrorHandler';
 import compression from 'compression';
 import {iocContainer} from './ioc';
+import Scheduler from './schedule/Scheduler';
 
 export default class Server {
   // @ts-ignore TS6133
@@ -28,6 +29,7 @@ export default class Server {
   private expressHost: string | undefined;
   private expressPort: number | undefined;
   private knex: Knex | undefined;
+  private scheduler: Scheduler | undefined;
 
 //region init once
   constructor() {
@@ -68,6 +70,7 @@ export default class Server {
     this.config = await iocContainer().get(ConfigProvider).get();
     await this.initExpress();
     await this.initDatabase();
+    await this.initScheduler();
   }
 
   private async initExpress(): Promise<void> {
@@ -101,6 +104,11 @@ export default class Server {
     await seedDb(this.knex);
   }
 
+  private async initScheduler(): Promise<void> {
+    this.scheduler = new Scheduler(this.config);
+    this.scheduler.registerJobs();
+  }
+
 //endregion
 
 //region start
@@ -114,6 +122,7 @@ export default class Server {
         reject(new Error('Server not initialized!'));
         return;
       }
+      this.scheduler!.startUp();
       this.server = this.express.listen(this.expressPort!, this.expressHost!, () => {
         if (!reboot) {
           console.log('Started server at http://' + this.expressHost + ':' + this.expressPort + '/');
@@ -136,6 +145,7 @@ export default class Server {
     }
     await this.stopExpress();
     await this.stopDatabase();
+    await this.stopScheduler();
   }
 
   private stopExpress(): Promise<void> {
@@ -172,6 +182,12 @@ export default class Server {
     }
     await this.knex.destroy();
     this.knex = undefined;
+  }
+
+  private async stopScheduler(): Promise<void> {
+    if (this.scheduler) {
+      await this.scheduler.cancelJobs();
+    }
   }
 
 //endregion
