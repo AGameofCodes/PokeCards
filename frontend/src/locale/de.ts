@@ -90,8 +90,8 @@ export const messagesDe = {
     main: 'Dashboard',
     profile: 'Profil',
     search: 'Suche',
-    userCards: 'Meine Karten',
     settings: 'Einstellungen',
+    userCards: 'Meine Karten',
   },
   settings: {
     settings: 'Einstellungen',
