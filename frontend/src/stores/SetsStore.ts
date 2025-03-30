@@ -52,7 +52,7 @@ export class SetsStore extends Pinia {
   }
 
   updateSet(set: SetVmV1): void {
-    const index = this._sets.findIndex(e => e.id == set.id);
+    const index = this._sets.findIndex(e => e.uid == set.uid);
     if (index >= 0) {
       this._sets.splice(index, 1, set);
     } else {
@@ -61,7 +61,7 @@ export class SetsStore extends Pinia {
   }
 
   forgetSet(set: SetVmV1): void {
-    const index = this._sets.findIndex(e => e.id == set.id);
+    const index = this._sets.findIndex(e => e.uid == set.uid);
     if (index >= 0) {
       this._sets.splice(index, 1);
     }
