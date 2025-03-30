@@ -4,6 +4,8 @@ export const messagesEn = {
     loginInProgress: 'Logging in ...',
     register: 'Register',
     logout: 'Log out',
+    password: 'Password',
+    username: 'Username',
   },
   card: {
     model: {

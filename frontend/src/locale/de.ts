@@ -6,6 +6,8 @@ export const messagesDe = {
     loginInProgress: 'Logge ein ...',
     register: 'Registrieren',
     logout: 'Ausloggen',
+    password: 'Passwort',
+    username: 'Username',
   },
   card: {
     model: {

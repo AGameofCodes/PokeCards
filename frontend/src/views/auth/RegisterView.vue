@@ -43,11 +43,11 @@ export default class RegisterView extends Vue {
             {{ error }}
           </div>
           <div class="mb-3">
-            Username
+            {{ $t('auth.username') }}
             <input type="text" class="form-control" v-model="username" />
           </div>
           <div class="mb-3">
-            Password
+            {{ $t('auth.password') }}
             <input type="password" class="form-control" v-model="password" />
           </div>
           <div class="float-right">

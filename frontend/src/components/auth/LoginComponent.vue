@@ -51,11 +51,11 @@ export default class LoginComponent extends Vue {
       {{ error }}
     </div>
     <div class="mb-3">
-      Username
+      {{ $t('auth.username') }}
       <input type="text" class="form-control" v-model="username"/>
     </div>
     <div class="mb-3">
-      Password
+      {{ $t('auth.password') }}
       <input type="password" class="form-control" v-model="password" @keydown.enter="login"/>
     </div>
     <div class="d-flex flex-row align-items-center mb-3">
