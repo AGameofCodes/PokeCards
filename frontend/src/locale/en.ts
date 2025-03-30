@@ -26,6 +26,11 @@ export const messagesEn = {
       noCardsFound: 'No card found',
     }
   },
+  dashboard: {
+    stats: 'Stats',
+    totalCards: 'Cards',
+    totalSets: 'Sets',
+  },
   design: 'Design',
   error: {
     badRequest: 'Bad request',

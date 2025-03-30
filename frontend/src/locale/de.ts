@@ -28,6 +28,11 @@ export const messagesDe = {
       noCardsFound: 'Keine Karten gefunden',
     },
   },
+  dashboard: {
+    stats: 'Stats',
+    totalCards: 'Karten',
+    totalSets: 'Sets',
+  },
   design: 'Design',
   error: {
     badRequest: 'Ungültige Anforderung',
