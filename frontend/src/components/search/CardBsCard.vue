@@ -22,6 +22,10 @@ export default class CardBsCard extends Vue {
     return (this.card as CardVmV1)?.setId ?? (this.card as CardBriefVmV1)?.id.split('-')[0];
   }
 
+  get number(): string {
+    return (this.card as CardVmV1)?.setId ?? (this.card as CardBriefVmV1)?.id.split('-')[1];
+  }
+
   get set(): SetVmV1 | undefined {
     if (!this.card) {
       return undefined;
@@ -46,8 +50,11 @@ export default class CardBsCard extends Vue {
     <img :src="image" class="card-img-top" :alt="card?.name">
     <div class="card-body">
       <h5 class="card-title">{{ card?.name }}</h5>
-      <div>Id: {{ card?.id }}</div>
-      <div>Set: {{ set?.abbreviation }} <img :src="set?.symbol + '.webp'" height="16" alt="set symbol"/></div>
+      <div>{{ $t('card.model.number') }}: {{ number }}</div>
+      <div>
+        {{ $t('card.model.set') }}: {{ set?.abbreviation ?? '?' }}
+        <img :src="set?.symbol + '.webp'" height="16" alt=""/>
+      </div>
     </div>
   </div>
 </template>

@@ -12,6 +12,7 @@ export const messagesEn = {
       number: 'Number',
       language: 'Language',
       rarity: 'Rarity',
+      set: 'Set',
       variants: {
         holo: 'Holo',
         normal: 'Normal',
