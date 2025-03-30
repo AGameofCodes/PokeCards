@@ -266,6 +266,18 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ConfigVmV1": {
+				"properties": {
+					"registerEnabled": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"registerEnabled"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"CardVmV1": {
 				"properties": {
 					"uid": {
@@ -1148,6 +1160,28 @@
 						}
 					}
 				]
+			}
+		},
+		"/api/v1/config": {
+			"get": {
+				"operationId": "GetConfig",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ConfigVmV1"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"config"
+				],
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/api/v1/cards": {

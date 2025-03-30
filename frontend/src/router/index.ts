@@ -12,6 +12,7 @@ import ProfileView from '@/views/ProfileView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 import LabelsView from '@/views/LabelsView.vue';
 import SearchView from '@/views/SearchView.vue';
+import {ConfigStore} from '@/stores/ConfigStore.ts';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -75,8 +76,12 @@ const router = createRouter({
 const routeCheck = async (route: RouteLocationNormalized): Promise<any> => {
   const sessionStore = new SessionStore();
   await sessionStore.loadIfAbsent();
+  const configStore = new ConfigStore();
+  await configStore.loadIfAbsent();
   if (!route.name) {
     return;
+  } else if (route.name === 'register' && !configStore.config?.registerEnabled) {
+    return {name: 'login'};
   } else if (!route.meta?.anon && !sessionStore.isLoggedIn) {
     return {name: 'login'};
   } else if (['login', 'register'].includes(route.name as string) && sessionStore.isLoggedIn) {

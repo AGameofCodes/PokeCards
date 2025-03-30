@@ -1,7 +1,7 @@
 import {Pinia, Store} from 'pinia-class-component';
 import {
   AuthApi,
-  CardsApi,
+  CardsApi, ConfigApi,
   createConfiguration,
   HttpMethod,
   LabelsApi,
@@ -26,6 +26,7 @@ export class ApiStore extends Pinia {
   //api
   private readonly _authApi = new AuthApi(this._config);
   private readonly _cardApi = new CardsApi(this._config);
+  private readonly _configApi = new ConfigApi(this._config);
   private readonly _labelApi = new LabelsApi(this._config);
   private readonly _setApi = new SetsApi(this._config);
   private readonly _userCardApi = new UserCardsApi(this._config);
@@ -37,6 +38,10 @@ export class ApiStore extends Pinia {
 
   get cardApi(): CardsApi {
     return this._cardApi;
+  }
+
+  get configApi(): CardsApi {
+    return this._configApi;
   }
 
   get labelApi(): LabelsApi {

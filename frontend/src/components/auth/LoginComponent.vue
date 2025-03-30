@@ -3,6 +3,7 @@ import {ApiException, LoginRequestVmV1, LoginResponseVmV1} from 'pokecards-oas';
 import {Component, Vue} from 'vue-facing-decorator';
 import {SessionStore} from '@/stores/SessionStore';
 import {ApiStore} from '@/stores/ApiStore';
+import {ConfigStore} from "@/stores/ConfigStore.ts";
 
 @Component({
   name: 'LoginComponent',
@@ -16,7 +17,12 @@ export default class LoginComponent extends Vue {
   error: string = '';
 
   private readonly apiStore = new ApiStore();
+  private readonly configStore = new ConfigStore();
   private readonly sessionStore = new SessionStore();
+
+  mounted() {
+    this.configStore.loadIfAbsent();
+  }
 
   async login(): Promise<void> {
     this.error = '';
@@ -52,10 +58,10 @@ export default class LoginComponent extends Vue {
       Password
       <input type="password" class="form-control" v-model="password" @keydown.enter="login"/>
     </div>
-    <div class="float-end mb-3">
-      <button class="btn btn-primary" @click="login">{{ $t('auth.login') }}</button>
+    <div class="d-flex flex-row align-items-center mb-3">
+      <RouterLink v-if="configStore.config?.registerEnabled" to="/register">{{ $t('auth.register') }}</RouterLink>
+      <button class="btn btn-primary ms-auto" @click="login">{{ $t('auth.login') }}</button>
     </div>
-    <div class="clearfix"></div>
   </div>
 </template>
 
