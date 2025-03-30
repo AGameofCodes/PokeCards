@@ -1,5 +1,5 @@
 import {Pinia, Store} from 'pinia-class-component';
-import type {SetVmV1} from 'pokecards-oas';
+import {ApiException, SetVmV1} from 'pokecards-oas';
 import {ApiStore} from '@/stores/ApiStore';
 
 @Store({
@@ -78,7 +78,11 @@ export class SetsStore extends Pinia {
       const set = await this.apiStore.setApi.getByLanguageAndId(language, id);
       this.updateSet(set);
     } catch (e) {
-      console.error(e);
+      if (e instanceof ApiException && e.code === 404) {
+        this.updateSet(SetVmV1.fromJson({uid: crypto.randomUUID(), id: id, language: language}));
+      } else {
+        console.error(e);
+      }
     } finally {
       this._loadingSetsLanguageAndIds.delete(languageAndId);
     }
