@@ -83,15 +83,12 @@ export default class Server {
 
     //middlewares
     this.express.use(compression());
-    // await registerOpenApiFirst(this.express, this.config);
     this.express.use(session(getSessionSettings(this.config, sessionStore)));
     this.express.use(sessionUserdataMiddleware());
     this.express.use(express.json());
     registerRoutes(this.express, this.config);
-    // RegisterRoutes(app);
     this.express.use(errorLogHandler());
     this.express.use(apiErrorHandler());
-    // registerOpenApiLast(this.express);
     this.express.use(uncaughtErrorHandler());
   }
 
