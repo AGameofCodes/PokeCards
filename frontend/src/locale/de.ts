@@ -89,6 +89,7 @@ export const messagesDe = {
     cards: 'Karten',
     main: 'Dashboard',
     profile: 'Profil',
+    search: 'Suche',
     userCards: 'Meine Karten',
     settings: 'Einstellungen',
   },

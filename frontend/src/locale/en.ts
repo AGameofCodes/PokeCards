@@ -91,6 +91,7 @@ export const messagesEn = {
     profile: 'Profile',
     reports: 'Reports',
     settings: 'Settings',
+    search: 'Search',
     userCards: 'My cards',
   },
   settings: {
