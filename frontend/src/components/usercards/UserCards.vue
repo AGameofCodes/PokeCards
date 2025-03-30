@@ -6,10 +6,10 @@ import 'vue-good-table-next/dist/vue-good-table-next.css';
 import '@/assets/vue-good-table/themes/bootstrap/bootstrap.scss';
 import '@/assets/vue-good-table/mobile.scss';
 import Loading from '@/components/Loading.vue';
-import CardBsCard from "@/components/search/CardBsCard.vue";
+import CardBsCard from "@/components/cards/CardBsCard.vue";
 import {CardsStore} from "@/stores/CardsStore";
 import {CardBriefVmV1, CardVmV1, UserCardVmV1} from "pokecards-oas";
-import UserCardEditModal from "@/components/search/UserCardEditModal.vue";
+import UserCardEditModal from "@/components/cards/UserCardEditModal.vue";
 
 @Component({
   components: {

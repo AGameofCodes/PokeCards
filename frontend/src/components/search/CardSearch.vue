@@ -3,9 +3,9 @@ import {Component, Vue} from 'vue-facing-decorator';
 import {CardsStore} from '@/stores/CardsStore';
 import {ApiStore} from '@/stores/ApiStore';
 import Spinner from '@/components/Spinner.vue';
-import UserCardEditModal from '@/components/search/UserCardEditModal.vue';
+import UserCardEditModal from '@/components/cards/UserCardEditModal.vue';
 import {CardBriefVmV1} from 'pokecards-oas';
-import CardBsCard from "@/components/search/CardBsCard.vue";
+import CardBsCard from "@/components/cards/CardBsCard.vue";
 import {getCurrentInstance} from "vue";
 import CenterOnParent from "@/components/CenterOnParent.vue";
 
