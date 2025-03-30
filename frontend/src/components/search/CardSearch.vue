@@ -24,7 +24,7 @@ export default class CardSearch extends Vue {
 
   availableLanguages = ['en', 'de'];
   searchLanguages = ['en', 'de'];
-  searchText = 'base4-1';
+  searchText = '';
   searchResults: CardBriefVmV1[] = [];
   loading = false;
 
