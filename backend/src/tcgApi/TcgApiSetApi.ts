@@ -19,5 +19,5 @@ export function fetchSet(language: string, id: string): Promise<TcgApiSet | unde
 }
 
 export function mapTcgApiSet2Set(set: TcgApiSet, language: string): Set {
-  return Set.new(randomUUID(), set.id, set.name, set.serie.id, set.logo, set.symbol, set.releaseDate, set.abbreviation?.official ?? '', language);
+  return Set.new(randomUUID(), set.id, set.name, set.serie.id, set.logo ?? '', set.symbol ?? '', set.releaseDate, set.abbreviation?.official ?? '', language);
 }

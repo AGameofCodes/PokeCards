@@ -3,8 +3,8 @@ import TcgApiCardBrief from './TcgApiCardBrief';
 export default interface TcgApiSet {
   id: string;
   name: string;
-  logo: string;
-  symbol: string;
+  logo: string | undefined;
+  symbol: string | undefined;
   cardCount: {
     firstEd: number,
     holo: number,
