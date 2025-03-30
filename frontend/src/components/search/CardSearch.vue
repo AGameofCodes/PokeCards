@@ -53,7 +53,12 @@ export default class CardSearch extends Vue {
 <template>
   <div class="p-2 w-100 h-100 d-flex flex-column">
     <div class="d-flex flex-row align-items-baseline mb-2">
-      <input type="text" class="form-control" v-model="searchText" @keydown.enter="search">
+      <div class="input-group mb-2">
+        <input ref="searchBox" type="text" class="form-control" v-model="searchText" @keydown.enter="search">
+        <button class="btn btn-secondary" @click="searchText = ''; $refs.searchBox.focus()">
+          <i class="fa fa-times"/>
+        </button>
+      </div>
       <div class="form-check ms-2" v-for="language in availableLanguages">
         <input class="form-check-input"
                type="checkbox"
