@@ -65,7 +65,9 @@ export default class CardSearch extends Vue {
         </label>
       </div>
     </div>
-    <Spinner v-if="loading"/>
+    <CenterOnParent v-if="loading">
+      <Spinner/>
+    </CenterOnParent>
     <CenterOnParent v-else-if="!searchResults.length">
       {{ $t('card.search.noCardsFound') }}
     </CenterOnParent>
