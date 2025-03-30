@@ -32,7 +32,6 @@ export class ConfigStore extends Pinia {
 
   setConfig(config: ConfigVmV1) {
     this._config = config;
-    this._session = session;
   }
 
   async reload(force: boolean = false) {
