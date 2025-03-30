@@ -3,10 +3,8 @@ import CardRepository from '../../../repository/CardRepository';
 import Card from '../../../models/db/Card';
 import {Controller, Get, Middlewares, Path, Query, Request, Response, Route, SuccessResponse, Tags} from 'tsoa';
 import {isAuthenticatedMiddleware} from '../../../middleware/auth';
-import TcgCardBrief from '../../../models/tcgApi/TcgCardBrief';
-import TcgCard from '../../../models/tcgApi/TcgCard';
-import {randomUUID} from 'crypto';
 import {UUID} from '../../../models/api/uuid';
+import {fetchCard, fetchCards, mapApiTcgCard2Card} from '../../../tcgApi/TcgApiCardApi';
 import {validateTcpApiResponse} from './util';
 
 interface CardBriefVmV1 {
@@ -103,22 +101,8 @@ export class CardController extends Controller {
 
     const cards: CardBriefVmV1[] = [];
     for (let language of languages) {
-      const byId: CardBriefVmV1[] = await fetch('https://api.tcgdex.net/v2/' + language + '/cards?id=like:' + searchText)
-        .then(res => validateTcpApiResponse(res))
-        .then(res => res.json())
-        .then(res => res.map((e: TcgCardBrief) => this.mapTcgCardBrief2CardBriefVmV1(e, language)))
-        .catch(e => {
-          console.error('Failed to search card by id for ' + searchText, e);
-          return [];
-        });
-      const byName: CardBriefVmV1[] = await fetch('https://api.tcgdex.net/v2/' + language + '/cards?name=like:' + searchText)
-        .then(res => validateTcpApiResponse(res))
-        .then(res => res.json())
-        .then(res => res.map((e: TcgCardBrief) => this.mapTcgCardBrief2CardBriefVmV1(e, language)))
-        .catch(e => {
-          console.error('Failed to search card by name for ' + searchText, e);
-          return [];
-        });
+      const byId = (await fetchCards(language, ['id=like:' + searchText])) ?? [];
+      const byName = (await fetchCards(language, ['name=like:' + searchText])) ?? [];
       for (const card of byId) {
         if (!cards.find(e => e.id === card.id && e.language === card.language)) {
           cards.push(card);
@@ -163,12 +147,9 @@ export class CardController extends Controller {
     }
 
     //from api
-    const apiCard = await fetch('https://api.tcgdex.net/v2/' + language + '/cards/' + id)
-      .then(res => validateTcpApiResponse(res))
-      .then(res => res.json())
-      .catch(e => console.error('Failed to fetch card ' + language + '/' + id, e));
+    const apiCard = await fetchCard(language, id);
     if (apiCard !== undefined) {
-      card = this.mapTcgCard2Card(apiCard, language);
+      card = mapApiTcgCard2Card(apiCard, language);
       await this.repo.add(card);
       return card;
     }
@@ -178,27 +159,11 @@ export class CardController extends Controller {
     return undefined as any;
   }
 
-  private mapTcgCardBrief2CardBriefVmV1(brief: TcgCardBrief, language: string): CardBriefVmV1 {
-    return {
-      id: brief.id,
-      name: brief.name,
-      image: brief.image,
-      language: language,
-    };
-  }
-
-  private mapTcgCard2Card(card: TcgCard, language: string): Card {
-    return Card.new(randomUUID(), card.id, card.name, card.set.id, card.localId, card.image ?? '', card.rarity, card.variants, language);
-  }
-
   private async updateIfNeeded(card: Card): Promise<Card> {
     if (card.updatedAt.getTime() + 24 * 60 * 60 * 1000 < Date.now()) {
-      const apiCard = await fetch('https://api.tcgdex.net/v2/' + card.language + '/cards/' + card.id)
-        .then(res => validateTcpApiResponse(res))
-        .then(res => res.json())
-        .catch(e => console.error('updateIfNeeded: Failed to fetch card ' + card.language + '/' + card.id, e));
+      const apiCard = await fetchCard(card.language, card.id);
       if (apiCard !== undefined) {
-        const updatedCard = this.mapTcgCard2Card(apiCard, card.language);
+        const updatedCard = mapApiTcgCard2Card(apiCard, card.language);
         updatedCard.uid = card.uid;
         await this.repo.update(updatedCard);
         return updatedCard;

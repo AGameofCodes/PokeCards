@@ -3,10 +3,8 @@ import SetRepository from '../../../repository/SetRepository';
 import Set from '../../../models/db/Set';
 import {Controller, Get, Middlewares, Path, Request, Response, Route, SuccessResponse, Tags} from 'tsoa';
 import {isAuthenticatedMiddleware} from '../../../middleware/auth';
-import TcgSet from '../../../models/tcgApi/TcgSet';
-import {randomUUID} from 'crypto';
 import {UUID} from '../../../models/api/uuid';
-import {validateTcpApiResponse} from './util';
+import {fetchSet, mapTcgApiSet2Set} from '../../../tcgApi/TcgApiSetApi';
 
 interface SetVmV1 {
   /**
@@ -97,12 +95,9 @@ export class SetController extends Controller {
     }
 
     //from api
-    const apiSet = await fetch('https://api.tcgdex.net/v2/' + language + '/sets/' + id)
-      .then(res => validateTcpApiResponse(res))
-      .then(res => res.json())
-      .catch(e => console.error('Failed to fetch set ' + language + '/' + id, e));
+    const apiSet = await fetchSet(language, id);
     if (apiSet !== undefined) {
-      set = this.mapTcgSet2Set(apiSet, language);
+      set = mapTcgApiSet2Set(apiSet, language);
       await this.repo.add(set);
       return set;
     }
@@ -112,19 +107,11 @@ export class SetController extends Controller {
     return undefined as any;
   }
 
-  private mapTcgSet2Set(set: TcgSet, language: string): Set {
-    return Set.new(randomUUID(), set.id, set.name, set.serie.id, set.logo, set.symbol, set.releaseDate, set.abbreviation?.official ?? '', language);
-  }
-
-
   private async updateIfNeeded(set: Set): Promise<Set> {
     if (set.updatedAt.getTime() + 24 * 60 * 60 * 1000 < Date.now()) {
-      const apiSet = await fetch('https://api.tcgdex.net/v2/' + set.language + '/sets/' + set.id)
-        .then(res => validateTcpApiResponse(res))
-        .then(res => res.json())
-        .catch(e => console.error('updateIfNeeded: Failed to fetch set ' + set.language + '/' + set.id, e));
+      const apiSet = await fetchSet(set.language, set.id);
       if (apiSet !== undefined) {
-        const updatedSet = this.mapTcgSet2Set(apiSet, set.language);
+        const updatedSet = mapTcgApiSet2Set(apiSet, set.language);
         updatedSet.uid = set.uid;
         await this.repo.update(updatedSet);
         return updatedSet;

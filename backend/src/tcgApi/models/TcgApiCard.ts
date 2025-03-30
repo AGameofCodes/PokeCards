@@ -1,6 +1,6 @@
-import TcgSetBrief from './TcgSetBrief';
+import TcgApiSetBrief from './TcgApiSetBrief';
 
-export default interface TcgCard {
+export default interface TcgApiCard {
   id: string;
   localId: string;
   name: string;
@@ -8,7 +8,7 @@ export default interface TcgCard {
   category: 'Pokemon' | 'Energy' | 'Trainer',
   illustrator: string | null | undefined,
   rarity: 'Uncommon' | null | undefined,
-  set: TcgSetBrief,
+  set: TcgApiSetBrief,
   variants: {
     firstEdition?: boolean,
     holo?: boolean,

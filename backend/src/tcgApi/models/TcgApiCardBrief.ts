@@ -1,4 +1,4 @@
-export default interface TcgCardBrief {
+export default interface TcgApiCardBrief {
   id: string;
   localId: string;
   name: string;
