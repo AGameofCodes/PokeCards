@@ -55,7 +55,7 @@ export default class CardSearch extends Vue {
     <div class="d-flex flex-row align-items-baseline mb-2">
       <div class="input-group mb-2">
         <input ref="searchBox" type="text" class="form-control" v-model="searchText" @keydown.enter="search">
-        <button class="btn btn-secondary" @click="searchText = ''; $refs.searchBox.focus()">
+        <button class="btn btn-secondary" @click="searchText = ''; ($refs.searchBox as HTMLInputElement).focus()">
           <i class="fa fa-times"/>
         </button>
       </div>
