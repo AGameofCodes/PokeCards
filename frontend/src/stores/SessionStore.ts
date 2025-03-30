@@ -50,7 +50,7 @@ export class SessionStore extends Pinia {
 
   async reload(force: boolean = false) {
     if (this._loadingPromise) {
-      await this._loadingPromise;
+      await this._loadingPromise.catch(_ => {});
       if (!force) {// when force is true, wait for the current operation to complete, then reload
         return;
       }

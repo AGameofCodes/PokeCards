@@ -75,7 +75,9 @@ const router = createRouter({
 const routeCheck = async (route: RouteLocationNormalized): Promise<any> => {
   const sessionStore = new SessionStore();
   await sessionStore.loadIfAbsent();
-  if (!route.meta?.anon && !sessionStore.isLoggedIn) {
+  if (!route.name) {
+    return;
+  } else if (!route.meta?.anon && !sessionStore.isLoggedIn) {
     return {name: 'login'};
   } else if (['login', 'register'].includes(route.name as string) && sessionStore.isLoggedIn) {
     return {name: 'home'};
