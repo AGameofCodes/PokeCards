@@ -47,8 +47,6 @@ export default class SideBar extends Vue {
                         @click="$emit('close')"/>
         <SideBarNavLink v-if="loggedIn" :text="$t('menu.labels')" to="/labels" faIcon="fa-ribbon"
                         @click="$emit('close')"/>
-        <SideBarNavLink v-if="loggedIn" :text="$t('menu.values')" to="/values" faIcon="fa-database"
-                        @click="$emit('close')"/>
         <SideBarNavLink :text="$t('menu.about')" to="/about" faIcon="fa-question"
                         @click="$emit('close')"/>
         <li>
