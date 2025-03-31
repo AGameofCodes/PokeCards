@@ -21,9 +21,10 @@ export default defineConfig({
       input: ['./src/main.ts', './index.html'],
       output: {
         manualChunks: (id: string, meta: ManualChunkMeta) => {
-          if (id.includes('node_modules')) {
-            return 'vendor';
-          }
+          //TODO somehow  splitting it breaks it, so everything goes into main for now
+          // if (id.includes('node_modules')) {
+          //   return 'vendor';
+          // }
           return 'main';
         },
       },
