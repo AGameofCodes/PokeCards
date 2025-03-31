@@ -49,7 +49,7 @@ export default class CardBsCard extends Vue {
   <div class="card">
     <img :src="image" class="card-img-top" :alt="card?.name">
     <div class="card-body">
-      <h5 class="card-title">{{ card?.name }}</h5>
+      <h5 class="card-title text-nowrap text-truncate">{{ card?.name }}</h5>
       <div>{{ $t('card.model.number') }}: {{ number }}</div>
       <div>
         {{ $t('card.model.set') }}: {{ set?.abbreviation ?? '?' }}
