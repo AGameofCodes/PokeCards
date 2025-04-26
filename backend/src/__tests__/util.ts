@@ -7,7 +7,6 @@ const dbConfig = {
     client: 'sqlite3',
     useNullAsDefault: true,
     connection: {
-      // filename: 'test.db',
       filename: ':memory:',
     },
     pool: {
@@ -22,7 +21,7 @@ const dbConfig = {
 export function getTestDbConfig(): any {
   const config = mergeDeep({}, dbConfig);
   config.sqlite.connection.filename = 'file:test.' + randomUUID() + '.db?mode=memory&cache=shared';
-  config.sqlite.connection.flags= ['OPEN_URI', 'OPEN_SHAREDCACHE'];
+  config.sqlite.connection.flags = ['OPEN_URI', 'OPEN_SHAREDCACHE'];
   return config;
 }
 
