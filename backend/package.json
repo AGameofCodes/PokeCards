@@ -6,7 +6,7 @@
   "scripts": {
     "dev-win": "set NODE_ENV=development && run-p dev:1 dev:2",
     "dev": "NODE_ENV=development run-p dev:1 dev:2",
-    "dev:1": "rm dev/main.js && tsc --watch --preserveWatchOutput -p tsconfig.dev.json",
+    "dev:1": "rm -f dev/main.js && tsc --watch --preserveWatchOutput -p tsconfig.dev.json",
     "dev:2": "wait-on dev/main.js && nodemon -q --watch dev/ dev/main.js",
     "build": "run-s tsoa:spec tsoa:routes type-check build-only test",
     "build-only": "tsc",
