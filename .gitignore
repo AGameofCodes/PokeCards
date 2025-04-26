@@ -5,7 +5,6 @@ node_modules
 pokecards.db
 pokecards.db-journal
 oas/
-src/backend/config.dev.ts
 backend/config/config.dev.json
 backend/config/config.prod.json
 backend/src/tsoa.gen/
