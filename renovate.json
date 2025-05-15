@@ -6,6 +6,7 @@
   "baseBranches": ["develop"],
   "packageRules": [
     {
+      "ignoreDeps": ["sass"],
       "matchUpdateTypes": ["minor"],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
