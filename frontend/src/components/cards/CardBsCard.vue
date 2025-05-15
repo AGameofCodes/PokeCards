@@ -23,7 +23,7 @@ export default class CardBsCard extends Vue {
   }
 
   get number(): string {
-    return (this.card as CardVmV1)?.setId ?? (this.card as CardBriefVmV1)?.id.split('-')[1];
+    return (this.card as CardVmV1)?.number ?? (this.card as CardBriefVmV1)?.id.split('-')[1];
   }
 
   get set(): SetVmV1 | undefined {
