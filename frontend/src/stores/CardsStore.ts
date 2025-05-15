@@ -13,6 +13,7 @@ export class CardsStore extends Pinia {
 
   //data
   private _loadingPromise: Promise<CardVmV1[]> | null = null;
+  private _singleCardLoadingPromises = new Map<string, Promise<void>>();
   private _cards: CardVmV1[] = [];
 
   //getter
@@ -43,7 +44,7 @@ export class CardsStore extends Pinia {
   }
 
   updateCard(card: CardVmV1): void {
-    const index = this._cards.findIndex(e => e.id == card.id);
+    const index = this._cards.findIndex(e => e.uid === card.uid);
     if (index >= 0) {
       this._cards.splice(index, 1, card);
     } else {
@@ -52,7 +53,7 @@ export class CardsStore extends Pinia {
   }
 
   forgetCard(card: CardVmV1): void {
-    const index = this._cards.findIndex(e => e.id == card.id);
+    const index = this._cards.findIndex(e => e.uid === card.uid);
     if (index >= 0) {
       this._cards.splice(index, 1);
     }
@@ -60,8 +61,15 @@ export class CardsStore extends Pinia {
 
   async reloadCardByUid(uid: string): Promise<void> {
     try {
-      const card = await this.apiStore.cardApi.getByUid(uid);
-      this.updateCard(card);
+      if (this._singleCardLoadingPromises.has(uid)) {
+        await this._singleCardLoadingPromises.get(uid);
+      } else {
+        const future = this.apiStore.cardApi.getByUid(uid)
+          .then(card => this.updateCard(card));
+        this._singleCardLoadingPromises.set(uid, future);
+        await future;
+        this._singleCardLoadingPromises.delete(uid);
+      }
     } catch (e) {
       console.error(e);
     }
