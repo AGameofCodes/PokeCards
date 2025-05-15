@@ -13,6 +13,11 @@ import UserCardEditModal from "@/components/cards/UserCardEditModal.vue";
 import {SetsStore} from '@/stores/SetsStore.ts';
 
 type CardFilterPredicate = (card: CardVmV1) => boolean;
+type CardDisplayCompound = {
+  userCard: UserCardVmV1;
+  card: CardVmV1 | null;
+  set: SetVmV1 | null;
+}
 
 @Component({
   components: {
@@ -34,21 +39,25 @@ export default class UserCards extends Vue {
     await this.setsStore.loadIfAbsent();
   }
 
-  get cards(): { userCard: UserCardVmV1, card: CardVmV1 | null }[] {
-    return this.userCardsStore.userCards.map(e => ({
-      userCard: e,
-      card: this.getOrFetchCard(e.cardUid),
-    }));
+  get cards(): CardDisplayCompound[] {
+    return this.userCardsStore.userCards.map(e => {
+      const card = this.getOrFetchCard(e.cardUid);
+      const set = !card ? null : this.setsStore.setsByLanguageAndId.get(card.language).get(card.setId);
+      return {
+        userCard: e,
+        card: card,
+        set: set,
+      }
+    });
   }
 
-  get filteredCards(): { userCard: UserCardVmV1, card: CardVmV1 | null }[] {
+  get filteredCards(): CardDisplayCompound[] {
     let trimmedFilter = this.filter.trim();
     if (!trimmedFilter.length) {
       return this.cards;
     }
 
-    //filter
-    let terms = trimmedFilter.split(' ');
+    let terms = this.filter.split(' ');
     let numbers = new Set(terms.filter((t) => t.match(/^[0-9]+$/)).map(t => parseInt(t)));
     let texts = terms.filter((t) => !t.match(/^[0-9]+$/));
 
@@ -73,9 +82,23 @@ export default class UserCards extends Vue {
         predicates.push((card: CardVmV1) => remainingTexts.every(t => card.name.toLocaleLowerCase().includes(t.toLocaleLowerCase())));
       }
     }
-    console.log(predicates);
 
     return this.cards.filter(e => e.card && predicates.every(p => p(e.card!)));
+  }
+
+  get sortedAndFilteredCards(): CardDisplayCompound[] {
+    const filteredCards = [...this.filteredCards];
+    filteredCards.sort((l, r) => {
+      const setCompare = (l.set?.abbreviation ?? l.card?.setId ?? l.card?.id.split('-')[0] ?? '')
+          .localeCompare(r.set?.abbreviation ?? r.card?.setId ?? r.card?.id.split('-')[0] ?? '');
+      if (setCompare !== 0) {
+        return setCompare;
+      }
+
+      return parseInt(l.card?.number ?? l.card?.id.split('-')[1] ?? '0')
+          - parseInt(r.card?.number ?? r.card?.id.split('-')[1] ?? '0');
+    });
+    return filteredCards;
   }
 
   getOrFetchCard(uid: string): CardVmV1 | null {
@@ -109,7 +132,7 @@ export default class UserCards extends Vue {
 
     <Loading v-if="userCardsStore.loading"/>
     <div v-else class="flex-grow-1 d-flex flex-row flex-wrap overflow-auto">
-      <div v-for="{userCard, card} in filteredCards"
+      <div v-for="{userCard, card} in sortedAndFilteredCards"
            :key="userCard.id"
            class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 pe-1 pb-1">
         <CardBsCard :card="card" class="c-pointer" @click="card && openCard(card, userCard)"/>
