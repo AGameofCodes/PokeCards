@@ -70,7 +70,7 @@ export default class UserCards extends Vue {
       const remainingTexts = texts.map(t => t.toLocaleLowerCase()).filter(t => !allSetAbbreviations.includes(t));
 
       if (remainingTexts.length) {
-        predicates.push((card: CardVmV1) => remainingTexts.some(t => card.name.toLocaleLowerCase().includes(t.toLocaleLowerCase())));
+        predicates.push((card: CardVmV1) => remainingTexts.every(t => card.name.toLocaleLowerCase().includes(t.toLocaleLowerCase())));
       }
     }
     console.log(predicates);
