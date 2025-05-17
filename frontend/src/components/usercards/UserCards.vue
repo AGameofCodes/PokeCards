@@ -35,8 +35,10 @@ export default class UserCards extends Vue {
   filter = '';
 
   async mounted(): Promise<void> {
-    await this.userCardsStore.loadIfAbsent();
-    await this.setsStore.loadIfAbsent();
+    await Promise.allSettled([
+      this.userCardsStore.loadIfAbsent(),
+      this.setsStore.loadIfAbsent(),
+    ]);
   }
 
   get cards(): CardDisplayCompound[] {
@@ -130,7 +132,7 @@ export default class UserCards extends Vue {
       </div>
     </div>
 
-    <Loading v-if="userCardsStore.loading"/>
+    <Loading v-if="userCardsStore.loading || setsStore.loading"/>
     <div v-else class="flex-grow-1 d-flex flex-row flex-wrap overflow-auto">
       <div v-for="{userCard, card} in sortedAndFilteredCards"
            :key="userCard.id"
