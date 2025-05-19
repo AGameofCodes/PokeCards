@@ -44,7 +44,7 @@ export default class UserCard extends BaseModelCreatedUpdated {
 
       properties: {
         cardUid: {type: 'string', format: 'uuid'},
-        variant: {type: 'string', maxLength: 255},
+        variant: {type: 'string', nullable: true, maxLength: 255},
         labels: {type: 'array', items: {$ref: '#/definitions/UserCardLabel'}},
       },
     });
