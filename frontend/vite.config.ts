@@ -35,9 +35,9 @@ export default defineConfig({
     preprocessorOptions: {
       scss: {
         api: 'modern', //needed because bootstrap still uses legacy-js-api https://sass-lang.com/documentation/breaking-changes/legacy-js-api/
-        quietDeps: true //needed because bootstrap still uses @import instead of @use; see https://sass-lang.com/blog/import-is-deprecated/
-      }
-    }
+        quietDeps: true, //needed because bootstrap still uses @import instead of @use; see https://sass-lang.com/blog/import-is-deprecated/
+      },
+    },
   },
   clearScreen: false,
   server: {

@@ -17,6 +17,7 @@ export const messagesDe = {
       language: 'Sprache',
       rarity: 'Seltenheit',
       set: 'Set',
+      variant: 'Variante',
       variants: {
         holo: 'Holo',
         normal: 'Normal',
