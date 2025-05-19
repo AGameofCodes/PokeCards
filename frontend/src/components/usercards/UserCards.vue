@@ -44,7 +44,7 @@ export default class UserCards extends Vue {
   get cards(): CardDisplayCompound[] {
     return this.userCardsStore.userCards.map(e => {
       const card = this.getOrFetchCard(e.cardUid);
-      const set = !card ? null : this.setsStore.setsByLanguageAndId.get(card.language).get(card.setId);
+      const set = !card ? null : this.setsStore.setsByLanguageAndId.get(card.language)?.get(card.setId) ?? null;
       return {
         userCard: e,
         card: card,

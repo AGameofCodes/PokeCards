@@ -90,7 +90,7 @@ export default class TableRow extends Vue {
       </template>
     </td>
     <td>
-      <input type="number" class="form-control" style="width: 5em" :min="1" max v-model="count"/>
+      <input type="number" class="form-control" style="width: 5em" :min="1" v-model="count"/>
     </td>
     <td>
       <div class="btn-group">

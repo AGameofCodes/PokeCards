@@ -196,7 +196,7 @@ export default class UserCardEditModal extends Vue {
           </div>
           <div v-if="isNewUserCard" class="d-flex flex-row align-items-center mt-2">
             {{ $t('general.count') }}:
-            <input type="number" class="form-control ms-2" style="width: 5em" :min="1" max v-model="count"/>
+            <input type="number" class="form-control ms-2" style="width: 5em" :min="1" v-model="count"/>
           </div>
         </div>
       </div>
