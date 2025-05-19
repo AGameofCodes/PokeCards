@@ -34,7 +34,7 @@ describe('UserCard model', () => {
         updatedAt: {type: 'string', format: 'date-time'},
         updatedBy: {type: 'string', format: 'uuid'}, //User.id
         cardUid: {type: 'string', format: 'uuid'},
-        variant: {type: 'string', maxLength: 255},
+        variant: {type: 'string', nullable: true, maxLength: 255},
         labels: {type: 'array', items: {$ref: '#/definitions/UserCardLabel'}},
       },
 
