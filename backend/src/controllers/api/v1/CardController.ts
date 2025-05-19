@@ -2,7 +2,20 @@ import type {Request as Req} from 'express';
 import CardRepository from '../../../repository/CardRepository';
 import Card from '../../../models/db/Card';
 import SetModel from '../../../models/db/Set';
-import {Controller, Get, Middlewares, Path, Query, Request, Response, Route, SuccessResponse, Tags} from 'tsoa';
+import {
+  Body,
+  Controller,
+  Get,
+  Middlewares,
+  Path,
+  Post,
+  Query,
+  Request,
+  Response,
+  Route,
+  SuccessResponse,
+  Tags,
+} from 'tsoa';
 import {isAuthenticatedMiddleware} from '../../../middleware/auth';
 import {UUID} from '../../../models/api/uuid';
 import {fetchCard, fetchCards, mapApiTcgCard2Card} from '../../../tcgApi/TcgApiCardApi';
@@ -80,6 +93,11 @@ interface CardVmV1 {
   language: string;
 }
 
+interface QueryRequestVmV1 {
+  languages: string[];
+  setIds: string[] | undefined;
+}
+
 @Route('api/v1/cards')
 @Middlewares(isAuthenticatedMiddleware)
 @Tags('cards')
@@ -146,6 +164,47 @@ export class CardController extends Controller {
       }
 
       //no search params -> no search
+      if (!languageSpecificFilter.length) {
+        continue;
+      }
+
+      //fetch cards
+      const apiCards = await fetchCards(language, languageSpecificFilter);
+      if (apiCards) {
+        for (const card of apiCards) {
+          if (!cards.find(e => e.id === card.id && e.language === card.language)) {
+            cards.push(card);
+          }
+        }
+      }
+    }
+    return cards;
+  }
+
+  @Post('query')
+  @SuccessResponse(200, 'Ok')
+  async query(@Body() body: QueryRequestVmV1, @Request() req: Req): Promise<CardBriefVmV1[]> {
+    //find sets
+    const searchSets: SetModel[] = [];
+    const sets = await this.setRepo.getAll();
+    for (let setId of (body.setIds ?? [])) {
+      const foundSets = sets.filter(set => setId === set.id && body.languages.includes(set.language));
+      if (foundSets.length > 0) {
+        searchSets.push(...foundSets);
+      }
+    }
+
+    const cards: CardBriefVmV1[] = [];
+    for (let language of body.languages) {
+      //prepare filter for this language
+      const languageSpecificFilter = [];
+      if (body.setIds?.length) {
+        languageSpecificFilter.push('set.id=eq:' + body.setIds.join('|'));
+      } else {
+        continue;
+      }
+
+      //no query params -> no query
       if (!languageSpecificFilter.length) {
         continue;
       }

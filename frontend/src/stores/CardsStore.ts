@@ -29,6 +29,14 @@ export class CardsStore extends Pinia {
     return new Map(this.cards.map(e => [e.uid, e]));
   }
 
+  get cardsByLanguageAndId(): Map<string, Map<string, CardVmV1>> {
+    return new Map(
+      Array.from(
+        Map.groupBy(this.cards, e => e.language).entries(),
+      ).map(([lang, sets]) => [lang, new Map(sets.map(s => [s.id, s]))]),
+    );
+  }
+
   //actions
   clear(): void {
     this._cards.splice(0);

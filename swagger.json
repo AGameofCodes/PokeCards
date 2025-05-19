@@ -384,6 +384,27 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"QueryRequestVmV1": {
+				"properties": {
+					"languages": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"setIds": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"languages"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"RegisterResponseVmV1": {
 				"properties": {
 					"success": {
@@ -1252,6 +1273,41 @@
 						}
 					}
 				]
+			}
+		},
+		"/api/v1/cards/query": {
+			"post": {
+				"operationId": "Query",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/CardBriefVmV1"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"cards"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/QueryRequestVmV1"
+							}
+						}
+					}
+				}
 			}
 		},
 		"/api/v1/cards/{uid}": {

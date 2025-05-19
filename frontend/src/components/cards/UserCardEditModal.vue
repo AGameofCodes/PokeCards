@@ -25,6 +25,7 @@ import {findForegroundColor} from "@/util/label";
 export default class UserCardEditModal extends Vue {
   card: CardVmV1 | null = null;
   userCard: UserCardVmV1 | null = null;
+  count: number = 1;
   saving = false;
   deleting = false;
 
@@ -43,9 +44,10 @@ export default class UserCardEditModal extends Vue {
     return getCurrentInstance()?.uid!;
   }
 
-  open(card: CardVmV1, userCard: UserCardVmV1 | null): Promise<void> {
+  open(card: CardVmV1, userCard: UserCardVmV1 | null, count: number = 1): Promise<void> {
     this.card = CardVmV1.fromJson(card);
     this.userCard = UserCardVmV1.fromJson(userCard);
+    this.count = count;
 
     if (this.isNewUserCard) {
       this.userCard = UserCardVmV1.fromJson({
@@ -55,8 +57,8 @@ export default class UserCardEditModal extends Vue {
         updatedAt: new Date(),
         updatedBy: emptyUUID(),
         cardUid: this.card!.uid,
-        variants: {},
-        labels: []
+        variant: userCard?.variant ?? null,
+        labels: [...(userCard?.labels ?? [])],
       } as any);
     }
 
@@ -110,8 +112,10 @@ export default class UserCardEditModal extends Vue {
     this.saving = true;
     try {
       if (this.isNewUserCard) {
-        const userCard = await this.api.userCardApi.add(this.userCard);
-        this.userCardStore.addCard(userCard);
+        const promises = [...new Array(this.count)]
+            .map(_ => this.api.userCardApi.add(this.userCard!)
+                .then((userCard: UserCardVmV1) => this.userCardStore.addCard(userCard)));
+        await Promise.all(promises);
       } else {
         const userCard = await this.api.userCardApi.update(this.userCard);
         this.userCardStore.updateCard(userCard);
@@ -189,6 +193,10 @@ export default class UserCardEditModal extends Vue {
                          style="min-width: 10em"/>
               </div>
             </div>
+          </div>
+          <div v-if="isNewUserCard" class="d-flex flex-row align-items-center mt-2">
+            {{ $t('general.count') }}:
+            <input type="number" class="form-control ms-2" style="width: 5em" :min="1" max v-model="count"/>
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ import SettingsView from '@/views/SettingsView.vue';
 import LabelsView from '@/views/LabelsView.vue';
 import SearchView from '@/views/SearchView.vue';
 import {ConfigStore} from '@/stores/ConfigStore.ts';
+import MassRecordView from '@/views/MassRecordView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,10 @@ const router = createRouter({
       path: '/search',
       name: 'search',
       component: SearchView,
+    },{
+      path: '/massRecord',
+      name: 'massRecord',
+      component: MassRecordView,
     },
     {
       path: '/cards',
