@@ -18,7 +18,7 @@ import {
 } from 'tsoa';
 import {isAuthenticatedMiddleware} from '../../../middleware/auth';
 import {UUID} from '../../../models/api/uuid';
-import {fetchCard, fetchCards, mapApiTcgCard2Card} from '../../../tcgApi/TcgApiCardApi';
+import {fetchCard, fetchCards, mapApiTcgDexNetCard2Card} from '../../../tcgDexNetApi/TcgApiCardApi';
 import SetRepository from '../../../repository/SetRepository';
 
 export interface CardBriefVmV1 {
@@ -254,7 +254,7 @@ export class CardController extends Controller {
     //from api
     const apiCard = await fetchCard(language, id);
     if (apiCard !== undefined) {
-      card = mapApiTcgCard2Card(apiCard, language);
+      card = mapApiTcgDexNetCard2Card(apiCard, language);
       await this.repo.add(card);
       return card;
     }
@@ -268,7 +268,7 @@ export class CardController extends Controller {
     if (card.updatedAt.getTime() + 24 * 60 * 60 * 1000 < Date.now()) {
       const apiCard = await fetchCard(card.language, card.id);
       if (apiCard !== undefined) {
-        const updatedCard = mapApiTcgCard2Card(apiCard, card.language);
+        const updatedCard = mapApiTcgDexNetCard2Card(apiCard, card.language);
         updatedCard.uid = card.uid;
         await this.repo.update(updatedCard);
         return updatedCard;

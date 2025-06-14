@@ -1,4 +1,4 @@
-export default interface TcgApiSetBrief {
+export default interface TcgDexNetSetBrief {
   id: string;
   name: string;
   logo: string | undefined;

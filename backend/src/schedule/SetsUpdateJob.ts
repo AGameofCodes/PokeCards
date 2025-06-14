@@ -1,6 +1,6 @@
 import type IJob from './IJob';
 import SetRepository from '../repository/SetRepository';
-import {fetchSet, fetchSets, mapTcgApiSet2Set} from '../tcgApi/TcgApiSetApi';
+import {fetchSet, fetchSets, mapTcgDexNetApiSet2Set} from '../tcgDexNetApi/TcgApiSetApi';
 
 export default class SetsUpdateJob implements IJob<void> {
   private repo: SetRepository;
@@ -53,7 +53,7 @@ export default class SetsUpdateJob implements IJob<void> {
 
         const apiSet = await fetchSet(language, apiSetBrief.id);
         if (apiSet) {
-          set = mapTcgApiSet2Set(apiSet, language);
+          set = mapTcgDexNetApiSet2Set(apiSet, language);
           await this.repo.add(set);
         }
       }

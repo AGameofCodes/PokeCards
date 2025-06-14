@@ -1,6 +1,6 @@
-import TcgApiCardBrief from './TcgApiCardBrief';
+import TcgDexNetCardBrief from './TcgDexNetCardBrief';
 
-export default interface TcgApiSet {
+export default interface TcgDexNetSet {
   id: string;
   name: string;
   logo: string | undefined;
@@ -13,7 +13,7 @@ export default interface TcgApiSet {
     reverse: number,
     total: number,
   };
-  cards: TcgApiCardBrief[],
+  cards: TcgDexNetCardBrief[],
   releaseDate: string; // e.g. '2020-08-14',
   serie: {
     id: string,

@@ -4,7 +4,7 @@ import Set from '../../../models/db/Set';
 import {Controller, Get, Middlewares, Path, Request, Response, Route, SuccessResponse, Tags} from 'tsoa';
 import {isAuthenticatedMiddleware} from '../../../middleware/auth';
 import {UUID} from '../../../models/api/uuid';
-import {fetchSet, mapTcgApiSet2Set} from '../../../tcgApi/TcgApiSetApi';
+import {fetchSet, mapTcgDexNetApiSet2Set} from '../../../tcgDexNetApi/TcgApiSetApi';
 
 interface SetVmV1 {
   /**
@@ -97,7 +97,7 @@ export class SetController extends Controller {
     //from api
     const apiSet = await fetchSet(language, id);
     if (apiSet !== undefined) {
-      set = mapTcgApiSet2Set(apiSet, language);
+      set = mapTcgDexNetApiSet2Set(apiSet, language);
       await this.repo.add(set);
       return set;
     }
@@ -111,7 +111,7 @@ export class SetController extends Controller {
     if (set.updatedAt.getTime() + 24 * 60 * 60 * 1000 < Date.now()) {
       const apiSet = await fetchSet(set.language, set.id);
       if (apiSet !== undefined) {
-        const updatedSet = mapTcgApiSet2Set(apiSet, set.language);
+        const updatedSet = mapTcgDexNetApiSet2Set(apiSet, set.language);
         updatedSet.uid = set.uid;
         await this.repo.update(updatedSet);
         return updatedSet;
