@@ -46,7 +46,8 @@ export default class MassRecord extends Vue {
     }
     this.fetchCardsForSet();
     return Array.from(this.cardStore.cardsByLanguageAndId.get(this.searchLanguage)?.values() ?? [])
-        .filter(e => e.setId === this.searchSet!.id);
+        .filter(e => e.setId === this.searchSet!.id)
+        .sort((l, r) => parseInt(r.number) - parseInt(l.number));
   }
 
   get uid(): number {
