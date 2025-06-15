@@ -24,7 +24,7 @@ export type ConfigType = {
     // [key: string]: Knex.Config //TODO
   },
   pokemonTcgIo?: {
-    apikey?: string,
+    apiKey?: string,
   }
 };
 

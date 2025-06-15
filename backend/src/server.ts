@@ -69,7 +69,7 @@ export default class Server {
 //region init
   async init(configOverrides?: any): Promise<void> {
     this.config = await iocContainer().get(ConfigProvider).get();
-    setApiKey(this.config.pokemonTcgIo?.apikey);
+    setApiKey(this.config.pokemonTcgIo?.apiKey);
     await this.initExpress();
     await this.initDatabase();
     await this.initScheduler();
