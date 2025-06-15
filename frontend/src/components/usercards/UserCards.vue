@@ -39,15 +39,20 @@ export default class UserCards extends Vue {
 
   filter = '';
   formatPrice = formatPrice;
+  preloadFinished = false;
 
   async mounted(): Promise<void> {
     await Promise.allSettled([
       this.userCardsStore.loadIfAbsent(),
       this.setsStore.loadIfAbsent(),
     ]);
+    await this.preload();
   }
 
   get cards(): CardDisplayCompound[] {
+    if (!this.preloadFinished) {
+      return [];
+    }
     return this.userCardsStore.userCards.map((e: UserCardVmV1) => {
       const card = this.getOrFetchCard(e.cardUid);
       const set = !card ? null : this.setsStore.setsByLanguageAndId.get(card.language)?.get(card.setId) ?? null;
@@ -136,6 +141,49 @@ export default class UserCards extends Vue {
   async openCard(card: CardVmV1, userCard: UserCardVmV1): Promise<void> {
     await (this.$refs.editModal as UserCardEditModal).open(card, userCard);
   }
+
+  private async preload(): Promise<void> {
+    try {
+      const cardUids = [...new Set(this.userCardsStore.userCards.map((e: UserCardVmV1) => e.cardUid))];
+      const cardFutures = cardUids.map((uid: string) => {
+        let future = Promise.resolve();
+
+        const card = this.cardStore.cardsByUid.get(uid);
+        if (!card) {
+          future = future.then(() => this.cardStore.reloadCardByUid(uid));
+        }
+
+        return future;
+      });
+      await Promise.allSettled(cardFutures);
+
+      const cardIds = [...new Set(
+          cardUids
+              .map((uid: string) => {
+                const card = this.cardStore.cardsByUid.get(uid);
+                if (!card) {
+                  return null;
+                }
+                return card.id;
+              })
+              .filter(e => !!e)
+              .map(e => e!),
+      )];
+      const priceFutures = cardIds.map((cardId: string) => {
+        let future = Promise.resolve();
+
+        const price = this.priceStore.cardPricesById.get(cardId);
+        if (!price) {
+          future = future.then(() => this.priceStore.reloadCardPriceById(cardId));
+        }
+
+        return future;
+      });
+      await Promise.allSettled(priceFutures);
+    } finally {
+      this.preloadFinished = true;
+    }
+  }
 }
 </script>
 
@@ -152,7 +200,7 @@ export default class UserCards extends Vue {
       </div>
     </div>
 
-    <Loading v-if="userCardsStore.loading || setsStore.loading"/>
+    <Loading v-if="userCardsStore.loading || setsStore.loading || !preloadFinished"/>
     <div v-else class="flex-grow-1 d-flex flex-row flex-wrap overflow-auto">
       <div v-for="{userCard, card, priceValue} in sortedAndFilteredCards"
            :key="userCard.id"
