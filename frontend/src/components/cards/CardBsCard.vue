@@ -47,7 +47,7 @@ export default class CardBsCard extends Vue {
 
 <template>
   <div class="card">
-    <img :src="image" class="card-img-top" :alt="card?.name">
+    <img :src="image" class="card-img-top pokemon-card" :alt="card?.name">
     <div class="card-body">
       <h5 class="card-title text-nowrap text-truncate">{{ card?.name }}</h5>
       <div>{{ $t('card.model.number') }}: {{ number }}</div>
@@ -59,3 +59,10 @@ export default class CardBsCard extends Vue {
     </div>
   </div>
 </template>
+
+<style scoped>
+.pokemon-card {
+  width: 100%;
+  aspect-ratio: 245 / 337;
+}
+</style>
