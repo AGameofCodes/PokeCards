@@ -54,6 +54,7 @@ export default class CardBsCard extends Vue {
       <div>
         {{ $t('card.model.set') }}: {{ set?.abbreviation ?? '?' }}
         <img :src="set?.symbol + '.webp'" height="16" alt=""/>
+        <slot/>
       </div>
     </div>
   </div>

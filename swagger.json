@@ -215,6 +215,117 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"PriceVmV1": {
+				"properties": {
+					"id": {
+						"type": "string",
+						"minLength": 1,
+						"maxLength": 255
+					},
+					"cardmarket": {
+						"properties": {
+							"prices": {
+								"properties": {
+									"reverseHoloAvg30": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"reverseHoloAvg7": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"reverseHoloAvg1": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"avg30": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"avg7": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"avg1": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"lowPriceExPlus": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"reverseHoloTrend": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"reverseHoloLow": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"reverseHoloSell": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"suggestedPrice": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"germanProLow": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"trendPrice": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"lowPrice": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									},
+									"averageSellPrice": {
+										"type": "number",
+										"format": "double",
+										"nullable": true
+									}
+								},
+								"type": "object"
+							},
+							"updatedAt": {
+								"type": "string"
+							},
+							"url": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"prices",
+							"updatedAt",
+							"url"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"id",
+					"cardmarket"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"LabelVmV1": {
 				"properties": {
 					"id": {
@@ -1019,6 +1130,40 @@
 							"type": "string"
 						}
 					},
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v1/prices/card/{id}": {
+			"get": {
+				"operationId": "GetByCardId",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PriceVmV1"
+								}
+							}
+						}
+					},
+					"404": {
+						"description": "Not Found"
+					}
+				},
+				"tags": [
+					"prices"
+				],
+				"security": [],
+				"parameters": [
 					{
 						"in": "path",
 						"name": "id",

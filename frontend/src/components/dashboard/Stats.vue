@@ -2,22 +2,49 @@
 import {Component, Vue} from 'vue-facing-decorator';
 import {UserCardsStore} from "@/stores/UserCardsStore.ts";
 import {CardsStore} from "@/stores/CardsStore.ts";
+import {CardPricesStore} from '@/stores/CardPricesStore.ts';
+import {UserCardVmV1} from 'pokecards-oas';
+import {findPrice, formatPrice} from '@/util/price.ts';
 
 @Component
 export default class Stats extends Vue {
   readonly cardStore = new CardsStore();
+  readonly priceStore = new CardPricesStore();
   readonly userCardStore = new UserCardsStore();
 
   get setCount(): number {
-    const setIds = this.userCardStore.userCards.map(e => {
-      const card = this.cardStore.cardsByUid.get(e.cardUid);
+    const setIds = this.userCardStore.userCards.map((userCard: UserCardVmV1) => {
+      const card = this.cardStore.cardsByUid.get(userCard.cardUid);
       if (!card) {
-        this.cardStore.reloadCardByUid(e.cardUid);
+        this.cardStore.reloadCardByUid(userCard.cardUid);
         return null;
       }
       return card.setId;
     });
     return new Set(setIds).size;
+  }
+
+  get priceSum(): number {
+    const prices: number[] = this.userCardStore.userCards.map((userCard: UserCardVmV1) => {
+      const card = this.cardStore.cardsByUid.get(userCard.cardUid);
+      if (!card) {
+        this.cardStore.reloadCardByUid(userCard.cardUid);
+        return 0;
+      }
+
+      const price = this.priceStore.cardPricesById.get(card.id);
+      if (!price) {
+        this.priceStore.reloadCardPriceById(card.id);
+        return 0;
+      }
+
+      return findPrice(price, userCard.variant) ?? 0;
+    });
+    return prices.reduce((l, r) => l + r, 0);
+  }
+
+  get priceSumFormatted(): string {
+    return formatPrice(this.priceSum, this.$i18n.locale);
   }
 
   async mounted(): Promise<void> {
@@ -33,6 +60,7 @@ export default class Stats extends Vue {
       <div class="card-text">
         <div>{{ $t('dashboard.totalCards') }}: {{ userCardStore.userCards.length }}</div>
         <div>{{ $t('dashboard.totalSets') }}: {{ setCount }}</div>
+        <div>{{ $t('price') }}: {{ priceSumFormatted }}</div>
       </div>
     </div>
   </div>

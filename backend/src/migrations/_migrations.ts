@@ -7,6 +7,8 @@ import * as M20250326195417_labels from './20250326195417_labels';
 import * as M20250326201010_usercardLabels from './20250326201010_usercardLabels';
 import * as M20250329115036_variants_rarity from './20250329115036_variants_rarity';
 import * as M20250329203754_sets from './20250329203754_sets';
+import * as M20250614152735_setMappings from './20250614152735_setMappings';
+import * as M20250614181612_cardPrices from './20250614181612_cardPrices';
 
 export type Migration = {
   name: string,
@@ -22,5 +24,7 @@ export const Migrations: Migration[] = [
   {name: '20250326201010_usercardLabels', migration: M20250326201010_usercardLabels},
   {name: '20250329115036_variants_rarity', migration: M20250329115036_variants_rarity},
   {name: '20250329203754_sets', migration: M20250329203754_sets},
+  {name: '20250614152735_setMappings', migration: M20250614152735_setMappings},
+  {name: '20250614181612_cardPrices', migration: M20250614181612_cardPrices},
 ];
 //TODO use glob import

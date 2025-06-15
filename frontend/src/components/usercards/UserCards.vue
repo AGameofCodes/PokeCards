@@ -8,31 +8,37 @@ import '@/assets/vue-good-table/mobile.scss';
 import Loading from '@/components/Loading.vue';
 import CardBsCard from "@/components/cards/CardBsCard.vue";
 import {CardsStore} from "@/stores/CardsStore";
-import {CardVmV1, SetVmV1, UserCardVmV1} from "pokecards-oas";
+import {CardVmV1, PriceVmV1, SetVmV1, UserCardVmV1} from "pokecards-oas";
 import UserCardEditModal from "@/components/cards/UserCardEditModal.vue";
 import {SetsStore} from '@/stores/SetsStore.ts';
+import {CardPricesStore} from '@/stores/CardPricesStore.ts';
+import {findPrice, formatPrice} from '@/util/price.ts';
 
 type CardFilterPredicate = (card: CardVmV1) => boolean;
 type CardDisplayCompound = {
   userCard: UserCardVmV1;
   card: CardVmV1 | null;
   set: SetVmV1 | null;
+  price: PriceVmV1 | null;
+  priceValue: number | null;
 }
 
 @Component({
   components: {
-    UserCardEditModal,
     CardBsCard,
     Loading,
+    UserCardEditModal,
     VueGoodTable,
   },
 })
 export default class UserCards extends Vue {
-  readonly userCardsStore = new UserCardsStore();
   readonly cardStore = new CardsStore();
   readonly setsStore = new SetsStore();
+  readonly priceStore = new CardPricesStore();
+  readonly userCardsStore = new UserCardsStore();
 
   filter = '';
+  formatPrice = formatPrice;
 
   async mounted(): Promise<void> {
     await Promise.allSettled([
@@ -42,14 +48,18 @@ export default class UserCards extends Vue {
   }
 
   get cards(): CardDisplayCompound[] {
-    return this.userCardsStore.userCards.map(e => {
+    return this.userCardsStore.userCards.map((e: UserCardVmV1) => {
       const card = this.getOrFetchCard(e.cardUid);
       const set = !card ? null : this.setsStore.setsByLanguageAndId.get(card.language)?.get(card.setId) ?? null;
+      const price = !card ? null : this.getOrFetchPrice(card.id) ?? null;
+      const priceValue = !price ? null : findPrice(price, e.variant);
       return {
         userCard: e,
         card: card,
         set: set,
-      }
+        price: price,
+        priceValue: priceValue,
+      };
     });
   }
 
@@ -113,6 +123,16 @@ export default class UserCards extends Vue {
     return null;
   }
 
+  getOrFetchPrice(cardId: string): PriceVmV1 | null {
+    const price = this.priceStore.cardPricesById.get(cardId);
+    if (price) {
+      return price;
+    }
+
+    this.priceStore.reloadCardPriceById(cardId);
+    return null;
+  }
+
   async openCard(card: CardVmV1, userCard: UserCardVmV1): Promise<void> {
     await (this.$refs.editModal as UserCardEditModal).open(card, userCard);
   }
@@ -134,10 +154,14 @@ export default class UserCards extends Vue {
 
     <Loading v-if="userCardsStore.loading || setsStore.loading"/>
     <div v-else class="flex-grow-1 d-flex flex-row flex-wrap overflow-auto">
-      <div v-for="{userCard, card} in sortedAndFilteredCards"
+      <div v-for="{userCard, card, priceValue} in sortedAndFilteredCards"
            :key="userCard.id"
            class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 pe-1 pb-1">
-        <CardBsCard :card="card" class="c-pointer" @click="card && openCard(card, userCard)"/>
+        <CardBsCard :card="card" class="c-pointer" @click="card && openCard(card, userCard)">
+          <div>
+            {{ $t('price') }}: {{ priceValue ? formatPrice(priceValue, $i18n.locale) : '?' }}
+          </div>
+        </CardBsCard>
       </div>
     </div>
 

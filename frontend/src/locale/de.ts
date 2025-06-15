@@ -106,6 +106,7 @@ export const messagesDe = {
     settings: 'Einstellungen',
     userCards: 'Meine Karten',
   },
+  price: 'Preis',
   settings: {
     settings: 'Einstellungen',
     currentlyNoSettings: 'Aktuell gibt es keine Einstellungen.',

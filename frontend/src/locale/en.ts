@@ -107,6 +107,7 @@ export const messagesEn = {
     search: 'Search',
     userCards: 'My cards',
   },
+  price: 'Price',
   settings: {
     settings: 'Settings',
     currentlyNoSettings: 'Currently there are no settings.',

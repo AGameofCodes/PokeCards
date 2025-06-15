@@ -1,11 +1,14 @@
 import {Pinia, Store} from 'pinia-class-component';
 import {
   AuthApi,
-  CardsApi, ConfigApi,
+  CardsApi,
+  ConfigApi,
   createConfiguration,
   HttpMethod,
   LabelsApi,
-  RequestContext, SetsApi,
+  PricesApi,
+  RequestContext,
+  SetsApi,
   UserCardsApi,
   UsersApi,
 } from 'pokecards-oas';
@@ -28,6 +31,7 @@ export class ApiStore extends Pinia {
   private readonly _cardApi = new CardsApi(this._config);
   private readonly _configApi = new ConfigApi(this._config);
   private readonly _labelApi = new LabelsApi(this._config);
+  private readonly _priceApi = new PricesApi(this._config);
   private readonly _setApi = new SetsApi(this._config);
   private readonly _userCardApi = new UserCardsApi(this._config);
   private readonly _userApi = new UsersApi(this._config);
@@ -46,6 +50,10 @@ export class ApiStore extends Pinia {
 
   get labelApi(): LabelsApi {
     return this._labelApi;
+  }
+
+  get priceApi(): PricesApi {
+    return this._priceApi;
   }
 
   get setApi(): SetsApi {
