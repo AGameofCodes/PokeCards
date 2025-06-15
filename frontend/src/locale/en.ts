@@ -131,6 +131,7 @@ export const messagesEn = {
     sort: {
       asc: 'ascending',
       desc: 'descending',
+      createdAt: 'Created',
       default: 'Default',
       price: 'Price',
     },

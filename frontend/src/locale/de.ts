@@ -130,6 +130,7 @@ export const messagesDe = {
     sort: {
       asc: 'aufsteigend',
       desc: 'absteigend',
+      createdAt: 'Erstellt',
       default: 'Standard',
       price: 'Preis',
     },

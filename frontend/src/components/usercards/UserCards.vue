@@ -63,6 +63,10 @@ export default class UserCards extends Vue {
         name: 'price',
         display: 'userCard.sort.price',
         comparator: (l, r) => (l.priceValue ?? 0) - (r.priceValue ?? 0),
+      }, {
+        name: 'createdAt',
+        display: 'userCard.sort.createdAt',
+        comparator: (l, r) => l.userCard.createdAt.getTime() - r.userCard.createdAt.getTime(),
       }];
   filter = '';
   formatPrice = formatPrice;
