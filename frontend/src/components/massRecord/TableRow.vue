@@ -83,7 +83,7 @@ export default class TableRow extends Vue {
                  :name="uid + '_variants'"
                  :value="variant"
                  v-model="selectedVariant">
-          <label class="form-check-label" :for="uid + '_' + variant">
+          <label class="form-check-label no-select" :for="uid + '_' + variant">
             {{ $t('card.model.variants.' + variant) }}
           </label>
         </div>

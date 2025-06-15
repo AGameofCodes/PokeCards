@@ -156,7 +156,7 @@ export default class UserCardEditModal extends Vue {
                        :name="uid + '_variants'"
                        :value="variant"
                        v-model="userCard.variant">
-                <label class="form-check-label" :for="uid + '_' + variant">
+                <label class="form-check-label no-select" :for="uid + '_' + variant">
                   {{ $t('card.model.variants.' + variant) }}
                 </label>
               </div>
