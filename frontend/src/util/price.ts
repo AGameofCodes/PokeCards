@@ -11,9 +11,9 @@ export function findPrice(price: PriceVmV1, variant: string | undefined): number
   const isNormal = variant.includes('normal');
 
   if (isReverse) {
-    return price.cardmarket.prices.reverseHoloLow ?? null;
+    return price.cardmarket.prices.reverseHoloAvg7 ?? null;
   } else if (isHolo || isNormal) {
-    return price.cardmarket.prices.lowPrice ?? null;
+    return price.cardmarket.prices.avg7 ?? null;
   } else {
     return null;
   }
