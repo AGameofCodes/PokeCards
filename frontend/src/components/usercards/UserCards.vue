@@ -259,9 +259,14 @@ export default class UserCards extends Vue {
           <template #end>
             <div>
               {{ $t('price') }}:
-              <a :href="price?.cardmarket.url ?? undefined" target="_blank" @click.stop>
-                {{ priceValue ? formatPrice(priceValue, $i18n.locale) : '?' }}
-              </a>
+              <template v-if="priceValue">
+                <a :href="price?.cardmarket.url ?? undefined" target="_blank" @click.stop>
+                  {{ formatPrice(priceValue, $i18n.locale) }}
+                </a>
+              </template>
+              <template v-else>
+                ?
+              </template>
             </div>
           </template>
         </CardBsCard>
