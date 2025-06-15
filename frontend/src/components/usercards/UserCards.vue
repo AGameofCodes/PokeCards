@@ -245,6 +245,13 @@ export default class UserCards extends Vue {
            :key="userCard.id"
            class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 pe-1 pb-1">
         <CardBsCard :card="card" class="c-pointer" @click="card && openCard(card, userCard)">
+          <template #afterNumber>
+            <div class="ms-auto">
+              <span class="badge text-bg-secondary">
+                {{ (userCard.variant ?? '?').charAt(0).toUpperCase() }}
+              </span>
+            </div>
+          </template>
           <template #end>
             <div>
               {{ $t('price') }}: {{ priceValue ? formatPrice(priceValue, $i18n.locale) : '?' }}
