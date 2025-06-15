@@ -1,6 +1,6 @@
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-facing-decorator';
-import {CardVmV1, UserCardLabelVmV1, UserCardVmV1} from 'pokecards-oas';
+import {CardVmV1, UserCardVmV1} from 'pokecards-oas';
 import {getCurrentInstance} from 'vue';
 import Spinner from '@/components/Spinner.vue';
 import {ApiStore} from '@/stores/ApiStore.ts';
@@ -8,9 +8,13 @@ import {emptyUUID} from '@/util/util.ts';
 import {UserCardsStore} from '@/stores/UserCardsStore.ts';
 import {errorToast, savedToast} from '@/util/toast.ts';
 import type UserCardEditModal from '@/components/cards/UserCardEditModal.vue';
+import VariantsRadios from '@/components/cards/VariantsRadios.vue';
 
 @Component({
-  components: {Spinner},
+  components: {
+    Spinner,
+    VariantsRadios,
+  },
 })
 export default class TableRow extends Vue {
   @Prop({required: true})
@@ -76,18 +80,7 @@ export default class TableRow extends Vue {
     <td style="width: 1em">{{ card.number }}</td>
     <td>{{ card.name }}</td>
     <td>
-      <template v-for="variant in Object.keys(card.variants)">
-        <div class="form-check" v-if="(card.variants as any)[variant]" :key="variant">
-          <input class="form-check-input" type="radio"
-                 :id="uid + '_' + variant"
-                 :name="uid + '_variants'"
-                 :value="variant"
-                 v-model="selectedVariant">
-          <label class="form-check-label no-select" :for="uid + '_' + variant">
-            {{ $t('card.model.variants.' + variant) }}
-          </label>
-        </div>
-      </template>
+      <VariantsRadios :card="card" v-model="selectedVariant"/>
     </td>
     <td>
       <input type="number" class="form-control" style="width: 5em" :min="1" v-model="count"/>

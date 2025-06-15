@@ -13,12 +13,14 @@ import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 import '@/assets/vue-select/bootstrap.css';
 import {findForegroundColor} from "@/util/label";
+import VariantsRadios from '@/components/cards/VariantsRadios.vue';
 
 @Component({
   methods: {},
   components: {
     BootstrapModal,
     Spinner,
+    VariantsRadios,
     vSelect,
   },
 })
@@ -149,18 +151,7 @@ export default class UserCardEditModal extends Vue {
           <div>{{ $t('card.model.rarity') }}: {{ card.rarity ?? '?' }}</div>
           <div>
             {{ $t('card.model.variants.variant') }}:
-            <template v-for="variant in Object.keys(card.variants)">
-              <div class="form-check" v-if="(card.variants as any)[variant]" :key="variant">
-                <input class="form-check-input" type="radio"
-                       :id="uid + '_' + variant"
-                       :name="uid + '_variants'"
-                       :value="variant"
-                       v-model="userCard.variant">
-                <label class="form-check-label no-select" :for="uid + '_' + variant">
-                  {{ $t('card.model.variants.' + variant) }}
-                </label>
-              </div>
-            </template>
+            <VariantsRadios :card="card" v-model="userCard.variant" />
           </div>
 
           <div>
