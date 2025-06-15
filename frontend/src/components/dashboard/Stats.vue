@@ -38,7 +38,7 @@ export default class Stats extends Vue {
         return 0;
       }
 
-      return findPrice(price, userCard.variant) ?? 0;
+      return findPrice(price, userCard.variant, userCard.labels.some(e => !!e.value)) ?? 0;
     });
     return prices.reduce((l, r) => l + r, 0);
   }

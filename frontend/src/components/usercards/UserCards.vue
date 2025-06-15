@@ -90,7 +90,7 @@ export default class UserCards extends Vue {
       const card = this.getOrFetchCard(e.cardUid);
       const set = !card ? null : this.setsStore.setsByLanguageAndId.get(card.language)?.get(card.setId) ?? null;
       const price = !card ? null : this.getOrFetchPrice(card.id) ?? null;
-      const priceValue = !price ? null : findPrice(price, e.variant);
+      const priceValue = !price ? null : findPrice(price, e.variant, e.labels.some(e => !!e.value));
       return {
         userCard: e,
         card: card,

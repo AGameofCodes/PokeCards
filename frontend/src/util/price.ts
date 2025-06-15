@@ -1,7 +1,7 @@
 import type {PriceVmV1} from 'pokecards-oas';
 
-export function findPrice(price: PriceVmV1, variant: string | undefined): number | null {
-  if (!variant) {
+export function findPrice(price: PriceVmV1, variant: string | undefined, hasLabels: boolean): number | null {
+  if (!variant || hasLabels) {
     return null;
   }
 
