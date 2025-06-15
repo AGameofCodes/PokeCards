@@ -32,11 +32,9 @@ export default class MassRecord extends Vue {
     if (!this.search.trim().length) {
       return null;
     }
-    console.log("get searchSet", this.search, this.searchLanguage, this.setsStore.sets);
     const sets = (Array.from(this.setsStore.setsByLanguageAndId.get(this.searchLanguage)?.values() ?? []) as SetVmV1[])
         .filter((e: SetVmV1) => e.abbreviation.toLocaleLowerCase() === this.search.toLocaleLowerCase()
             || e.id.toLocaleLowerCase() === this.search.toLocaleLowerCase());
-    console.log("sets", sets)
     return sets[0] ?? null;
   };
 
