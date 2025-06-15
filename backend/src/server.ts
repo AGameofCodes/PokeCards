@@ -18,6 +18,7 @@ import {uncaughtErrorHandler} from './middleware/UncaughtErrorHandler';
 import compression from 'compression';
 import {iocContainer} from './ioc';
 import Scheduler from './schedule/Scheduler';
+import {setApiKey} from './pokemonTcgIoApi/auth';
 
 export default class Server {
   // @ts-ignore TS6133
@@ -68,6 +69,7 @@ export default class Server {
 //region init
   async init(configOverrides?: any): Promise<void> {
     this.config = await iocContainer().get(ConfigProvider).get();
+    setApiKey(this.config.pokemonTcgIo?.apikey);
     await this.initExpress();
     await this.initDatabase();
     await this.initScheduler();

@@ -23,6 +23,9 @@ export type ConfigType = {
     use: string,
     // [key: string]: Knex.Config //TODO
   },
+  pokemonTcgIo?: {
+    apikey?: string,
+  }
 };
 
 export class ConfigProvider {
