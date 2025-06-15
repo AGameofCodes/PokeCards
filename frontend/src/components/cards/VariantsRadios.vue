@@ -50,6 +50,17 @@ export default class VariantsRadios extends Vue {
     return getCurrentInstance()?.uid!;
   }
 
+  get url(): string | null {
+    if (!this.card) {
+      return null;
+    }
+    const price = this.getOrFetchPrice(this.card.id);
+    if (!price) {
+      return null;
+    }
+    return price.cardmarket.url;
+  }
+
   private getOrFetchPrice(cardId: string): PriceVmV1 | null {
     const price = this.priceStore.cardPricesById.get(cardId);
     if (price) {
@@ -77,8 +88,10 @@ export default class VariantsRadios extends Vue {
             {{ $t('card.model.variants.' + variant) }}
           </label>
         </div>
-        <span class="ms-4" v-if="variant.toLowerCase().includes('reverse')">{{ reverseHoloPrice }}</span>
-        <span class="ms-4" v-else>{{ normalOrHoloPrice }}</span>
+        <a :href="url ?? undefined" target="_blank">
+          <span class="ms-4" v-if="variant.toLowerCase().includes('reverse')">{{ reverseHoloPrice }}</span>
+          <span class="ms-4" v-else>{{ normalOrHoloPrice }}</span>
+        </a>
       </div>
     </template>
   </div>
