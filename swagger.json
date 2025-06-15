@@ -1141,6 +1141,43 @@
 				]
 			}
 		},
+		"/api/v1/prices/card": {
+			"get": {
+				"operationId": "ListForCards",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/PriceVmV1"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"prices"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				]
+			}
+		},
 		"/api/v1/prices/card/{id}": {
 			"get": {
 				"operationId": "GetByCardId",
@@ -1372,7 +1409,19 @@
 					"cards"
 				],
 				"security": [],
-				"parameters": []
+				"parameters": [
+					{
+						"in": "query",
+						"name": "uid",
+						"required": true,
+						"schema": {
+							"type": "array",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
+				]
 			}
 		},
 		"/api/v1/cards/search": {

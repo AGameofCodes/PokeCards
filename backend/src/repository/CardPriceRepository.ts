@@ -1,9 +1,17 @@
 import CardPrice from '../models/db/CardPrice';
-import type {TransactionOrKnex} from 'objection';
+import {QueryBuilder, TransactionOrKnex} from 'objection';
 
 export default class CardPriceRepository {
-  async getAll(trx?: TransactionOrKnex): Promise<CardPrice[]> {
-    return CardPrice.query(trx);
+  async getAll(trx?: TransactionOrKnex,
+               filters?: ((query: QueryBuilder<CardPrice, CardPrice[]>) => QueryBuilder<CardPrice, CardPrice[]>)[],
+  ): Promise<CardPrice[]> {
+    let q = CardPrice.query(trx);
+    if (filters) {
+      filters.forEach((filter) => {
+        q = filter(q);
+      });
+    }
+    return q;
   }
 
   async getById(id: string, trx?: TransactionOrKnex): Promise<CardPrice | undefined> {

@@ -14,6 +14,7 @@ import {SetsStore} from '@/stores/SetsStore.ts';
 import {CardPricesStore} from '@/stores/CardPricesStore.ts';
 import {findPrice, formatPrice} from '@/util/price.ts';
 import SortDropDown from '@/components/usercards/SortDropDown.vue';
+import * as utilPreload from '@/util/preload.ts';
 
 type CardFilterPredicate = (card: CardVmV1) => boolean;
 type CardDisplayCompound = {
@@ -75,11 +76,11 @@ export default class UserCards extends Vue {
 
   async mounted(): Promise<void> {
     this.selectedSortOption = this.sortOptions[0];
-    await Promise.allSettled([
-      this.userCardsStore.loadIfAbsent(),
-      this.setsStore.loadIfAbsent(),
-    ]);
-    await this.preload();
+    try {
+      await utilPreload.preload();
+    } finally {
+      this.preloadFinished = true;
+    }
   }
 
   get cards(): CardDisplayCompound[] {
@@ -178,49 +179,6 @@ export default class UserCards extends Vue {
 
   async openCard(card: CardVmV1, userCard: UserCardVmV1): Promise<void> {
     await (this.$refs.editModal as UserCardEditModal).open(card, userCard);
-  }
-
-  private async preload(): Promise<void> {
-    try {
-      const cardUids = [...new Set(this.userCardsStore.userCards.map((e: UserCardVmV1) => e.cardUid))];
-      const cardFutures = cardUids.map((uid: string) => {
-        let future = Promise.resolve();
-
-        const card = this.cardStore.cardsByUid.get(uid);
-        if (!card) {
-          future = future.then(() => this.cardStore.reloadCardByUid(uid));
-        }
-
-        return future;
-      });
-      await Promise.allSettled(cardFutures);
-
-      const cardIds = [...new Set(
-          cardUids
-              .map((uid: string) => {
-                const card = this.cardStore.cardsByUid.get(uid);
-                if (!card) {
-                  return null;
-                }
-                return card.id;
-              })
-              .filter(e => !!e)
-              .map(e => e!),
-      )];
-      const priceFutures = cardIds.map((cardId: string) => {
-        let future = Promise.resolve();
-
-        const price = this.priceStore.cardPricesById.get(cardId);
-        if (!price) {
-          future = future.then(() => this.priceStore.reloadCardPriceById(cardId));
-        }
-
-        return future;
-      });
-      await Promise.allSettled(priceFutures);
-    } finally {
-      this.preloadFinished = true;
-    }
   }
 }
 </script>

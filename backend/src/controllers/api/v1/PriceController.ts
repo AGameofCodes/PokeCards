@@ -1,10 +1,11 @@
 import type {Request as Req} from 'express';
-import {Controller, Get, Middlewares, Path, Request, Response, Route, SuccessResponse, Tags} from 'tsoa';
+import {Controller, Get, Middlewares, Path, Query, Request, Response, Route, SuccessResponse, Tags} from 'tsoa';
 import {isAuthenticatedMiddleware} from '../../../middleware/auth';
 import * as pokemonTcgCardApi from '../../../pokemonTcgIoApi/PokemonTcgIoCardApi';
 import SetMappingRepository from '../../../repository/SetMappingRepository';
 import CardPriceRepository from '../../../repository/CardPriceRepository';
 import CardPrice, {emptyCardMarket} from '../../../models/db/CardPrice';
+import {QueryBuilder} from 'objection';
 
 
 interface PriceVmV1 {
@@ -42,6 +43,22 @@ interface PriceVmV1 {
 export class PriceController extends Controller {
   private cardPriceRepo = new CardPriceRepository();
   private mappingRepo = new SetMappingRepository();
+
+  @Get('card')
+  @SuccessResponse(200, 'Ok')
+  async listForCards(@Query('id') ids: string[], @Request() req: Req): Promise<PriceVmV1[]> {
+    //bug in openapi/tsoa see https://github.com/lukeautry/tsoa/issues/219
+    if (ids.length === 1 && ids[0]!.includes(',')) {
+      ids = ids[0]!.split(',');
+    }
+
+    let filters: ((query: QueryBuilder<CardPrice, CardPrice[]>) => QueryBuilder<CardPrice, CardPrice[]>)[] = [];
+    if (ids.length > 0) {
+      filters.push(q => q.whereIn('id', ids));
+    }
+
+    return await this.cardPriceRepo.getAll(undefined, filters);
+  }
 
   @Get('card/{id}')
   @SuccessResponse(200, 'Ok')

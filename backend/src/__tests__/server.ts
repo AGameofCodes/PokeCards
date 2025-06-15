@@ -7,6 +7,7 @@ describe('server', () => {
     const server = new Server();
     await server.init(getTestConfig());
     await server.queueStart();
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     await server.queueStop();
   });
 });

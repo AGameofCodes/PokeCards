@@ -1,10 +1,18 @@
 import Card from '../models/db/Card';
-import type {TransactionOrKnex} from 'objection';
+import {QueryBuilder, TransactionOrKnex} from 'objection';
 import {UUID} from '../models/api/uuid';
 
 export default class CardRepository {
-  async getAll(trx?: TransactionOrKnex): Promise<Card[]> {
-    return Card.query(trx);
+  async getAll(trx?: TransactionOrKnex,
+               filters?: ((query: QueryBuilder<Card, Card[]>) => QueryBuilder<Card, Card[]>)[],
+  ): Promise<Card[]> {
+    let q = Card.query(trx);
+    if (filters) {
+      filters.forEach((filter) => {
+        q = filter(q);
+      });
+    }
+    return q;
   }
 
   async getByUid(uid: UUID, trx?: TransactionOrKnex): Promise<Card | undefined> {

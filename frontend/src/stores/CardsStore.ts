@@ -83,6 +83,15 @@ export class CardsStore extends Pinia {
     }
   }
 
+  async reloadCardsByUids(uids: string[]): Promise<void> {
+    try {
+      const cards = await this.apiStore.cardApi.list(uids);
+      cards.forEach(card => this.updateCard(card));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   // async reload(force: boolean = false): Promise<void> {
   //   if (this._loadingPromise) {
   //     await this._loadingPromise;

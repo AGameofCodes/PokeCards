@@ -20,6 +20,7 @@ import {isAuthenticatedMiddleware} from '../../../middleware/auth';
 import {UUID} from '../../../models/api/uuid';
 import {fetchCard, fetchCards, mapApiTcgDexNetCard2Card} from '../../../tcgDexNetApi/TcgApiCardApi';
 import SetRepository from '../../../repository/SetRepository';
+import {QueryBuilder} from 'objection';
 
 export interface CardBriefVmV1 {
   /**
@@ -107,8 +108,18 @@ export class CardController extends Controller {
 
   @Get()
   @SuccessResponse(200, 'Ok')
-  async list(@Request() req: Req): Promise<CardVmV1[]> {
-    return this.repo.getAll();
+  async list(@Query('uid') uids: string[], @Request() req: Req): Promise<CardVmV1[]> {
+    //bug in openapi/tsoa see https://github.com/lukeautry/tsoa/issues/219
+    if (uids.length === 1 && uids[0]!.includes(',')) {
+      uids = uids[0]!.split(',');
+    }
+
+    let filters: ((query: QueryBuilder<Card, Card[]>) => QueryBuilder<Card, Card[]>)[] = [];
+    if (uids.length > 0) {
+      filters.push(q => q.whereIn('uid', uids));
+    }
+
+    return this.repo.getAll(undefined, filters);
   }
 
   @Get('search')

@@ -5,12 +5,20 @@ import {CardsStore} from "@/stores/CardsStore.ts";
 import {CardPricesStore} from '@/stores/CardPricesStore.ts';
 import {UserCardVmV1} from 'pokecards-oas';
 import {findPrice, formatPrice} from '@/util/price.ts';
+import {preload} from '@/util/preload.ts';
+import Spinner from '@/components/Spinner.vue';
 
-@Component
+@Component({
+  components: {
+    Spinner,
+  },
+})
 export default class Stats extends Vue {
   readonly cardStore = new CardsStore();
   readonly priceStore = new CardPricesStore();
   readonly userCardStore = new UserCardsStore();
+
+  preloadFinished = false;
 
   get setCount(): number {
     const setIds = this.userCardStore.userCards.map((userCard: UserCardVmV1) => {
@@ -48,7 +56,11 @@ export default class Stats extends Vue {
   }
 
   async mounted(): Promise<void> {
-    await this.userCardStore.loadIfAbsent();
+    try {
+      await preload();
+    } finally {
+      this.preloadFinished = true;
+    }
   }
 }
 </script>
@@ -58,9 +70,14 @@ export default class Stats extends Vue {
     <div class="card-body">
       <h5 class="card-title">{{ $t('dashboard.stats') }}</h5>
       <div class="card-text">
-        <div>{{ $t('dashboard.totalCards') }}: {{ userCardStore.userCards.length }}</div>
-        <div>{{ $t('dashboard.totalSets') }}: {{ setCount }}</div>
-        <div>{{ $t('price') }}: {{ priceSumFormatted }}</div>
+        <template v-if="preloadFinished">
+          <div>{{ $t('dashboard.totalCards') }}: {{ userCardStore.userCards.length }}</div>
+          <div>{{ $t('dashboard.totalSets') }}: {{ setCount }}</div>
+          <div>{{ $t('price') }}: {{ priceSumFormatted }}</div>
+        </template>
+        <template v-else>
+          <Spinner/>
+        </template>
       </div>
     </div>
   </div>
