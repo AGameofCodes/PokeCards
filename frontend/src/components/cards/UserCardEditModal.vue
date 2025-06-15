@@ -142,7 +142,7 @@ export default class UserCardEditModal extends Vue {
     </template>
     <template #default v-if="card && userCard">
       <div class="d-flex flex-row">
-        <img :src="card.image + '/high.webp'" height="400" alt="card img">
+        <img :src="card.image + '/high.webp'" height="400" alt="card img" style="aspect-ratio: 600 / 825">
         <div class="ms-2">
           <div>{{ $t('card.model.id') }}: {{ card.id }}</div>
           <div>{{ $t('card.model.name') }}: {{ card.name }}</div>
