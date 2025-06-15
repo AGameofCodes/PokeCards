@@ -13,6 +13,7 @@ import UserCardEditModal from "@/components/cards/UserCardEditModal.vue";
 import {SetsStore} from '@/stores/SetsStore.ts';
 import {CardPricesStore} from '@/stores/CardPricesStore.ts';
 import {findPrice, formatPrice} from '@/util/price.ts';
+import SortDropDown from '@/components/usercards/SortDropDown.vue';
 
 type CardFilterPredicate = (card: CardVmV1) => boolean;
 type CardDisplayCompound = {
@@ -23,10 +24,17 @@ type CardDisplayCompound = {
   priceValue: number | null;
 }
 
+type SortOption = {
+  name: string;
+  display: string;
+  comparator: (l: CardDisplayCompound, r: CardDisplayCompound) => number;
+}
+
 @Component({
   components: {
     CardBsCard,
     Loading,
+    SortDropDown,
     UserCardEditModal,
     VueGoodTable,
   },
@@ -37,11 +45,32 @@ export default class UserCards extends Vue {
   readonly priceStore = new CardPricesStore();
   readonly userCardsStore = new UserCardsStore();
 
+  baseSortOptions: SortOption[] =
+      [{
+        name: 'default',
+        display: 'userCard.sort.default',
+        comparator: (l, r) => {
+          const setCompare = (l.set?.abbreviation ?? l.card?.setId ?? l.card?.id.split('-').reverse().slice(1).reverse().join('-') ?? '')
+              .localeCompare(r.set?.abbreviation ?? r.card?.setId ?? r.card?.id.split('-').reverse().slice(1).reverse().join('-') ?? '');
+          if (setCompare !== 0) {
+            return setCompare;
+          }
+
+          return parseInt(l.card?.number ?? l.card?.id.split('-').reverse()[0] ?? '0')
+              - parseInt(r.card?.number ?? r.card?.id.split('-').reverse()[0] ?? '0');
+        },
+      }, {
+        name: 'price',
+        display: 'userCard.sort.price',
+        comparator: (l, r) => (l.priceValue ?? 0) - (r.priceValue ?? 0),
+      }];
   filter = '';
   formatPrice = formatPrice;
   preloadFinished = false;
+  selectedSortOption: SortOption = {name: '', display: '', comparator: () => 0};
 
   async mounted(): Promise<void> {
+    this.selectedSortOption = this.sortOptions[0];
     await Promise.allSettled([
       this.userCardsStore.loadIfAbsent(),
       this.setsStore.loadIfAbsent(),
@@ -105,17 +134,22 @@ export default class UserCards extends Vue {
 
   get sortedAndFilteredCards(): CardDisplayCompound[] {
     const filteredCards = [...this.filteredCards];
-    filteredCards.sort((l, r) => {
-      const setCompare = (l.set?.abbreviation ?? l.card?.setId ?? l.card?.id.split('-')[0] ?? '')
-          .localeCompare(r.set?.abbreviation ?? r.card?.setId ?? r.card?.id.split('-')[0] ?? '');
-      if (setCompare !== 0) {
-        return setCompare;
-      }
-
-      return parseInt(l.card?.number ?? l.card?.id.split('-')[1] ?? '0')
-          - parseInt(r.card?.number ?? r.card?.id.split('-')[1] ?? '0');
-    });
+    filteredCards.sort(this.selectedSortOption.comparator);
     return filteredCards;
+  }
+
+  get sortOptions(): SortOption[] {
+    return this.baseSortOptions.flatMap(e => [
+      {
+        name: e.name + '.asc',
+        display: this.$t(e.display) + ' (' + this.$t('userCard.sort.asc') + ')',
+        comparator: e.comparator,
+      }, {
+        name: e.name + '.desc',
+        display: this.$t(e.display) + ' (' + this.$t('userCard.sort.desc') + ')',
+        comparator: (l: CardDisplayCompound, r: CardDisplayCompound) => -e.comparator(l, r),
+      },
+    ]);
   }
 
   getOrFetchCard(uid: string): CardVmV1 | null {
@@ -198,6 +232,11 @@ export default class UserCards extends Vue {
           <i class="fa fa-refresh"/>
         </button>
       </div>
+      <div class="btn-group ms-2">
+        <SortDropDown v-model="selectedSortOption" :options="sortOptions">
+          <i class="fa fa-sort-alpha-asc"/>
+        </SortDropDown>
+      </div>
     </div>
 
     <Loading v-if="userCardsStore.loading || setsStore.loading || !preloadFinished"/>
@@ -206,9 +245,11 @@ export default class UserCards extends Vue {
            :key="userCard.id"
            class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 pe-1 pb-1">
         <CardBsCard :card="card" class="c-pointer" @click="card && openCard(card, userCard)">
-          <div>
-            {{ $t('price') }}: {{ priceValue ? formatPrice(priceValue, $i18n.locale) : '?' }}
-          </div>
+          <template #end>
+            <div>
+              {{ $t('price') }}: {{ priceValue ? formatPrice(priceValue, $i18n.locale) : '?' }}
+            </div>
+          </template>
         </CardBsCard>
       </div>
     </div>

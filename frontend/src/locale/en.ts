@@ -128,6 +128,12 @@ export const messagesEn = {
     model: {
       labels: 'Labels',
     },
+    sort: {
+      asc: 'ascending',
+      desc: 'descending',
+      default: 'Default',
+      price: 'Price',
+    },
   },
   userinfo: {
     model: {

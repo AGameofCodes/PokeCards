@@ -127,6 +127,12 @@ export const messagesDe = {
     model: {
       labels: 'Labels',
     },
+    sort: {
+      asc: 'aufsteigend',
+      desc: 'absteigend',
+      default: 'Standard',
+      price: 'Preis',
+    },
   },
   userinfo: {
     model: {

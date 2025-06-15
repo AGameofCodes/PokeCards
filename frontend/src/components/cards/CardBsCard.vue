@@ -19,11 +19,11 @@ export default class CardBsCard extends Vue {
   }
 
   get setId(): string {
-    return (this.card as CardVmV1)?.setId ?? (this.card as CardBriefVmV1)?.id.split('-')[0];
+    return (this.card as CardVmV1)?.setId ?? (this.card as CardBriefVmV1)?.id.split('-').reverse().slice(1).reverse().join('-');
   }
 
   get number(): string {
-    return (this.card as CardVmV1)?.number ?? (this.card as CardBriefVmV1)?.id.split('-')[1];
+    return (this.card as CardVmV1)?.number ?? (this.card as CardBriefVmV1)?.id.split('-').reverse()[0];
   }
 
   get set(): SetVmV1 | undefined {
@@ -50,11 +50,17 @@ export default class CardBsCard extends Vue {
     <img :src="image" class="card-img-top pokemon-card" :alt="card?.name">
     <div class="card-body">
       <h5 class="card-title text-nowrap text-truncate">{{ card?.name }}</h5>
-      <div>{{ $t('card.model.number') }}: {{ number }}</div>
+      <div class="d-flex flex-row">
+        <div>{{ $t('card.model.number') }}: {{ number }}</div>
+        <slot name="afterNumber"/>
+      </div>
       <div>
         {{ $t('card.model.set') }}: {{ set?.abbreviation ?? '?' }}
         <img :src="set?.symbol + '.webp'" height="16" alt=""/>
-        <slot/>
+        <slot name="afterSet"/>
+      </div>
+      <div>
+        <slot name="end"/>
       </div>
     </div>
   </div>
