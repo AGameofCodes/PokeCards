@@ -4,7 +4,7 @@ import {UserCardsStore} from "@/stores/UserCardsStore.ts";
 import {CardsStore} from "@/stores/CardsStore.ts";
 import {CardPricesStore} from '@/stores/CardPricesStore.ts';
 import {UserCardVmV1} from 'pokecards-oas';
-import {findPrice, formatPrice} from '@/util/price.ts';
+import {findPrice, formatPrice, isCardPriceIgnoredInTotalValue} from '@/util/price.ts';
 import {preload} from '@/util/preload.ts';
 import Spinner from '@/components/Spinner.vue';
 
@@ -34,6 +34,10 @@ export default class Stats extends Vue {
 
   get priceSum(): number {
     const prices: number[] = this.userCardStore.userCards.map((userCard: UserCardVmV1) => {
+      if (isCardPriceIgnoredInTotalValue(userCard)) {
+        return 0;
+      }
+
       const card = this.cardStore.cardsByUid.get(userCard.cardUid);
       if (!card) {
         this.cardStore.reloadCardByUid(userCard.cardUid);
@@ -46,7 +50,7 @@ export default class Stats extends Vue {
         return 0;
       }
 
-      return findPrice(price, userCard.variant, userCard.labels.some(e => !!e.value)) ?? 0;
+      return findPrice(price, userCard.variant) ?? 0;
     });
     return prices.reduce((l, r) => l + r, 0);
   }
@@ -73,7 +77,7 @@ export default class Stats extends Vue {
         <template v-if="preloadFinished">
           <div>{{ $t('dashboard.totalCards') }}: {{ userCardStore.userCards.length }}</div>
           <div>{{ $t('dashboard.totalSets') }}: {{ setCount }}</div>
-          <div>{{ $t('price') }}: {{ priceSumFormatted }}</div>
+          <div>{{ $t('price.price') }}: {{ priceSumFormatted }}</div>
         </template>
         <template v-else>
           <Spinner/>

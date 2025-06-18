@@ -106,7 +106,10 @@ export const messagesDe = {
     settings: 'Einstellungen',
     userCards: 'Meine Karten',
   },
-  price: 'Preis',
+  price: {
+    price: 'Preis',
+    priceNotCountedInTotal: 'Preis nicht für Gesamtsumme gezählt',
+  },
   settings: {
     settings: 'Einstellungen',
     currentlyNoSettings: 'Aktuell gibt es keine Einstellungen.',

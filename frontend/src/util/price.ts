@@ -1,7 +1,7 @@
-import type {PriceVmV1} from 'pokecards-oas';
+import {type PriceVmV1, UserCardVmV1} from 'pokecards-oas';
 
-export function findPrice(price: PriceVmV1, variant: string | undefined, hasLabels: boolean): number | null {
-  if (!variant || hasLabels) {
+export function findPrice(price: PriceVmV1, variant: string | undefined): number | null {
+  if (!variant) {
     return null;
   }
 
@@ -22,4 +22,8 @@ export function findPrice(price: PriceVmV1, variant: string | undefined, hasLabe
 export function formatPrice(price: number, locale: string): string {
   const opts = {minimumFractionDigits: 2, maximumFractionDigits: 2};
   return price.toLocaleString(locale, opts) + '€';
+}
+
+export function isCardPriceIgnoredInTotalValue(userCard: UserCardVmV1): boolean {
+  return userCard.labels.some(e => !!e.value);
 }

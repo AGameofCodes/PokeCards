@@ -24,7 +24,7 @@ export default class VariantsRadios extends Vue {
     if (!price) {
       return null;
     }
-    const priceValue = findPrice(price, 'normal', false);
+    const priceValue = findPrice(price, 'normal');
     if (!priceValue) {
       return null;
     }
@@ -39,7 +39,7 @@ export default class VariantsRadios extends Vue {
     if (!price) {
       return null;
     }
-    const priceValue = findPrice(price, 'reverse', false);
+    const priceValue = findPrice(price, 'reverse');
     if (!priceValue) {
       return null;
     }

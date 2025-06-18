@@ -107,7 +107,10 @@ export const messagesEn = {
     search: 'Search',
     userCards: 'My cards',
   },
-  price: 'Price',
+  price: {
+    price: 'Price',
+    priceNotCountedInTotal: 'Price not counted in total',
+  },
   settings: {
     settings: 'Settings',
     currentlyNoSettings: 'Currently there are no settings.',

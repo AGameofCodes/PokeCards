@@ -12,7 +12,7 @@ import {CardVmV1, PriceVmV1, SetVmV1, UserCardVmV1} from "pokecards-oas";
 import UserCardEditModal from "@/components/cards/UserCardEditModal.vue";
 import {SetsStore} from '@/stores/SetsStore.ts';
 import {CardPricesStore} from '@/stores/CardPricesStore.ts';
-import {findPrice, formatPrice} from '@/util/price.ts';
+import {findPrice, formatPrice, isCardPriceIgnoredInTotalValue} from '@/util/price.ts';
 import SortDropDown from '@/components/usercards/SortDropDown.vue';
 import * as utilPreload from '@/util/preload.ts';
 
@@ -23,6 +23,7 @@ type CardDisplayCompound = {
   set: SetVmV1 | null;
   price: PriceVmV1 | null;
   priceValue: number | null;
+  priceIgnore: boolean;
 }
 
 type SortOption = {
@@ -71,6 +72,7 @@ export default class UserCards extends Vue {
       }];
   filter = '';
   formatPrice = formatPrice;
+  isCardPriceIgnoredInTotalValue = isCardPriceIgnoredInTotalValue;
   preloadFinished = false;
   selectedSortOption: SortOption = {name: '', display: '', comparator: () => 0};
 
@@ -87,17 +89,19 @@ export default class UserCards extends Vue {
     if (!this.preloadFinished) {
       return [];
     }
-    return this.userCardsStore.userCards.map((e: UserCardVmV1) => {
-      const card = this.getOrFetchCard(e.cardUid);
+    return this.userCardsStore.userCards.map((userCard: UserCardVmV1) => {
+      const card = this.getOrFetchCard(userCard.cardUid);
       const set = !card ? null : this.setsStore.setsByLanguageAndId.get(card.language)?.get(card.setId) ?? null;
       const price = !card ? null : this.getOrFetchPrice(card.id) ?? null;
-      const priceValue = !price ? null : findPrice(price, e.variant, e.labels.some(e => !!e.value));
+      const priceValue = !price ? null : findPrice(price, userCard.variant);
+      const priceIgnore = !price ? false : isCardPriceIgnoredInTotalValue(userCard);
       return {
-        userCard: e,
+        userCard: userCard,
         card: card,
         set: set,
         price: price,
         priceValue: priceValue,
+        priceIgnore: priceIgnore,
       };
     });
   }
@@ -203,7 +207,7 @@ export default class UserCards extends Vue {
 
     <Loading v-if="userCardsStore.loading || setsStore.loading || !preloadFinished"/>
     <div v-else class="flex-grow-1 d-flex flex-row flex-wrap overflow-auto">
-      <div v-for="{userCard, card, price, priceValue} in sortedAndFilteredCards"
+      <div v-for="{userCard, card, price, priceValue, priceIgnore} in sortedAndFilteredCards"
            :key="userCard.id"
            class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 pe-1 pb-1">
         <CardBsCard :card="card" class="c-pointer" @click="card && openCard(card, userCard)">
@@ -216,9 +220,11 @@ export default class UserCards extends Vue {
           </template>
           <template #end>
             <div>
-              {{ $t('price') }}:
-              <template v-if="priceValue">
-                <a :href="price?.cardmarket.url ?? undefined" target="_blank" @click.stop>
+              {{ $t('price.price') }}:
+              <template v-if="priceValue && isCardPriceIgnoredInTotalValue(userCard)">
+                <a :href="price?.cardmarket.url ?? undefined" target="_blank" @click.stop
+                   :style="{color: priceIgnore ? 'red' : undefined}"
+                   :title="priceIgnore ? $t('price.priceNotCountedInTotal') : undefined">
                   {{ formatPrice(priceValue, $i18n.locale) }}
                 </a>
               </template>
