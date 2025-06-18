@@ -13,7 +13,7 @@ import UserCardEditModal from "@/components/cards/UserCardEditModal.vue";
 import {SetsStore} from '@/stores/SetsStore';
 import {CardPricesStore} from '@/stores/CardPricesStore';
 import {findPrice, formatPrice, isCardPriceIgnoredInTotalValue} from '@/util/price';
-import SortDropDown from '@/components/usercards/SortDropDown';
+import SortDropDown from '@/components/usercards/SortDropDown.vue';
 import * as utilPreload from '@/util/preload';
 
 type CardFilterPredicate = (card: CardVmV1) => boolean;
