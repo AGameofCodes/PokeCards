@@ -72,7 +72,6 @@ export default class UserCards extends Vue {
       }];
   filter = '';
   formatPrice = formatPrice;
-  isCardPriceIgnoredInTotalValue = isCardPriceIgnoredInTotalValue;
   preloadFinished = false;
   selectedSortOption: SortOption = {name: '', display: '', comparator: () => 0};
 
