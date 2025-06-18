@@ -3,7 +3,7 @@ import {ApiException, LoginRequestVmV1, LoginResponseVmV1} from 'pokecards-oas';
 import {Component, Vue} from 'vue-facing-decorator';
 import {SessionStore} from '@/stores/SessionStore';
 import {ApiStore} from '@/stores/ApiStore';
-import {ConfigStore} from "@/stores/ConfigStore.ts";
+import {ConfigStore} from "@/stores/ConfigStore";
 
 @Component({
   name: 'LoginComponent',

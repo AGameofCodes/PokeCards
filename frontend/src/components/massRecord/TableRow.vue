@@ -3,10 +3,10 @@ import {Component, Prop, Vue} from 'vue-facing-decorator';
 import {CardVmV1, UserCardVmV1} from 'pokecards-oas';
 import {getCurrentInstance} from 'vue';
 import Spinner from '@/components/Spinner.vue';
-import {ApiStore} from '@/stores/ApiStore.ts';
-import {emptyUUID} from '@/util/util.ts';
-import {UserCardsStore} from '@/stores/UserCardsStore.ts';
-import {errorToast, savedToast} from '@/util/toast.ts';
+import {ApiStore} from '@/stores/ApiStore';
+import {emptyUUID} from '@/util/util';
+import {UserCardsStore} from '@/stores/UserCardsStore';
+import {errorToast, savedToast} from '@/util/toast';
 import type UserCardEditModal from '@/components/cards/UserCardEditModal.vue';
 import VariantsRadios from '@/components/cards/VariantsRadios.vue';
 

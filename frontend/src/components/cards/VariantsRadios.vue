@@ -2,8 +2,8 @@
 import {Component, Prop, Vue} from 'vue-facing-decorator';
 import {CardVmV1, PriceVmV1} from 'pokecards-oas';
 import {getCurrentInstance} from "vue";
-import {CardPricesStore} from '@/stores/CardPricesStore.ts';
-import {findPrice, formatPrice} from '@/util/price.ts';
+import {CardPricesStore} from '@/stores/CardPricesStore';
+import {findPrice, formatPrice} from '@/util/price';
 
 @Component({
   emits: ['update:modelValue'],

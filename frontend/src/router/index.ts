@@ -12,7 +12,7 @@ import ProfileView from '@/views/ProfileView.vue';
 import SettingsView from '@/views/SettingsView.vue';
 import LabelsView from '@/views/LabelsView.vue';
 import SearchView from '@/views/SearchView.vue';
-import {ConfigStore} from '@/stores/ConfigStore.ts';
+import {ConfigStore} from '@/stores/ConfigStore';
 import MassRecordView from '@/views/MassRecordView.vue';
 
 const router = createRouter({

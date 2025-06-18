@@ -1,11 +1,11 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
-import {UserCardsStore} from "@/stores/UserCardsStore.ts";
-import {CardsStore} from "@/stores/CardsStore.ts";
-import {CardPricesStore} from '@/stores/CardPricesStore.ts';
+import {UserCardsStore} from "@/stores/UserCardsStore";
+import {CardsStore} from "@/stores/CardsStore";
+import {CardPricesStore} from '@/stores/CardPricesStore';
 import {UserCardVmV1} from 'pokecards-oas';
-import {findPrice, formatPrice, isCardPriceIgnoredInTotalValue} from '@/util/price.ts';
-import {preload} from '@/util/preload.ts';
+import {findPrice, formatPrice, isCardPriceIgnoredInTotalValue} from '@/util/price';
+import {preload} from '@/util/preload';
 import Spinner from '@/components/Spinner.vue';
 
 @Component({

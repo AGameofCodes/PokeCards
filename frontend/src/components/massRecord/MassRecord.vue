@@ -2,9 +2,9 @@
 import {Component, Vue} from 'vue-facing-decorator';
 import Loading from '@/components/Loading.vue';
 import {CardsStore} from "@/stores/CardsStore";
-import {SetsStore} from '@/stores/SetsStore.ts';
+import {SetsStore} from '@/stores/SetsStore';
 import {CardBriefVmV1, CardVmV1, QueryRequestVmV1, SetVmV1} from 'pokecards-oas';
-import {ApiStore} from '@/stores/ApiStore.ts';
+import {ApiStore} from '@/stores/ApiStore';
 import {getCurrentInstance} from 'vue';
 import TableRow from '@/components/massRecord/TableRow.vue';
 import UserCardEditModal from '@/components/cards/UserCardEditModal.vue';
