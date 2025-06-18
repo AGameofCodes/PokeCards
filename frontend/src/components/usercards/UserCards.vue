@@ -221,7 +221,7 @@ export default class UserCards extends Vue {
           <template #end>
             <div>
               {{ $t('price.price') }}:
-              <template v-if="priceValue && isCardPriceIgnoredInTotalValue(userCard)">
+              <template v-if="priceValue">
                 <a :href="price?.cardmarket.url ?? undefined" target="_blank" @click.stop
                    :style="{color: priceIgnore ? 'red' : undefined}"
                    :title="priceIgnore ? $t('price.priceNotCountedInTotal') : undefined">
