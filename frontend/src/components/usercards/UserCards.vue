@@ -15,8 +15,9 @@ import {CardPricesStore} from '@/stores/CardPricesStore';
 import {findPrice, formatPrice, isCardPriceIgnoredInTotalValue} from '@/util/price';
 import SortDropDown from '@/components/usercards/SortDropDown.vue';
 import * as utilPreload from '@/util/preload';
+import {LabelStore} from '@/stores/LabelStore';
 
-type CardFilterPredicate = (card: CardVmV1) => boolean;
+type CardFilterPredicate = (compound: CardDisplayCompound) => boolean;
 type CardDisplayCompound = {
   userCard: UserCardVmV1;
   card: CardVmV1 | null;
@@ -43,6 +44,7 @@ type SortOption = {
 })
 export default class UserCards extends Vue {
   readonly cardStore = new CardsStore();
+  readonly labelStore = new LabelStore();
   readonly setsStore = new SetsStore();
   readonly priceStore = new CardPricesStore();
   readonly userCardsStore = new UserCardsStore();
@@ -112,32 +114,58 @@ export default class UserCards extends Vue {
     }
 
     let terms = this.filter.split(' ');
+    let props = terms.filter(e => e.includes("=") || e.includes("!="));
+    terms = terms.filter((t) => !props.includes(t));
     let numbers = new Set(terms.filter((t) => t.match(/^[0-9]+$/)).map(t => parseInt(t)));
     let texts = terms.filter((t) => !t.match(/^[0-9]+$/));
 
     let predicates: CardFilterPredicate[] = [];
+    if (props.length) {
+      predicates.push(...props
+          .map(prop => {
+            const [key, value] = prop.split('=');
+            return (compound: CardDisplayCompound) =>
+                Object.entries(compound.card ?? {})
+                    .some(([k, v]) => k.toLowerCase() === key.toLowerCase()
+                        && JSON.stringify(v).toLowerCase().includes(value.toLowerCase()))
+                || Object.entries(compound.userCard ?? {})
+                    .some(([k, v]) => k.toLowerCase() === key.toLowerCase()
+                        && JSON.stringify(v).toLowerCase().includes(value.toLowerCase()))
+                || compound.userCard.labels.some((cardLabel) => {
+                  const label = this.labelStore.labelsById.get(cardLabel.labelId);
+                  return label?.name.toLowerCase().includes(key.toLowerCase())
+                      && JSON.stringify(cardLabel.value).toLowerCase().includes(value.toLowerCase());
+                });
+          })
+          .filter(e => e)
+          .map(e => e!));
+    }
+
     if (numbers.size) {
-      predicates.push((card: CardVmV1) => numbers.has(parseInt(card.number ?? card.id.split('-')[1] ?? '-1')));
+      predicates.push((compound: CardDisplayCompound) =>
+          numbers.has(parseInt(compound.card?.number ?? compound.card?.id.split('-').reverse()[0] ?? '-1')));
     }
 
     if (texts.length) {
       const lowerTexts = new Set(texts.map(e => e.toLocaleLowerCase()));
       let matchingSets = this.setsStore.sets.filter((s: SetVmV1) => lowerTexts.has(s.abbreviation.toLocaleLowerCase()));
       if (matchingSets.length) {
-        const setPredicates: CardFilterPredicate[]
-            = matchingSets.map((s: SetVmV1) => ((card: CardVmV1) => card.setId === s.id && card.language === s.language));
-        predicates.push((card: CardVmV1) => setPredicates.some(p => p(card)));
+        const setPredicates: CardFilterPredicate[] = matchingSets.map(
+            (s: SetVmV1) => ((compound: CardDisplayCompound) => compound.card?.setId === s.id
+                && compound.card?.language === s.language));
+        predicates.push((compound: CardDisplayCompound) => setPredicates.some(p => p(compound)));
       }
 
       const allSetAbbreviations = this.setsStore.sets.map((s: SetVmV1) => s.abbreviation.toLocaleLowerCase());
       const remainingTexts = texts.map(t => t.toLocaleLowerCase()).filter(t => !allSetAbbreviations.includes(t));
 
       if (remainingTexts.length) {
-        predicates.push((card: CardVmV1) => remainingTexts.every(t => card.name.toLocaleLowerCase().includes(t.toLocaleLowerCase())));
+        predicates.push((compound: CardDisplayCompound) =>
+            remainingTexts.every(t => compound.card?.name.toLocaleLowerCase().includes(t.toLocaleLowerCase())));
       }
     }
 
-    return this.cards.filter(e => e.card && predicates.every(p => p(e.card!)));
+    return this.cards.filter(e => predicates.every(p => p(e)));
   }
 
   get sortedAndFilteredCards(): CardDisplayCompound[] {

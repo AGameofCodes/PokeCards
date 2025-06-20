@@ -24,6 +24,10 @@ export class LabelStore extends Pinia {
     return this._labels;
   }
 
+  get labelsById(): Map<string, LabelVmV1> {
+    return new Map(this._labels.map(e => [e.id, e]));
+  }
+
   //actions
   clear(): void {
     this._labels.splice(0);
