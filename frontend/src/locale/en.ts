@@ -130,6 +130,7 @@ export const messagesEn = {
     },
     model: {
       labels: 'Labels',
+      updatedAt: 'Updated at',
     },
     sort: {
       asc: 'ascending',

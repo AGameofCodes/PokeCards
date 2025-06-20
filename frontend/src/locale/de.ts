@@ -129,6 +129,7 @@ export const messagesDe = {
     },
     model: {
       labels: 'Labels',
+      updatedAt: 'Bearbeitet am',
     },
     sort: {
       asc: 'aufsteigend',

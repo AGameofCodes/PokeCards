@@ -189,6 +189,10 @@ export default class UserCardEditModal extends Vue {
             {{ $t('general.count') }}:
             <input type="number" class="form-control ms-2" style="width: 5em" :min="1" v-model="count"/>
           </div>
+          <div v-if="!isNewUserCard" class="d-flex flex-row align-items-center mt-2">
+            {{ $t('userCard.model.updatedAt') }}:
+            {{ $d(userCard.updatedAt, 'datetime') }}
+          </div>
         </div>
       </div>
     </template>
