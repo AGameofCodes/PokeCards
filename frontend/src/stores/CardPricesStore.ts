@@ -73,7 +73,15 @@ export class CardPricesStore extends Pinia {
 
   async reloadCardPricesByIds(ids: string[]): Promise<void> {
     try {
-      const prices = await this.apiStore.priceApi.listForCards(ids)
+      //split requests
+      const prefixLength = 100;
+      const paramLength = 20 + 'uid='.length;
+      const maxParamCountPerRequest = Math.floor((8000 - prefixLength) / paramLength);
+      const idBatches = Array.from(new Array(Math.ceil(ids.length / maxParamCountPerRequest)))
+        .map((_, i) => ids.slice(i * maxParamCountPerRequest, Math.min((i + 1) * maxParamCountPerRequest, ids.length)));
+      const requests = idBatches.map(idBatch => this.apiStore.priceApi.listForCards(idBatch));
+
+      const prices = (await Promise.all(requests)).flatMap(e => e);
       prices.forEach(cardPrice => this.rememberCardPrice(cardPrice));
     } catch (e) {
       console.error(e);
