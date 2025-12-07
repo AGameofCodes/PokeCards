@@ -86,11 +86,11 @@ export default class EditLabelModal extends Vue {
 
       if (this.isNew) {
         const res = await this.api.labelApi.add(this.label);
-        this.store.addLabel(res);
+        this.store.rememberLabel(res);
         savedToast(this.$i18n);
       } else {
         const res = await this.api.labelApi.update(this.label);
-        this.store.updateLabel(res);
+        this.store.rememberLabel(res);
         savedToast(this.$i18n);
       }
       await this.dismiss();

@@ -38,11 +38,7 @@ export class LabelStore extends Pinia {
     this._labels.push(...labels);
   }
 
-  addLabel(label: LabelVmV1): void {
-    this._labels.push(label);
-  }
-
-  updateLabel(label: LabelVmV1): void {
+  rememberLabel(label: LabelVmV1): void {
     const index = this._labels.findIndex(e => e.id == label.id);
     if (index >= 0) {
       this._labels.splice(index, 1, label);

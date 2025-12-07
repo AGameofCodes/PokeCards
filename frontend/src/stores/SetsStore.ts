@@ -47,11 +47,7 @@ export class SetsStore extends Pinia {
     this._sets.push(...sets);
   }
 
-  addSet(set: SetVmV1): void {
-    this._sets.push(set);
-  }
-
-  updateSet(set: SetVmV1): void {
+  rememberSet(set: SetVmV1): void {
     const index = this._sets.findIndex(e => e.uid == set.uid);
     if (index >= 0) {
       this._sets.splice(index, 1, set);
@@ -76,10 +72,10 @@ export class SetsStore extends Pinia {
 
     try {
       const set = await this.apiStore.setApi.getByLanguageAndId(language, id);
-      this.updateSet(set);
+      this.rememberSet(set);
     } catch (e) {
       if (e instanceof ApiException && e.code === 404) {
-        this.updateSet(SetVmV1.fromJson({uid: crypto.randomUUID(), id: id, language: language}));
+        this.rememberSet(SetVmV1.fromJson({uid: crypto.randomUUID(), id: id, language: language}));
       } else {
         console.error(e);
       }

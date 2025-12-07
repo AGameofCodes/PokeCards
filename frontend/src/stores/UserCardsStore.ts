@@ -34,11 +34,7 @@ export class UserCardsStore extends Pinia {
     this._userCards.push(...cards);
   }
 
-  addCard(card: UserCardVmV1): void {
-    this._userCards.push(card);
-  }
-
-  updateCard(card: UserCardVmV1): void {
+  rememberCard(card: UserCardVmV1): void {
     const index = this._userCards.findIndex(e => e.id == card.id);
     if (index >= 0) {
       this._userCards.splice(index, 1, card);
