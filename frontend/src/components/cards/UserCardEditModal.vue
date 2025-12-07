@@ -174,7 +174,7 @@ export default class UserCardEditModal extends Vue {
                 <span class="badge rounded-pill me-2"
                       :style="{background: label.color, color: findForegroundColor(label.color) ?? 'black'}">
                   <label :for="uid + '_type'" class="form-label mb-0">
-                    {{ $t('label.model.type') }}
+                    {{ label.name }}
                   </label>
                 </span>
                 <vSelect :id="uid + '_type'"
