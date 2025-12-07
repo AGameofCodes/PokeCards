@@ -47,17 +47,28 @@ export class CardsStore extends Pinia {
     this._cards.push(...cards);
   }
 
-  addCard(card: CardVmV1): void {
-    this._cards.push(card);
-  }
-
-  updateCard(card: CardVmV1): void {
+  rememberCard(card: CardVmV1): void {
     const index = this._cards.findIndex(e => e.uid === card.uid);
     if (index >= 0) {
       this._cards.splice(index, 1, card);
     } else {
       this._cards.push(card);
     }
+  }
+
+  rememberCards(cards: CardVmV1[]): void {
+    const byId = new Map<string, CardVmV1>(cards.map(e => [e.id, e]));
+
+    //replace existing
+    for (let i = 0; i < this._cards.length; i++) {
+      if (byId.has(this._cards[i].id)) {
+        this._cards[i] = byId.get(this._cards[i].id)!;
+        byId.delete(this._cards[i].id);
+      }
+    }
+
+    // add missing
+    this._cards.push(...byId.values());
   }
 
   forgetCard(card: CardVmV1): void {
@@ -73,7 +84,7 @@ export class CardsStore extends Pinia {
         await this._singleCardLoadingPromises.get(uid);
       } else {
         const future = this.apiStore.cardApi.getByUid(uid)
-          .then(card => this.updateCard(card));
+          .then(card => this.rememberCard(card));
         this._singleCardLoadingPromises.set(uid, future);
         await future;
         this._singleCardLoadingPromises.delete(uid);
@@ -94,7 +105,7 @@ export class CardsStore extends Pinia {
       const requests = uidBatches.map(uidBatch => this.apiStore.cardApi.list(uidBatch));
 
       const cards = (await Promise.all(requests)).flatMap(e => e);
-      cards.forEach(card => this.updateCard(card));
+      this.rememberCards(cards);
     } catch (e) {
       console.error(e);
     }

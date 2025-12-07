@@ -86,7 +86,7 @@ export default class MassRecord extends Vue {
       const maybeCards: (CardVmV1 | null)[] = await Promise.all(cardPromises);
       const cards = maybeCards.filter(maybeCard => maybeCard).map(maybeCard => maybeCard!); //filtered out failed cards
       cards.forEach(card => {
-        this.cardStore.updateCard(card);
+        this.cardStore.rememberCard(card);
       });
     } finally {
       this.loading = false;

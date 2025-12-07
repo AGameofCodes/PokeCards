@@ -48,6 +48,21 @@ export class CardPricesStore extends Pinia {
     }
   }
 
+  rememberCardPrices(cardPrices: PriceVmV1[]): void {
+    const byId = new Map<string, PriceVmV1>(cardPrices.map(e => [e.id, e]));
+
+    //replace existing
+    for (let i = 0; i < this._cardPrices.length; i++) {
+      if (byId.has(this._cardPrices[i].id)) {
+        this._cardPrices[i] = byId.get(this._cardPrices[i].id)!;
+        byId.delete(this._cardPrices[i].id);
+      }
+    }
+
+    // add missing
+    this._cardPrices.push(...byId.values());
+  }
+
   forgetCardPrice(cardPrice: PriceVmV1): void {
     const index = this._cardPrices.findIndex(e => e.id === cardPrice.id);
     if (index >= 0) {
@@ -82,7 +97,7 @@ export class CardPricesStore extends Pinia {
       const requests = idBatches.map(idBatch => this.apiStore.priceApi.listForCards(idBatch));
 
       const prices = (await Promise.all(requests)).flatMap(e => e);
-      prices.forEach(cardPrice => this.rememberCardPrice(cardPrice));
+      this.rememberCardPrices(prices);
     } catch (e) {
       console.error(e);
     }

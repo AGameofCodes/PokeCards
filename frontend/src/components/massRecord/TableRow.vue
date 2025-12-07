@@ -37,7 +37,7 @@ export default class TableRow extends Vue {
     try {
       const promises = [...new Array(this.count)]
           .map(_ => this.api.userCardApi.add(this.initUserCard())
-              .then((userCard: UserCardVmV1) => this.store.addCard(userCard)));
+              .then((userCard: UserCardVmV1) => this.store.rememberCard(userCard)));
       await Promise.all(promises);
       savedToast(this.$i18n);
       this.reset();

@@ -116,11 +116,11 @@ export default class UserCardEditModal extends Vue {
       if (this.isNewUserCard) {
         const promises = [...new Array(this.count)]
             .map(_ => this.api.userCardApi.add(this.userCard!)
-                .then((userCard: UserCardVmV1) => this.userCardStore.addCard(userCard)));
+                .then((userCard: UserCardVmV1) => this.userCardStore.rememberCard(userCard)));
         await Promise.all(promises);
       } else {
         const userCard = await this.api.userCardApi.update(this.userCard);
-        this.userCardStore.updateCard(userCard);
+        this.userCardStore.rememberCard(userCard);
       }
       savedToast(this.$i18n);
       await this.dismiss();
