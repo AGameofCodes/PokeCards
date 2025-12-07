@@ -171,12 +171,12 @@ export default class UserCardEditModal extends Vue {
                 </div>
               </template>
               <div class="d-flex flex-row align-items-baseline" v-if="label.type === 'enum'">
-              <span class="badge rounded-pill me-2"
-                    :style="{background: label.color, color: findForegroundColor(label.color) ?? 'black'}">
-                <label :for="uid + '_type'" class="form-label mb-0">
-                  {{ $t('label.model.type') }}
-                </label>
-              </span>
+                <span class="badge rounded-pill me-2"
+                      :style="{background: label.color, color: findForegroundColor(label.color) ?? 'black'}">
+                  <label :for="uid + '_type'" class="form-label mb-0">
+                    {{ $t('label.model.type') }}
+                  </label>
+                </span>
                 <vSelect :id="uid + '_type'"
                          v-model="getUserCardLabelByLabelId(label.id).value"
                          :options="label.enumValues?.split(',').map(e => e.trim()).filter(e => !!e)"
