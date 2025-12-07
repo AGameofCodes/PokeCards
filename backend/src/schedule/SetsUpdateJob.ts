@@ -47,14 +47,22 @@ export default class SetsUpdateJob implements IJob<void> {
     for (let apiSetBrief of apiSetBriefs) {
       let set = await this.repo.getByLanguageAndId(language, apiSetBrief.id);
 
-      //add missing set
       if (!set) {
+        //add missing set
         await new Promise((resolve) => setTimeout(resolve, 1000)); //sleep 3000ms before next api request
 
         const apiSet = await fetchSet(language, apiSetBrief.id);
         if (apiSet) {
           set = mapTcgDexNetApiSet2Set(apiSet, language);
           await this.repo.add(set);
+        }
+      } else {
+        //update existing set
+        const apiSet = await fetchSet(language, apiSetBrief.id);
+        if (apiSet !== undefined) {
+          const updatedSet = mapTcgDexNetApiSet2Set(apiSet, set.language);
+          updatedSet.uid = set.uid;
+          await this.repo.update(updatedSet);
         }
       }
     }

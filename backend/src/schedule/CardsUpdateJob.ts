@@ -41,8 +41,9 @@ export default class CardsUpdateJob implements IJob<void> {
 
       const apiCard = await fetchCard(card.language, card.id);
       if (apiCard) {
-        card = mapApiTcgDexNetCard2Card(apiCard, card.language);
-        await this.repo.update(card);
+        const updatedCard = mapApiTcgDexNetCard2Card(apiCard, card.language);
+        updatedCard.uid = card.uid;
+        await this.repo.update(updatedCard);
         this.updatedCardCount++;
       }
     }
