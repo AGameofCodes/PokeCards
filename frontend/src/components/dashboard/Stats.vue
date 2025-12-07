@@ -2,7 +2,6 @@
 import {Component, Vue} from 'vue-facing-decorator';
 import {UserCardsStore} from "@/stores/UserCardsStore";
 import {CardsStore} from "@/stores/CardsStore";
-import {CardPricesStore} from '@/stores/CardPricesStore';
 import {UserCardVmV1} from 'pokecards-oas';
 import {findPrice, formatPrice, isCardPriceIgnoredInTotalValue} from '@/util/price';
 import {preload} from '@/util/preload';
@@ -15,7 +14,6 @@ import Spinner from '@/components/Spinner.vue';
 })
 export default class Stats extends Vue {
   readonly cardStore = new CardsStore();
-  readonly priceStore = new CardPricesStore();
   readonly userCardStore = new UserCardsStore();
 
   preloadFinished = false;
@@ -44,13 +42,7 @@ export default class Stats extends Vue {
         return 0;
       }
 
-      const price = this.priceStore.cardPricesById.get(card.id);
-      if (!price) {
-        this.priceStore.reloadCardPriceById(card.id);
-        return 0;
-      }
-
-      return findPrice(price, userCard.variant) ?? 0;
+      return findPrice(card, userCard.variant) ?? 0;
     });
     return prices.reduce((l, r) => l + r, 0);
   }

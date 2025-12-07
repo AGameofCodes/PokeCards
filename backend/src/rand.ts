@@ -8,6 +8,10 @@ export function randomInt(max: number): number {
   return Math.floor(Math.random() * max);
 }
 
+export function randomNumber(max: number): number {
+  return Math.random() * max;
+}
+
 export function randomEmail(): string {
   return `${randomString(10)}@${randomString(10)}.${randomString(10)}`;
 }

@@ -3,7 +3,7 @@ import {initGlobals} from '../../../util/GlobalInit';
 import Card from '../Card';
 import {randomString} from '../../../util/string';
 import {randomUUID} from 'crypto';
-import {randomBoolean} from '../../../rand';
+import {randomBoolean, randomNumber} from '../../../rand';
 
 describe('Card model', () => {
   test('fromJSON/toJSON works', () => {
@@ -24,6 +24,24 @@ describe('Card model', () => {
       reverse: randomBoolean(),
       wPromo: randomBoolean(),
     };
+    card.pricing = {
+      cardmarket: {
+        updatedAt: new Date().toISOString(),
+        unit: randomString(3),
+        avg: randomNumber(1000),
+        low: randomNumber(1000),
+        trend: randomNumber(1000),
+        avg1: randomNumber(1000),
+        avg7: randomNumber(1000),
+        avg30: randomNumber(1000),
+        'avg-holo': randomNumber(1000),
+        'low-holo': randomNumber(1000),
+        'trend-holo': randomNumber(1000),
+        'avg1-holo': randomNumber(1000),
+        'avg7-holo': randomNumber(1000),
+        'avg30-holo': randomNumber(1000),
+      },
+    };
     card.language = randomString(7);
     card.updatedAt = new Date();
     const res = Card.fromJson(card.toJSON());
@@ -35,7 +53,7 @@ describe('Card model', () => {
     expect(res).toStrictEqual({
       $id: 'Card',
       type: 'object',
-      required: ['uid', 'id', 'name', 'setId', 'number', 'image', 'variants', 'language', 'updatedAt'],
+      required: ['uid', 'id', 'name', 'setId', 'number', 'image', 'variants', 'pricing', 'language', 'updatedAt'],
 
       properties: {
         uid: {type: 'string', format: 'uuid'},
@@ -53,6 +71,30 @@ describe('Card model', () => {
             normal: {type: 'boolean'},
             reverse: {type: 'boolean'},
             wPromo: {type: 'boolean'},
+          },
+        },
+        pricing: {
+          type: 'object',
+          properties: {
+            cardmarket: {
+              type: 'object',
+              properties: {
+                updatedAt: {type: 'string', format: 'date-time'},
+                unit: {type: 'string'},
+                avg: {type: 'number'},
+                low: {type: 'number'},
+                trend: {type: 'number'},
+                avg1: {type: 'number'},
+                avg7: {type: 'number'},
+                avg30: {type: 'number'},
+                'avg-holo': {type: 'number'},
+                'low-holo': {type: 'number'},
+                'trend-holo': {type: 'number'},
+                'avg1-holo': {type: 'number'},
+                'avg7-holo': {type: 'number'},
+                'avg30-holo': {type: 'number'},
+              },
+            },
           },
         },
         language: {type: 'string', minLength: 2, maxLength: 15}, //max length 255

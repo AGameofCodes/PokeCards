@@ -87,6 +87,24 @@ interface CardVmV1 {
     reverse?: boolean,
     wPromo?: boolean,
   };
+  pricing: {
+    cardmarket?: {
+      updatedAt?: string;
+      unit?: string,
+      avg?: number,
+      low?: number,
+      trend?: number,
+      avg1?: number,
+      avg7?: number,
+      avg30?: number,
+      'avg-holo'?: number,
+      'low-holo'?: number,
+      'trend-holo'?: number,
+      'avg1-holo'?: number,
+      'avg7-holo'?: number,
+      'avg30-holo'?: number,
+    } | null | undefined,
+  };
   /**
    * @minLength 2
    * @maxLength 15

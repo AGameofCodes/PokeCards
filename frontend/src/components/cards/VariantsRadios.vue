@@ -1,8 +1,7 @@
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-facing-decorator';
-import {CardVmV1, PriceVmV1} from 'pokecards-oas';
+import {CardVmV1} from 'pokecards-oas';
 import {getCurrentInstance} from "vue";
-import {CardPricesStore} from '@/stores/CardPricesStore';
 import {findPrice, formatPrice} from '@/util/price';
 
 @Component({
@@ -14,17 +13,11 @@ export default class VariantsRadios extends Vue {
   @Prop({required: true})
   modelValue!: string;
 
-  readonly priceStore = new CardPricesStore();
-
   get normalOrHoloPrice(): string | null {
     if (!this.card) {
       return null;
     }
-    const price = this.getOrFetchPrice(this.card.id);
-    if (!price) {
-      return null;
-    }
-    const priceValue = findPrice(price, 'normal');
+    const priceValue = findPrice(this.card, 'normal');
     if (!priceValue) {
       return null;
     }
@@ -35,11 +28,7 @@ export default class VariantsRadios extends Vue {
     if (!this.card) {
       return null;
     }
-    const price = this.getOrFetchPrice(this.card.id);
-    if (!price) {
-      return null;
-    }
-    const priceValue = findPrice(price, 'reverse');
+    const priceValue = findPrice(this.card, 'reverse');
     if (!priceValue) {
       return null;
     }
@@ -51,23 +40,14 @@ export default class VariantsRadios extends Vue {
   }
 
   get url(): string | null {
-    if (!this.card) {
-      return null;
-    }
-    const price = this.getOrFetchPrice(this.card.id);
-    if (!price) {
-      return null;
-    }
-    return price.cardmarket.url;
-  }
-
-  private getOrFetchPrice(cardId: string): PriceVmV1 | null {
-    const price = this.priceStore.cardPricesById.get(cardId);
-    if (price) {
-      return price;
-    }
-
-    this.priceStore.reloadCardPriceById(cardId);
+    // if (!this.card) {
+    //   return null;
+    // }
+    // const price = this.getOrFetchPrice(this.card.id);
+    // if (!price) {
+    //   return null;
+    // }
+    // return price.cardmarket.url;
     return null;
   }
 }

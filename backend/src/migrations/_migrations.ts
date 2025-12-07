@@ -9,6 +9,9 @@ import * as M20250329115036_variants_rarity from './20250329115036_variants_rari
 import * as M20250329203754_sets from './20250329203754_sets';
 import * as M20250614152735_setMappings from './20250614152735_setMappings';
 import * as M20250614181612_cardPrices from './20250614181612_cardPrices';
+import * as M20251207132542_integratedCardPrices from './20251207132542_integratedCardPrices';
+import * as M20251207181625_dropCardPrices from './20251207181625_dropCardPrices';
+import * as M20251207191803_dropSetMappings from './20251207191803_dropSetMappings';
 
 export type Migration = {
   name: string,
@@ -26,5 +29,8 @@ export const Migrations: Migration[] = [
   {name: '20250329203754_sets', migration: M20250329203754_sets},
   {name: '20250614152735_setMappings', migration: M20250614152735_setMappings},
   {name: '20250614181612_cardPrices', migration: M20250614181612_cardPrices},
+  {name: '20251207132542_integratedCardPrices', migration: M20251207132542_integratedCardPrices},
+  {name: '20251207181625_dropCardPrices', migration: M20251207181625_dropCardPrices},
+  {name: '20251207191803_dropSetMappings', migration: M20251207191803_dropSetMappings},
 ];
 //TODO use glob import

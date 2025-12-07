@@ -31,5 +31,5 @@ export function mapTcgDexNetApiCardBrief2CardBriefVmV1(brief: TcgDexNetCardBrief
 }
 
 export function mapApiTcgDexNetCard2Card(card: TcgDexNetCard, language: string): Card {
-  return Card.new(randomUUID(), card.id, card.name, card.set.id, card.localId, card.image ?? '', card.rarity, card.variants, language);
+  return Card.new(randomUUID(), card.id, card.name, card.set.id, card.localId, card.image ?? '', card.rarity, card.variants, card.pricing, language);
 }

@@ -1,6 +1,6 @@
-import {type PriceVmV1, UserCardVmV1} from 'pokecards-oas';
+import {CardVmV1, UserCardVmV1} from 'pokecards-oas';
 
-export function findPrice(price: PriceVmV1, variant: string | undefined): number | null {
+export function findPrice(card: CardVmV1, variant: string | undefined): number | null {
   if (!variant) {
     return null;
   }
@@ -11,9 +11,9 @@ export function findPrice(price: PriceVmV1, variant: string | undefined): number
   const isNormal = variant.includes('normal');
 
   if (isReverse) {
-    return price.cardmarket.prices.reverseHoloTrend ?? null;
+    return card.pricing.cardmarket?.trendHolo ?? null;
   } else if (isHolo || isNormal) {
-    return price.cardmarket.prices.trendPrice ?? null;
+    return card.pricing.cardmarket?.trend ?? null;
   } else {
     return null;
   }
