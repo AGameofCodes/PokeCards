@@ -58,17 +58,21 @@ export class CardsStore extends Pinia {
 
   rememberCards(cards: CardVmV1[]): void {
     const byId = new Map<string, CardVmV1>(cards.map(e => [e.id, e]));
+    const newList = [...this._cards];
 
-    //replace existing
+    // replace existing
     for (let i = 0; i < this._cards.length; i++) {
-      if (byId.has(this._cards[i].id)) {
-        this._cards[i] = byId.get(this._cards[i].id)!;
-        byId.delete(this._cards[i].id);
+      if (byId.has(newList[i].id)) {
+        newList[i] = byId.get(this._cards[i].id)!;
+        byId.delete(newList[i].id);
       }
     }
 
     // add missing
-    this._cards.push(...byId.values());
+    newList.push(...byId.values());
+
+    // set
+    this.setCards(newList);
   }
 
   forgetCard(card: CardVmV1): void {
