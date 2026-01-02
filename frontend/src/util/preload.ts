@@ -14,7 +14,11 @@ export async function preload(): Promise<void> {
   ]);
 
   //cards
-  const cardUids = [...new Set(userCardsStore.userCards.map((e: UserCardVmV1) => e.cardUid))] as string[];
+  const loadedCardUids = new Set(cardStore.cards.map(e => e.uid));
+  const cardUids = [...new Set(userCardsStore.userCards
+    .map((e: UserCardVmV1) => e.cardUid)
+    .filter(uid => !loadedCardUids.has(uid)) //only load cards that aren't already loaded
+  )] as string[];
   await cardStore.reloadCardsByUids(cardUids);
 
   //cards fallback and missing cards
