@@ -1,23 +1,22 @@
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
 import {UserCardsStore} from '@/stores/UserCardsStore';
-import {VueGoodTable} from 'vue-good-table-next';
-import 'vue-good-table-next/dist/vue-good-table-next.css';
-import '@/assets/vue-good-table/themes/bootstrap/bootstrap.scss';
-import '@/assets/vue-good-table/mobile.scss';
 import Loading from '@/components/Loading.vue';
 import CardBsCard from "@/components/cards/CardBsCard.vue";
 import {CardsStore} from "@/stores/CardsStore";
 import {CardVmV1, SetVmV1, UserCardVmV1} from "pokecards-oas";
 import UserCardEditModal from "@/components/cards/UserCardEditModal.vue";
 import {SetsStore} from '@/stores/SetsStore';
-import {findPrice, formatPrice, isCardPriceIgnoredInTotalValue} from '@/util/price';
+import {findPrice, isCardPriceIgnoredInTotalValue} from '@/util/price';
 import SortDropDown from '@/components/usercards/SortDropDown.vue';
 import * as utilPreload from '@/util/preload';
 import {LabelStore} from '@/stores/LabelStore';
+import RecycleCardList from '@/components/usercards/RecycleCardList.vue';
+import LegacyCardList from '@/components/usercards/LegacyCardList.vue';
 
 type CardFilterPredicate = (compound: CardDisplayCompound) => boolean;
-type CardDisplayCompound = {
+export type CardDisplayCompound = {
+  id: string;
   userCard: UserCardVmV1;
   card: CardVmV1 | null;
   set: SetVmV1 | null;
@@ -34,10 +33,11 @@ type SortOption = {
 @Component({
   components: {
     CardBsCard,
+    LegacyCardList,
     Loading,
+    RecycleCardList,
     SortDropDown,
     UserCardEditModal,
-    VueGoodTable,
   },
 })
 export default class UserCards extends Vue {
@@ -70,7 +70,6 @@ export default class UserCards extends Vue {
         comparator: (l, r) => l.userCard.createdAt.getTime() - r.userCard.createdAt.getTime(),
       }];
   filter = '';
-  formatPrice = formatPrice;
   preloadFinished = false;
   selectedSortOption: SortOption = {name: '', display: '', comparator: () => 0};
 
@@ -93,6 +92,7 @@ export default class UserCards extends Vue {
       const priceValue = !card ? null : findPrice(card, userCard.variant);
       const priceIgnore = !card ? false : isCardPriceIgnoredInTotalValue(userCard);
       return {
+        id: userCard.id,
         userCard: userCard,
         card: card,
         set: set,
@@ -218,36 +218,8 @@ export default class UserCards extends Vue {
     </div>
 
     <Loading v-if="userCardsStore.loading || setsStore.loading || !preloadFinished"/>
-    <div v-else class="flex-grow-1 d-flex flex-row flex-wrap overflow-auto">
-      <div v-for="{userCard, card, priceValue, priceIgnore} in sortedAndFilteredCards"
-           :key="userCard.id"
-           class="col-xl-2 col-lg-3 col-md-4 col-sm-6 col-12 pe-1 pb-1">
-        <CardBsCard :card="card" class="c-pointer" @click="card && openCard(card, userCard)">
-          <template #afterNumber>
-            <div class="ms-auto">
-              <span class="badge text-bg-secondary">
-                {{ (userCard.variant ?? '?').charAt(0).toUpperCase() }}
-              </span>
-            </div>
-          </template>
-          <template #end>
-            <div>
-              {{ $t('price.price') }}:
-              <template v-if="priceValue">
-                <a :href="undefined" target="_blank" @click.stop
-                   :style="{color: priceIgnore ? 'red' : undefined}"
-                   :title="priceIgnore ? $t('price.priceNotCountedInTotal') : undefined">
-                  {{ formatPrice(priceValue, $i18n.locale) }}
-                </a>
-              </template>
-              <template v-else>
-                ?
-              </template>
-            </div>
-          </template>
-        </CardBsCard>
-      </div>
-    </div>
+    <RecycleCardList :cards="sortedAndFilteredCards" @open="openCard($event.card, $event.userCard)"/>
+    <!--    <LegacyCardList :cards="sortedAndFilteredCards" @open="openCard($event.card, $event.userCard)"/> -->
 
     <UserCardEditModal ref="editModal"/>
   </div>
