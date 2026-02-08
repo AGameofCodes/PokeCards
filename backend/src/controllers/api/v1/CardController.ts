@@ -150,9 +150,9 @@ export class CardController extends Controller {
 
     let filter: string[] = [];
 
-    const searchTerms = searchText.split(' ').map(e => ({term: e, number: parseInt(e)}));
-    const searchNumbers = searchTerms.filter(e => !isNaN(e.number)).map(e => e.number);
-    const searchTexts = searchTerms.filter(e => isNaN(e.number)).map(e => e.term);
+    const searchTerms = searchText.split(' ');
+    const searchNumbers = searchTerms.filter(e => e.match(/[0-9]+/g)).map(e => e.toLocaleUpperCase());
+    const searchTexts = searchTerms.filter(e => !e.match(/[0-9]+/g));
 
     //find sets
     const searchSets: SetModel[] = [];
