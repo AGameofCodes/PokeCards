@@ -49,5 +49,9 @@
     "tsoa": "^6.6.0",
     "typescript": "^5.9.3",
     "wait-on": "^8.0.5"
+  },
+  "allowScripts": {
+    "bcrypt@5.1.1": true,
+    "sqlite3@5.1.7": true
   }
 }
