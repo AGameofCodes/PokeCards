@@ -64,6 +64,7 @@ export const messagesEn = {
     saved: 'Saved',
     saving: 'Saving ...',
     search: 'Search',
+    undo: 'undo',
   },
   label: {
     create: {

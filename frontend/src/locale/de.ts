@@ -66,6 +66,7 @@ export const messagesDe = {
     saved: 'Gespeichert',
     saving: 'Wird gespeichert ...',
     search: 'Suche',
+    undo: 'Rückgängig',
   },
   label: {
     create: {
