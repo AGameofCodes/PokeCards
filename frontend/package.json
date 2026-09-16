@@ -47,7 +47,7 @@
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.41.0",
     "@rushstack/eslint-patch": "^1.16.1",
-    "@tsconfig/node20": "^20.1.10",
+    "@tsconfig/node24": "^24.0.5",
     "@types/bootstrap": "^5.2.11",
     "@types/gravatar": "^1.8.6",
     "@types/jsdom": "^21.1.7",
@@ -66,11 +66,11 @@
     "prettier": "^3.9.6",
     "sass": "1.79.6",
     "start-server-and-test": "^3.0.12",
-    "typescript": "~5.8.2",
+    "typescript": "^6.0.3",
     "vite": "^8.3.0",
     "vite-plugin-vue-facing-decorator-hmr": "^1.0.1",
     "vitest": "^5.0.0",
-    "vue-tsc": "^2.2.12"
+    "vue-tsc": "^3.3.11"
   },
   "devDependenciesNotes": {
     "sass:1.79.6": "needed because bootstrap still uses @import instead of @use; see https://sass-lang.com/blog/import-is-deprecated/"
