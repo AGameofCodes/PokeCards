@@ -1,9 +1,8 @@
 import {fileURLToPath, URL} from 'node:url';
-import {defineConfig, UserConfig} from 'vite';
+import {defineConfig} from 'vite';
 import vue from '@vitejs/plugin-vue';
 import VueI18nPlugin from '@intlify/unplugin-vue-i18n/vite';
 import vueFacingDecoratorHmr from 'vite-plugin-vue-facing-decorator-hmr';
-import {ManualChunkMeta} from 'rollup';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -18,15 +17,16 @@ export default defineConfig({
     manifest: true,
     emptyOutDir: false,
     chunkSizeWarningLimit: 10_000_000,
-    rollupOptions: {
+    rolldownOptions: {
       input: ['./src/main.ts', './index.html'],
       output: {
-        manualChunks: (id: string, meta: ManualChunkMeta) => {
-          //TODO somehow  splitting it breaks it, so everything goes into main for now
-          // if (id.includes('node_modules')) {
-          //   return 'vendor';
-          // }
-          return 'main';
+        codeSplitting: {
+          groups: [
+            {
+              test: () => true,
+              name: 'main',
+            },
+          ],
         },
       },
     },
@@ -34,7 +34,6 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        api: 'modern', //needed because bootstrap still uses legacy-js-api https://sass-lang.com/documentation/breaking-changes/legacy-js-api/
         quietDeps: true, //needed because bootstrap still uses @import instead of @use; see https://sass-lang.com/blog/import-is-deprecated/
       },
     },
@@ -48,4 +47,4 @@ export default defineConfig({
       },
     },
   },
-} as UserConfig);
+});
