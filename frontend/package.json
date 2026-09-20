@@ -79,11 +79,11 @@
     "pokecards-oas": "file:../oas"
   },
   "allowScripts": {
-    "@openapitools/openapi-generator-cli@2.41.0": true,
-    "cypress@16.1.0": true,
+    "@openapitools/openapi-generator-cli": true,
+    "@parcel/watcher": true,
+    "cypress": true,
     "esbuild@0.25.12": true,
     "file:../../oas": true,
-    "@parcel/watcher@2.6.0": true,
-    "vue-demi@0.14.10": true
+    "vue-demi": true
   }
 }
