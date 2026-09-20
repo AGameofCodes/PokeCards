@@ -4,9 +4,10 @@
     "config:recommended"
   ],
   "baseBranches": ["develop"],
+  "ignoreDeps": ["sass"],
   "packageRules": [
     {
-      "ignoreDeps": ["sass"],
+      "matchUpdateTypes": ["minor"],
       "matchCurrentVersion": "!/^0/",
       "automerge": true
     }
