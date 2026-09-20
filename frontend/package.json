@@ -35,7 +35,7 @@
     "pinia": "^2.3.1",
     "pinia-class-component": "^0.9.4",
     "vue": "^3.5.43",
-    "vue-facing-decorator": "^3.0.4",
+    "vue-facing-decorator": "^4.0.0",
     "vue-good-table-next": "^0.2.2",
     "vue-i18n": "^11.4.12",
     "vue-router": "^4.6.4",
