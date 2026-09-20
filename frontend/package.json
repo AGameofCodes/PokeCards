@@ -80,7 +80,7 @@
   },
   "allowScripts": {
     "@openapitools/openapi-generator-cli@2.41.0": true,
-    "cypress@16.0.0": true,
+    "cypress@16.1.0": true,
     "esbuild@0.25.12": true,
     "file:../../oas": true,
     "@parcel/watcher@2.6.0": true,
