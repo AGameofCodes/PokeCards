@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "node": ">=21.0.0",
+  "node": ">=24.0.0",
   "scripts": {
     "setup": "run-s setup:1 setup:2",
     "setup:1": "npm run build:oas",
