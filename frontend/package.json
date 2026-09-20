@@ -25,7 +25,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.0.0",
-    "@intlify/unplugin-vue-i18n": "^6.0.8",
+    "@intlify/unplugin-vue-i18n": "^11.0.0",
     "@popperjs/core": "^2.11.8",
     "@vuepic/vue-datepicker": "^11.0.3",
     "bootstrap": "^5.3.8",
