@@ -27,7 +27,7 @@
     "@fortawesome/fontawesome-free": "^7.0.0",
     "@intlify/unplugin-vue-i18n": "^11.0.0",
     "@popperjs/core": "^2.11.8",
-    "@vuepic/vue-datepicker": "^11.0.3",
+    "@vuepic/vue-datepicker": "^14.0.0",
     "bootstrap": "^5.3.8",
     "gravatar": "^1.8.2",
     "mitt": "^3.0.1",
