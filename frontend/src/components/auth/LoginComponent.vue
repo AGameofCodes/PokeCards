@@ -1,3 +1,44 @@
+<template>
+  <div>
+    <div class="width"></div>
+    <div v-if="error" class="alert alert-danger" role="alert">
+      {{ error }}
+    </div>
+    <div class="mb-3">
+      {{ $t('auth.username') }}
+      <input type="text" class="form-control" v-model="username"/>
+    </div>
+    <div class="mb-3">
+      {{ $t('auth.password') }}
+      <input type="password" class="form-control" v-model="password" @keydown.enter="login"/>
+    </div>
+    <div class="d-flex flex-row align-items-center mb-3">
+      <RouterLink v-if="configStore.config?.registerEnabled" to="/register">{{ $t('auth.register') }}</RouterLink>
+      <button class="btn btn-primary ms-auto" @click="login">{{ $t('auth.login') }}</button>
+    </div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+@import 'bootstrap/scss/functions';
+@import 'bootstrap/scss/variables';
+@import 'bootstrap/scss/mixins/breakpoints';
+
+@include media-breakpoint-down(sm) {
+  .width {
+    width: calc(100vw - 3em);
+    transition: width .125s ease-in-out;
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  .width {
+    width: 18em;
+    transition: width .125s ease-in-out;
+  }
+}
+</style>
+
 <script lang="ts">
 import {ApiException, LoginRequestVmV1, LoginResponseVmV1} from 'pokecards-oas';
 import {Component, Vue} from 'vue-facing-decorator';
@@ -43,44 +84,3 @@ export default class LoginComponent extends Vue {
   }
 }
 </script>
-
-<template>
-  <div>
-    <div class="width"></div>
-    <div v-if="error" class="alert alert-danger" role="alert">
-      {{ error }}
-    </div>
-    <div class="mb-3">
-      {{ $t('auth.username') }}
-      <input type="text" class="form-control" v-model="username"/>
-    </div>
-    <div class="mb-3">
-      {{ $t('auth.password') }}
-      <input type="password" class="form-control" v-model="password" @keydown.enter="login"/>
-    </div>
-    <div class="d-flex flex-row align-items-center mb-3">
-      <RouterLink v-if="configStore.config?.registerEnabled" to="/register">{{ $t('auth.register') }}</RouterLink>
-      <button class="btn btn-primary ms-auto" @click="login">{{ $t('auth.login') }}</button>
-    </div>
-  </div>
-</template>
-
-<style lang="scss" scoped>
-@import 'bootstrap/scss/functions';
-@import 'bootstrap/scss/variables';
-@import 'bootstrap/scss/mixins/breakpoints';
-
-@include media-breakpoint-down(sm) {
-  .width {
-    width: calc(100vw - 3em);
-    transition: width .125s ease-in-out;
-  }
-}
-
-@include media-breakpoint-up(sm) {
-  .width {
-    width: 18em;
-    transition: width .125s ease-in-out;
-  }
-}
-</style>

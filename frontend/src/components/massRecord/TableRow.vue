@@ -1,3 +1,28 @@
+<template>
+  <tr>
+    <td style="width: 1em"><img :src="card.image + '/low.webp'" style="height: 3em"/></td>
+    <td style="width: 1em">{{ card.number }}</td>
+    <td>{{ card.name }}</td>
+    <td>
+      <VariantsRadios :card="card" v-model="selectedVariant"/>
+    </td>
+    <td>
+      <input type="number" class="form-control" style="width: 5em" :min="1" v-model="count"/>
+    </td>
+    <td>
+      <div class="btn-group">
+        <button class="btn btn-sm btn-success" @click="addUserCard" :disabled="saving || !selectedVariant">
+          <Spinner v-if="saving" :size="1"/>
+          <i v-else class="fa fa-plus"/>
+        </button>
+        <button class="btn btn-sm btn-secondary" @click="addUserCardViaModal">
+          <i class="fa fa-cog"/>
+        </button>
+      </div>
+    </td>
+  </tr>
+</template>
+
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-facing-decorator';
 import {CardVmV1, UserCardVmV1} from 'pokecards-oas';
@@ -114,28 +139,3 @@ export default class TableRow extends Vue {
   }
 }
 </script>
-
-<template>
-  <tr>
-    <td style="width: 1em"><img :src="card.image + '/low.webp'" style="height: 3em"/></td>
-    <td style="width: 1em">{{ card.number }}</td>
-    <td>{{ card.name }}</td>
-    <td>
-      <VariantsRadios :card="card" v-model="selectedVariant"/>
-    </td>
-    <td>
-      <input type="number" class="form-control" style="width: 5em" :min="1" v-model="count"/>
-    </td>
-    <td>
-      <div class="btn-group">
-        <button class="btn btn-sm btn-success" @click="addUserCard" :disabled="saving || !selectedVariant">
-          <Spinner v-if="saving" :size="1"/>
-          <i v-else class="fa fa-plus"/>
-        </button>
-        <button class="btn btn-sm btn-secondary" @click="addUserCardViaModal">
-          <i class="fa fa-cog"/>
-        </button>
-      </div>
-    </td>
-  </tr>
-</template>

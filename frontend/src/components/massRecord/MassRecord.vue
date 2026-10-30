@@ -1,3 +1,43 @@
+<template>
+  <div class="d-flex flex-column">
+    <div class="d-flex flex-row align-items-center mb-2">
+      <div class="flex-grow-1">
+        <input class="form-control" v-model="search"/>
+      </div>
+      <div class="form-check ms-2" v-for="language in availableLanguages">
+        <input class="form-check-input"
+               type="radio"
+               :id="uid + '_' + language"
+               :value="language"
+               v-model="searchLanguage">
+        <label class="form-check-label" :for="uid + '_' + language">
+          {{ language }}
+        </label>
+      </div>
+    </div>
+
+    <Loading v-if="setsStore.loading || loading"/>
+    <div v-else class="flex-grow-1 overflow-auto">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th></th>
+          <th>{{ '#' }}</th>
+          <th>{{ $t('card.model.name') }}</th>
+          <th>{{ $t('card.model.variant') }}</th>
+          <th>{{ $t('general.count') }}</th>
+          <th>{{ $t('general.actions') }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        <TableRow v-for="card in searchCards" :key="card.id" :card="card" :modal="$refs.editModal"/>
+        </tbody>
+      </table>
+    </div>
+    <UserCardEditModal ref="editModal" />
+  </div>
+</template>
+
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
 import Loading from '@/components/Loading.vue';
@@ -94,43 +134,3 @@ export default class MassRecord extends Vue {
   }
 }
 </script>
-
-<template>
-  <div class="d-flex flex-column">
-    <div class="d-flex flex-row align-items-center mb-2">
-      <div class="flex-grow-1">
-        <input class="form-control" v-model="search"/>
-      </div>
-      <div class="form-check ms-2" v-for="language in availableLanguages">
-        <input class="form-check-input"
-               type="radio"
-               :id="uid + '_' + language"
-               :value="language"
-               v-model="searchLanguage">
-        <label class="form-check-label" :for="uid + '_' + language">
-          {{ language }}
-        </label>
-      </div>
-    </div>
-
-    <Loading v-if="setsStore.loading || loading"/>
-    <div v-else class="flex-grow-1 overflow-auto">
-      <table class="table table-striped">
-        <thead>
-        <tr>
-          <th></th>
-          <th>{{ '#' }}</th>
-          <th>{{ $t('card.model.name') }}</th>
-          <th>{{ $t('card.model.variant') }}</th>
-          <th>{{ $t('general.count') }}</th>
-          <th>{{ $t('general.actions') }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        <TableRow v-for="card in searchCards" :key="card.id" :card="card" :modal="$refs.editModal"/>
-        </tbody>
-      </table>
-    </div>
-    <UserCardEditModal ref="editModal" />
-  </div>
-</template>

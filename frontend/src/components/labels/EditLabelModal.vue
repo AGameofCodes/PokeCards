@@ -1,3 +1,64 @@
+<template>
+  <div>
+    <BootstrapModal ref="modal">
+      <template #modal-title>
+        {{ isNew ? $t('label.create.modalTitle') : $t('label.edit.modalTitle') }}
+      </template>
+      <div>
+        <div class="mb-3">
+          <label :for="uid + '_name'" class="form-label">{{ $t('label.model.name') }}</label>
+          <input type="text" class="form-control" :id="uid + '_name'" v-model="label.name"
+                 v-validate="{type: Label, prop: 'name', i18n: $i18n}">
+        </div>
+        <div class="mb-3">
+          <label :for="uid + '_type'" class="form-label">{{ $t('label.model.type') }}</label>
+          <vSelect :id="uid + '_type'"
+                   v-model="label.type"
+                   :options="types"
+                   label="label"
+                   :reduce="(option: any) => option.type"
+                   :clearable="false"/>
+        </div>
+        <div class="mb-3" v-if="label.type === 'enum'">
+          <label :for="uid + '_unit'" class="form-label">{{ $t('label.model.enumValues') }}</label>
+          <input type="text" class="form-control" :id="uid + '_unit'" v-model="label.enumValues"
+                 v-validate="{type: Label, prop: 'unit', i18n: $i18n}">
+        </div>
+        <div class="mb-3">
+          <label :for="uid + '_color'" class="form-label">{{ $t('label.model.color') }}</label>
+          <ColorPicker
+              :id="uid + '_color'"
+              style="height: 2em"
+              :disable-alpha="true"
+              lang="En"
+              :theme="sharedDarkMode.darkMode ? 'black' : 'white'"
+              v-model:pureColor="label.color"/>
+        </div>
+      </div>
+      <template #modal-footer>
+        <button class="btn btn-secondary" type="button" @click="dismiss" :disabled="saving">
+          {{ $t('general.cancel') }}
+        </button>
+        <button class="btn btn-primary" type="button" @click="save" :disabled="saving">
+          <Spinner v-if="saving" :style="'text-light'" size="1" class="me-1"/>
+          {{ isNew ? $t('label.create.button') : $t('label.edit.button') }}
+        </button>
+      </template>
+    </BootstrapModal>
+  </div>
+</template>
+
+<style>
+.vc-color-wrap {
+  width: 100% !important;
+  height: 2.375em !important;
+  margin-right: 0 !important;
+  display: block !important;
+  border-radius: var(--bs-border-radius);
+  border: var(--bs-border-width) solid var(--bs-border-color);
+}
+</style>
+
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
 import {LabelStore} from '@/stores/LabelStore';
@@ -102,64 +163,3 @@ export default class EditLabelModal extends Vue {
   }
 }
 </script>
-
-<template>
-  <div>
-    <BootstrapModal ref="modal">
-      <template #modal-title>
-        {{ isNew ? $t('label.create.modalTitle') : $t('label.edit.modalTitle') }}
-      </template>
-      <div>
-        <div class="mb-3">
-          <label :for="uid + '_name'" class="form-label">{{ $t('label.model.name') }}</label>
-          <input type="text" class="form-control" :id="uid + '_name'" v-model="label.name"
-                 v-validate="{type: Label, prop: 'name', i18n: $i18n}">
-        </div>
-        <div class="mb-3">
-          <label :for="uid + '_type'" class="form-label">{{ $t('label.model.type') }}</label>
-          <vSelect :id="uid + '_type'"
-                   v-model="label.type"
-                   :options="types"
-                   label="label"
-                   :reduce="(option: any) => option.type"
-                   :clearable="false"/>
-        </div>
-        <div class="mb-3" v-if="label.type === 'enum'">
-          <label :for="uid + '_unit'" class="form-label">{{ $t('label.model.enumValues') }}</label>
-          <input type="text" class="form-control" :id="uid + '_unit'" v-model="label.enumValues"
-                 v-validate="{type: Label, prop: 'unit', i18n: $i18n}">
-        </div>
-        <div class="mb-3">
-          <label :for="uid + '_color'" class="form-label">{{ $t('label.model.color') }}</label>
-          <ColorPicker
-              :id="uid + '_color'"
-              style="height: 2em"
-              :disable-alpha="true"
-              lang="En"
-              :theme="sharedDarkMode.darkMode ? 'black' : 'white'"
-              v-model:pureColor="label.color"/>
-        </div>
-      </div>
-      <template #modal-footer>
-        <button class="btn btn-secondary" type="button" @click="dismiss" :disabled="saving">
-          {{ $t('general.cancel') }}
-        </button>
-        <button class="btn btn-primary" type="button" @click="save" :disabled="saving">
-          <Spinner v-if="saving" :style="'text-light'" size="1" class="me-1"/>
-          {{ isNew ? $t('label.create.button') : $t('label.edit.button') }}
-        </button>
-      </template>
-    </BootstrapModal>
-  </div>
-</template>
-
-<style>
-.vc-color-wrap {
-  width: 100% !important;
-  height: 2.375em !important;
-  margin-right: 0 !important;
-  display: block !important;
-  border-radius: var(--bs-border-radius);
-  border: var(--bs-border-width) solid var(--bs-border-color);
-}
-</style>

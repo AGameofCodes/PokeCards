@@ -1,19 +1,3 @@
-<script lang="ts">
-import {Component, Vue} from 'vue-facing-decorator';
-import Password from '@/components/profile/Password.vue';
-import Personal from '@/components/profile/Personal.vue';
-
-@Component({
-  name: 'Profile',
-  components: {
-    Password,
-    Personal,
-  },
-})
-export default class Profile extends Vue {
-}
-</script>
-
 <template>
   <div class="profile d-flex flex-row">
     <Personal class="flex-grow-1"/>
@@ -42,3 +26,19 @@ export default class Profile extends Vue {
   }
 }
 </style>
+
+<script lang="ts">
+import {Component, Vue} from 'vue-facing-decorator';
+import Password from '@/components/profile/Password.vue';
+import Personal from '@/components/profile/Personal.vue';
+
+@Component({
+  name: 'Profile',
+  components: {
+    Password,
+    Personal,
+  },
+})
+export default class Profile extends Vue {
+}
+</script>

@@ -1,3 +1,20 @@
+<template>
+  <!-- <div> needed, otherwise @confirm event will merge into including <tag> a will trigger multiple times and with null as event param -->
+  <div>
+    <DeleteConfirmModal ref="modal" :deleting="deleting" @confirm="confirm">
+      <template #modal-title>{{ $t('general.confirmation') }}</template>
+      <template #default>
+        <div>
+          {{ $t('label.delete.reallyDelete') }}
+        </div>
+        <div v-if="label">
+          {{ $t('label.model.name') + ': ' + label.name }}
+        </div>
+      </template>
+    </DeleteConfirmModal>
+  </div>
+</template>
+
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
 import DeleteConfirmModal from '@/components/modals/DeleteConfirmModal.vue';
@@ -45,20 +62,3 @@ export default class LabelDeleteConfirmModal extends Vue {
   }
 }
 </script>
-
-<template>
-  <!-- <div> needed, otherwise @confirm event will merge into including <tag> a will trigger multiple times and with null as event param -->
-  <div>
-    <DeleteConfirmModal ref="modal" :deleting="deleting" @confirm="confirm">
-      <template #modal-title>{{ $t('general.confirmation') }}</template>
-      <template #default>
-        <div>
-          {{ $t('label.delete.reallyDelete') }}
-        </div>
-        <div v-if="label">
-          {{ $t('label.model.name') + ': ' + label.name }}
-        </div>
-      </template>
-    </DeleteConfirmModal>
-  </div>
-</template>

@@ -1,3 +1,31 @@
+<template>
+  <div class="card">
+    <img :src="image" class="card-img-top pokemon-card" :alt="card?.name">
+    <div class="card-body">
+      <h5 class="card-title text-nowrap text-truncate">{{ card?.name }}</h5>
+      <div class="d-flex flex-row">
+        <div>{{ $t('card.model.number') }}: {{ number }}</div>
+        <slot name="afterNumber"/>
+      </div>
+      <div>
+        {{ $t('card.model.set') }}: {{ set?.abbreviation ?? '?' }}
+        <img :src="set?.symbol + '.webp'" height="16" alt=""/>
+        <slot name="afterSet"/>
+      </div>
+      <div>
+        <slot name="end"/>
+      </div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.pokemon-card {
+  width: 100%;
+  aspect-ratio: 245 / 337;
+}
+</style>
+
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-facing-decorator';
 import {CardBriefVmV1, CardVmV1, SetVmV1} from 'pokecards-oas';
@@ -45,30 +73,3 @@ export default class CardBsCard extends Vue {
 }
 </script>
 
-<template>
-  <div class="card">
-    <img :src="image" class="card-img-top pokemon-card" :alt="card?.name">
-    <div class="card-body">
-      <h5 class="card-title text-nowrap text-truncate">{{ card?.name }}</h5>
-      <div class="d-flex flex-row">
-        <div>{{ $t('card.model.number') }}: {{ number }}</div>
-        <slot name="afterNumber"/>
-      </div>
-      <div>
-        {{ $t('card.model.set') }}: {{ set?.abbreviation ?? '?' }}
-        <img :src="set?.symbol + '.webp'" height="16" alt=""/>
-        <slot name="afterSet"/>
-      </div>
-      <div>
-        <slot name="end"/>
-      </div>
-    </div>
-  </div>
-</template>
-
-<style scoped>
-.pokemon-card {
-  width: 100%;
-  aspect-ratio: 245 / 337;
-}
-</style>

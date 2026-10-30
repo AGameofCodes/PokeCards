@@ -1,3 +1,44 @@
+<template>
+  <RecycleScroller
+      ref="scroller"
+      :items="cards"
+      :item-size="itemHeight"
+      :grid-items="itemsPerLine"
+      :item-secondary-size="itemWidth"
+      :buffer="2000"
+      :itemClass="'pe-1 pb-1'"
+      v-resize="onResize"
+  >
+    <template #default="{ item, index }">
+      <CardBsCard :card="item.card" class="c-pointer"
+                  @click="item.card && $emit('open', {card: item.card, userCard: item.userCard})">-->
+        <template #afterNumber>
+          <div class="ms-auto">
+            <span class="badge text-bg-secondary">
+              {{ (item.userCard.variant ?? '?').charAt(0).toUpperCase() }}
+            </span>
+          </div>
+        </template>
+        <template #end>
+          <div>
+            {{ $t('price.price') }}:
+            <template v-if="item.priceValue">
+              <a :href="undefined" target="_blank" @click.stop
+                 :style="{color: item.priceIgnore ? 'red' : undefined}"
+                 :title="item.priceIgnore ? $t('price.priceNotCountedInTotal') : undefined">
+                {{ formatPrice(item.priceValue, $i18n.locale) }}
+              </a>
+            </template>
+            <template v-else>
+              ?
+            </template>
+          </div>
+        </template>
+      </CardBsCard>
+    </template>
+  </RecycleScroller>
+</template>
+
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-facing-decorator';
 import CardBsCard from "@/components/cards/CardBsCard.vue";
@@ -45,44 +86,3 @@ export default class UserCards extends Vue {
   }
 }
 </script>
-
-<template>
-  <RecycleScroller
-      ref="scroller"
-      :items="cards"
-      :item-size="itemHeight"
-      :grid-items="itemsPerLine"
-      :item-secondary-size="itemWidth"
-      :buffer="2000"
-      :itemClass="'pe-1 pb-1'"
-      v-resize="onResize"
-  >
-    <template #default="{ item, index }">
-      <CardBsCard :card="item.card" class="c-pointer"
-                  @click="item.card && $emit('open', {card: item.card, userCard: item.userCard})">-->
-        <template #afterNumber>
-          <div class="ms-auto">
-            <span class="badge text-bg-secondary">
-              {{ (item.userCard.variant ?? '?').charAt(0).toUpperCase() }}
-            </span>
-          </div>
-        </template>
-        <template #end>
-          <div>
-            {{ $t('price.price') }}:
-            <template v-if="item.priceValue">
-              <a :href="undefined" target="_blank" @click.stop
-                 :style="{color: item.priceIgnore ? 'red' : undefined}"
-                 :title="item.priceIgnore ? $t('price.priceNotCountedInTotal') : undefined">
-                {{ formatPrice(item.priceValue, $i18n.locale) }}
-              </a>
-            </template>
-            <template v-else>
-              ?
-            </template>
-          </div>
-        </template>
-      </CardBsCard>
-    </template>
-  </RecycleScroller>
-</template>

@@ -1,3 +1,8 @@
+<template>
+  <img :src="profilePictureUrl" alt="Profile picture" :width="size" :height="size" class="rounded-circle"
+       referrerpolicy="no-referrer" @error="onProfilePictureError">
+</template>
+
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-facing-decorator';
 import * as gravatar from 'gravatar';
@@ -68,7 +73,3 @@ export default class ProfilePicture extends Vue {
   }
 }
 </script>
-<template>
-  <img :src="profilePictureUrl" alt="Profile picture" :width="size" :height="size" class="rounded-circle"
-       referrerpolicy="no-referrer" @error="onProfilePictureError">
-</template>

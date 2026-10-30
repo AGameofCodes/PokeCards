@@ -1,42 +1,3 @@
-<script lang="ts">
-import {Component, Vue} from 'vue-facing-decorator';
-import {SessionStore} from '@/stores/SessionStore';
-import {ApiStore} from '@/stores/ApiStore';
-import ProfilePicture from '@/components/navbar/ProfilePicture.vue';
-
-@Component({
-  name: 'LoggedInComponent',
-  components: {ProfilePicture},
-  emits: ['actionClicked'],
-})
-export default class LoggedInComponent extends Vue {
-  readonly apiStore: ApiStore = new ApiStore();
-  readonly sessionStore: SessionStore = new SessionStore();
-
-  async mounted(): Promise<void> {
-    await this.sessionStore.loadIfAbsent();
-  }
-
-  onGotoSettings(): void {
-    this.$router.push('/settings');
-    this.$emit('actionClicked');
-  }
-
-  onGotoProfile(): void {
-    this.$router.push('/profile');
-    this.$emit('actionClicked');
-  }
-
-  async onLogout(): Promise<void> {
-    const res = await this.apiStore.authApi.logout();
-    if (res.success) {
-      this.sessionStore.clear();
-    }
-    this.$router.push('/');
-    this.$emit('actionClicked');
-  }
-}
-</script>
 <template>
   <div class="width"></div>
   <li>
@@ -93,3 +54,43 @@ export default class LoggedInComponent extends Vue {
   }
 }
 </style>
+
+<script lang="ts">
+import {Component, Vue} from 'vue-facing-decorator';
+import {SessionStore} from '@/stores/SessionStore';
+import {ApiStore} from '@/stores/ApiStore';
+import ProfilePicture from '@/components/navbar/ProfilePicture.vue';
+
+@Component({
+  name: 'LoggedInComponent',
+  components: {ProfilePicture},
+  emits: ['actionClicked'],
+})
+export default class LoggedInComponent extends Vue {
+  readonly apiStore: ApiStore = new ApiStore();
+  readonly sessionStore: SessionStore = new SessionStore();
+
+  async mounted(): Promise<void> {
+    await this.sessionStore.loadIfAbsent();
+  }
+
+  onGotoSettings(): void {
+    this.$router.push('/settings');
+    this.$emit('actionClicked');
+  }
+
+  onGotoProfile(): void {
+    this.$router.push('/profile');
+    this.$emit('actionClicked');
+  }
+
+  async onLogout(): Promise<void> {
+    const res = await this.apiStore.authApi.logout();
+    if (res.success) {
+      this.sessionStore.clear();
+    }
+    this.$router.push('/');
+    this.$emit('actionClicked');
+  }
+}
+</script>

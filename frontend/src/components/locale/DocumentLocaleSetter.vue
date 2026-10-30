@@ -1,3 +1,6 @@
+<template>
+</template>
+
 <script lang="ts">
 import {Component, Vue, Watch} from 'vue-facing-decorator';
 
@@ -17,6 +20,3 @@ export default class DocumentLocaleSetter extends Vue {
   }
 }
 </script>
-
-<template>
-</template>

@@ -1,3 +1,19 @@
+<template>
+  <div class="dropdown">
+    <button aria-expanded="false" class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown" type="button">
+      <i class="fa fa-language"/>
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+      <li v-for="l in supportedLocales" :key="l.value">
+        <a :class="{active: locale === l.value}" class="dropdown-item" href="#"
+           @click.prevent="locale = l.value">
+          {{ l.text }}
+        </a>
+      </li>
+    </ul>
+  </div>
+</template>
+
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
 
@@ -19,19 +35,3 @@ export default class LocaleSelector extends Vue {
   }
 }
 </script>
-
-<template>
-  <div class="dropdown">
-    <button aria-expanded="false" class="btn btn-sm btn-outline-secondary" data-bs-toggle="dropdown" type="button">
-      <i class="fa fa-language"/>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-      <li v-for="l in supportedLocales" :key="l.value">
-        <a :class="{active: locale === l.value}" class="dropdown-item" href="#"
-           @click.prevent="locale = l.value">
-          {{ l.text }}
-        </a>
-      </li>
-    </ul>
-  </div>
-</template>

@@ -1,24 +1,3 @@
-<script lang="ts">
-import {Component, Vue} from 'vue-facing-decorator';
-import BootstrapThemeSwitch from '@/components/bootstrapThemeSwitch/BootstrapThemeSwitch.vue';
-import LocaleSelector from '@/components/locale/LocaleSelector.vue';
-import Logo from '@/components/Logo.vue';
-import UserAccountDropdown from '@/components/navbar/UserAccountDropdown.vue';
-
-@Component({
-  name: 'NavBar',
-  components: {
-    UserAccountDropdown,
-    BootstrapThemeSwitch,
-    LocaleSelector,
-    Logo,
-  },
-  emits: ['toggleSidebar'],
-})
-export default class NavBar extends Vue {
-}
-</script>
-
 <template>
   <!-- z-index needed, otherwise shadow not showing -->
   <nav class="navbar border-bottom shadow flex-nowrap" style="z-index: 1">
@@ -75,4 +54,25 @@ nav.navbar .nav-item {
   }
 }
 </style>
+
+<script lang="ts">
+import {Component, Vue} from 'vue-facing-decorator';
+import BootstrapThemeSwitch from '@/components/bootstrapThemeSwitch/BootstrapThemeSwitch.vue';
+import LocaleSelector from '@/components/locale/LocaleSelector.vue';
+import Logo from '@/components/Logo.vue';
+import UserAccountDropdown from '@/components/navbar/UserAccountDropdown.vue';
+
+@Component({
+  name: 'NavBar',
+  components: {
+    UserAccountDropdown,
+    BootstrapThemeSwitch,
+    LocaleSelector,
+    Logo,
+  },
+  emits: ['toggleSidebar'],
+})
+export default class NavBar extends Vue {
+}
+</script>
 

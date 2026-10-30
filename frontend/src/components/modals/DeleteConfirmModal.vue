@@ -1,42 +1,3 @@
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-facing-decorator';
-import ConfirmModal from './ConfirmModal.vue';
-import Spinner from '@/components/Spinner.vue';
-
-@Component({
-  name: 'DeleteConfirmModal',
-  components: {
-    ConfirmModal,
-    Spinner,
-  },
-  emits: ['confirm'],
-})
-export default class DeleteConfirmModal extends Vue {
-  //props
-  @Prop({default: true})
-  readonly closeOnOutsideClick!: boolean;
-  @Prop({default: true})
-  readonly closeOnKeyboardEsc!: boolean;
-  @Prop({default: false})
-  readonly scrollable!: boolean;
-  @Prop({default: false})
-  readonly centerVertically!: boolean;
-  @Prop({default: undefined})
-  readonly size!: 'sm' | 'lg' | 'xl' | null | undefined;
-  @Prop({default: false})
-  readonly deleting!: boolean;
-
-  //public functions
-  open(): Promise<void> {
-    return (this.$refs.modal as ConfirmModal).open();
-  }
-
-  dismiss(): Promise<void> {
-    return (this.$refs.modal as ConfirmModal).dismiss();
-  }
-}
-</script>
-
 <template>
   <ConfirmModal ref="modal"
                 :closeOnOutsideClick="closeOnOutsideClick"
@@ -75,3 +36,42 @@ export default class DeleteConfirmModal extends Vue {
     </template>
   </ConfirmModal>
 </template>
+
+<script lang="ts">
+import {Component, Prop, Vue} from 'vue-facing-decorator';
+import ConfirmModal from './ConfirmModal.vue';
+import Spinner from '@/components/Spinner.vue';
+
+@Component({
+  name: 'DeleteConfirmModal',
+  components: {
+    ConfirmModal,
+    Spinner,
+  },
+  emits: ['confirm'],
+})
+export default class DeleteConfirmModal extends Vue {
+  //props
+  @Prop({default: true})
+  readonly closeOnOutsideClick!: boolean;
+  @Prop({default: true})
+  readonly closeOnKeyboardEsc!: boolean;
+  @Prop({default: false})
+  readonly scrollable!: boolean;
+  @Prop({default: false})
+  readonly centerVertically!: boolean;
+  @Prop({default: undefined})
+  readonly size!: 'sm' | 'lg' | 'xl' | null | undefined;
+  @Prop({default: false})
+  readonly deleting!: boolean;
+
+  //public functions
+  open(): Promise<void> {
+    return (this.$refs.modal as ConfirmModal).open();
+  }
+
+  dismiss(): Promise<void> {
+    return (this.$refs.modal as ConfirmModal).dismiss();
+  }
+}
+</script>

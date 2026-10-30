@@ -1,3 +1,31 @@
+<template>
+  <div>
+    <Card>
+      <Loading v-if="store.loading"/>
+      <Alert v-else-if="!store.isLoggedIn" type="alert-danger">
+        {{ $t('error.failedToLoad') }}
+      </Alert>
+      <div v-else>
+        <div class="mb-3">
+          <label :for="uid + 'password'" class="form-label">{{ $t('userinfo.password') }}</label>
+          <input type="password" class="form-control" :id="uid + 'password'" v-model="password">
+        </div>
+        <div class="mb-3">
+          <label :for="uid + 'passwordRepeat'" class="form-label">{{ $t('userinfo.passwordRepeat') }}</label>
+          <input ref="passwordRepeatRef" type="password" class="form-control" :id="uid + 'passwordRepeat'"
+                 v-model="passwordRepeat" v-validate="{validator: () => checkPasswordValidity(), i18n: $i18n}">
+        </div>
+        <div class="d-flex flex-row">
+          <button class="btn btn-primary ms-auto" type="button" @click="save" :disabled="saving">
+            <Spinner v-if="saving" :style="'text-light'" size="1" class="me-1"/>
+            {{ $t('general.save') }}
+          </button>
+        </div>
+      </div>
+    </Card>
+  </div>
+</template>
+
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
 import {SessionStore} from '@/stores/SessionStore';
@@ -90,31 +118,3 @@ export default class Password extends Vue {
   }
 }
 </script>
-
-<template>
-  <div>
-    <Card>
-      <Loading v-if="store.loading"/>
-      <Alert v-else-if="!store.isLoggedIn" type="alert-danger">
-        {{ $t('error.failedToLoad') }}
-      </Alert>
-      <div v-else>
-        <div class="mb-3">
-          <label :for="uid + 'password'" class="form-label">{{ $t('userinfo.password') }}</label>
-          <input type="password" class="form-control" :id="uid + 'password'" v-model="password">
-        </div>
-        <div class="mb-3">
-          <label :for="uid + 'passwordRepeat'" class="form-label">{{ $t('userinfo.passwordRepeat') }}</label>
-          <input ref="passwordRepeatRef" type="password" class="form-control" :id="uid + 'passwordRepeat'"
-                 v-model="passwordRepeat" v-validate="{validator: () => checkPasswordValidity(), i18n: $i18n}">
-        </div>
-        <div class="d-flex flex-row">
-          <button class="btn btn-primary ms-auto" type="button" @click="save" :disabled="saving">
-            <Spinner v-if="saving" :style="'text-light'" size="1" class="me-1"/>
-            {{ $t('general.save') }}
-          </button>
-        </div>
-      </div>
-    </Card>
-  </div>
-</template>

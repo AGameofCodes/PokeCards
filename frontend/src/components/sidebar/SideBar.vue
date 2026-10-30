@@ -1,39 +1,3 @@
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-facing-decorator';
-import SideBarNavItem from '@/components/sidebar/SideBarNavItem.vue';
-import SideBarNavLink from '@/components/sidebar/SideBarNavLink.vue';
-import SideBarHead from '@/components/sidebar/SideBarHead.vue';
-import LocaleSelector from '@/components/locale/LocaleSelector.vue';
-import BootstrapThemeSwitch from '@/components/bootstrapThemeSwitch/BootstrapThemeSwitch.vue';
-import {SessionStore} from '@/stores/SessionStore';
-
-@Component({
-  name: 'SideBar',
-  components: {
-    BootstrapThemeSwitch,
-    LocaleSelector,
-    SideBarHead,
-    SideBarNavLink,
-    SideBarNavItem,
-  },
-  emits: ['close']
-})
-export default class SideBar extends Vue {
-  @Prop({default: false})
-  toggled!: boolean;
-
-  private readonly sessionStore = new SessionStore();
-
-  get loggedIn(): boolean {
-    return this.sessionStore.isLoggedIn;
-  }
-
-  async mounted(): Promise<void> {
-    await this.sessionStore.loadIfAbsent();
-  }
-}
-</script>
-
 <template>
   <div :class="{ toggled: toggled }" class="sidebar border-right shadow bg-body d-flex flex-column">
     <SideBarHead @close="$emit('close')"/>
@@ -102,3 +66,39 @@ $width: 15em;
   }
 }
 </style>
+
+<script lang="ts">
+import {Component, Prop, Vue} from 'vue-facing-decorator';
+import SideBarNavItem from '@/components/sidebar/SideBarNavItem.vue';
+import SideBarNavLink from '@/components/sidebar/SideBarNavLink.vue';
+import SideBarHead from '@/components/sidebar/SideBarHead.vue';
+import LocaleSelector from '@/components/locale/LocaleSelector.vue';
+import BootstrapThemeSwitch from '@/components/bootstrapThemeSwitch/BootstrapThemeSwitch.vue';
+import {SessionStore} from '@/stores/SessionStore';
+
+@Component({
+  name: 'SideBar',
+  components: {
+    BootstrapThemeSwitch,
+    LocaleSelector,
+    SideBarHead,
+    SideBarNavLink,
+    SideBarNavItem,
+  },
+  emits: ['close']
+})
+export default class SideBar extends Vue {
+  @Prop({default: false})
+  toggled!: boolean;
+
+  private readonly sessionStore = new SessionStore();
+
+  get loggedIn(): boolean {
+    return this.sessionStore.isLoggedIn;
+  }
+
+  async mounted(): Promise<void> {
+    await this.sessionStore.loadIfAbsent();
+  }
+}
+</script>

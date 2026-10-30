@@ -1,20 +1,3 @@
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-facing-decorator';
-
-export type DropDownSortOption = {
-  name: string;
-  display: string;
-};
-
-@Component
-export default class SortDropDown extends Vue {
-  @Prop({required: true})
-  modelValue!: DropDownSortOption;
-  @Prop({required: true})
-  options!: DropDownSortOption[];
-}
-</script>
-
 <template>
   <div class="dropdown">
     <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -32,3 +15,20 @@ export default class SortDropDown extends Vue {
     </ul>
   </div>
 </template>
+
+<script lang="ts">
+import {Component, Prop, Vue} from 'vue-facing-decorator';
+
+export type DropDownSortOption = {
+  name: string;
+  display: string;
+};
+
+@Component
+export default class SortDropDown extends Vue {
+  @Prop({required: true})
+  modelValue!: DropDownSortOption;
+  @Prop({required: true})
+  options!: DropDownSortOption[];
+}
+</script>

@@ -1,3 +1,29 @@
+<template>
+  <div class="d-flex flex-column">
+    <div class="d-flex flex-row mb-2">
+      <div class="flex-grow-1">
+        <input class="form-control" v-model="filter"/>
+      </div>
+      <div class="btn-group ms-2">
+        <button class="btn btn-secondary" @click="userCardsStore.reload()">
+          <i class="fa fa-refresh"/>
+        </button>
+      </div>
+      <div class="btn-group ms-2">
+        <SortDropDown v-model="selectedSortOption" :options="sortOptions">
+          <i class="fa fa-sort-alpha-asc"/>
+        </SortDropDown>
+      </div>
+    </div>
+
+    <Loading v-if="userCardsStore.loading || setsStore.loading || !preloadFinished"/>
+    <RecycleCardList :cards="sortedAndFilteredCards" @open="openCard($event.card, $event.userCard)"/>
+    <!--    <LegacyCardList :cards="sortedAndFilteredCards" @open="openCard($event.card, $event.userCard)"/> -->
+
+    <UserCardEditModal ref="editModal"/>
+  </div>
+</template>
+
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
 import {UserCardsStore} from '@/stores/UserCardsStore';
@@ -198,29 +224,3 @@ export default class UserCards extends Vue {
   }
 }
 </script>
-
-<template>
-  <div class="d-flex flex-column">
-    <div class="d-flex flex-row mb-2">
-      <div class="flex-grow-1">
-        <input class="form-control" v-model="filter"/>
-      </div>
-      <div class="btn-group ms-2">
-        <button class="btn btn-secondary" @click="userCardsStore.reload()">
-          <i class="fa fa-refresh"/>
-        </button>
-      </div>
-      <div class="btn-group ms-2">
-        <SortDropDown v-model="selectedSortOption" :options="sortOptions">
-          <i class="fa fa-sort-alpha-asc"/>
-        </SortDropDown>
-      </div>
-    </div>
-
-    <Loading v-if="userCardsStore.loading || setsStore.loading || !preloadFinished"/>
-    <RecycleCardList :cards="sortedAndFilteredCards" @open="openCard($event.card, $event.userCard)"/>
-    <!--    <LegacyCardList :cards="sortedAndFilteredCards" @open="openCard($event.card, $event.userCard)"/> -->
-
-    <UserCardEditModal ref="editModal"/>
-  </div>
-</template>

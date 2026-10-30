@@ -1,3 +1,35 @@
+<template>
+  <div ref="modal" :data-bs-backdrop="closeOnOutsideClick" :data-bs-keyboard="closeOnKeyboardEsc" class="modal"
+       tabindex="-1">
+    <div :class="modalDialogClasses" class="modal-dialog">
+      <div class="modal-content">
+        <slot name="modal-content">
+          <div class="modal-header">
+            <slot name="modal-header">
+              <h5 class="modal-title">
+                <slot name="modal-title">
+                  Modal title
+                </slot>
+              </h5>
+              <button aria-label="Close" class="btn-close" type="button" @click="dismiss"></button>
+            </slot>
+          </div>
+          <div class="modal-body">
+            <slot>
+              <p>Modal body text goes here.</p>
+            </slot>
+          </div>
+          <div class="modal-footer">
+            <slot name="modal-footer">
+              <button class="btn btn-secondary" type="button" @click="dismiss">{{ $t('general.close') }}</button>
+            </slot>
+          </div>
+        </slot>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-facing-decorator';
 import {Modal} from 'bootstrap';
@@ -107,35 +139,3 @@ export default class BootstrapModal extends Vue {
   }
 }
 </script>
-
-<template>
-  <div ref="modal" :data-bs-backdrop="closeOnOutsideClick" :data-bs-keyboard="closeOnKeyboardEsc" class="modal"
-       tabindex="-1">
-    <div :class="modalDialogClasses" class="modal-dialog">
-      <div class="modal-content">
-        <slot name="modal-content">
-          <div class="modal-header">
-            <slot name="modal-header">
-              <h5 class="modal-title">
-                <slot name="modal-title">
-                  Modal title
-                </slot>
-              </h5>
-              <button aria-label="Close" class="btn-close" type="button" @click="dismiss"></button>
-            </slot>
-          </div>
-          <div class="modal-body">
-            <slot>
-              <p>Modal body text goes here.</p>
-            </slot>
-          </div>
-          <div class="modal-footer">
-            <slot name="modal-footer">
-              <button class="btn btn-secondary" type="button" @click="dismiss">{{ $t('general.close') }}</button>
-            </slot>
-          </div>
-        </slot>
-      </div>
-    </div>
-  </div>
-</template>

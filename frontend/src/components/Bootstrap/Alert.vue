@@ -1,3 +1,9 @@
+<template>
+  <div class="alert" :class="[type]" role="alert">
+    <slot/>
+  </div>
+</template>
+
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-facing-decorator';
 
@@ -17,9 +23,3 @@ export default class Alert extends Vue {
   readonly type: AlertType | null = 'alert-primary';
 }
 </script>
-
-<template>
-  <div class="alert" :class="[type]" role="alert">
-    <slot/>
-  </div>
-</template>

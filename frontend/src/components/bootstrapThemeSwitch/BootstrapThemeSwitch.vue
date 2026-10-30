@@ -1,3 +1,24 @@
+<template>
+  <div class="form-check form-switch light-dark-switch">
+    <input class="form-check-input" type="checkbox" role="switch" v-model="dark">
+  </div>
+</template>
+
+<style scoped>
+.light-dark-switch .form-check-input {
+  --bs-form-switch-bg: url(assets/sun.svg) !important;
+}
+
+.light-dark-switch .form-check-input:focus {
+  --bs-form-switch-bg: url(assets/sun_focus.svg) !important;
+}
+
+.light-dark-switch .form-check-input:checked,
+.light-dark-switch .form-check-input:checked:focus {
+  --bs-form-switch-bg: url(assets/moon.svg) !important;
+}
+</style>
+
 <script lang="ts">
 import {Component, Vue, Watch} from 'vue-facing-decorator';
 import {reactive} from 'vue';
@@ -50,24 +71,3 @@ export default class BootstrapThemeSwitch extends Vue {
   }
 }
 </script>
-
-<template>
-  <div class="form-check form-switch light-dark-switch">
-    <input class="form-check-input" type="checkbox" role="switch" v-model="dark">
-  </div>
-</template>
-
-<style scoped>
-.light-dark-switch .form-check-input {
-  --bs-form-switch-bg: url(assets/sun.svg) !important;
-}
-
-.light-dark-switch .form-check-input:focus {
-  --bs-form-switch-bg: url(assets/sun_focus.svg) !important;
-}
-
-.light-dark-switch .form-check-input:checked,
-.light-dark-switch .form-check-input:checked:focus {
-  --bs-form-switch-bg: url(assets/moon.svg) !important;
-}
-</style>

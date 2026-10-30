@@ -1,3 +1,37 @@
+<template>
+  <div>
+    <Card>
+      <Loading v-if="store.loading"/>
+      <Alert v-else-if="!store.isLoggedIn" type="alert-danger">
+        {{ $t('error.failedToLoad') }}
+      </Alert>
+      <div v-else>
+        <div class="mb-3">
+          <label :for="uid + 'name'" class="form-label">{{ $t('userinfo.model.name') }}</label>
+          <input type="text" class="form-control" :id="uid + 'name'" v-model="user.name"
+                 v-validate="{type: UserInfo, prop: 'name', i18n: $i18n}" :disabled="true">
+        </div>
+        <div class="mb-3">
+          <label :for="uid + 'displayName'" class="form-label">{{ $t('userinfo.model.displayName') }}</label>
+          <input type="text" class="form-control" :id="uid + 'displayName'" v-model="user.displayName"
+                 v-validate="{type: UserInfo, prop: 'displayName', i18n: $i18n}">
+        </div>
+        <div class="mb-3">
+          <label :for="uid + 'email'" class="form-label">{{ $t('userinfo.model.email') }}</label>
+          <input type="email" class="form-control" :id="uid + 'email'" v-model="user.email"
+                 v-validate="{type: UserInfo, prop: 'email', i18n: $i18n}">
+        </div>
+        <div class="d-flex flex-row">
+          <button class="btn btn-primary ms-auto" type="button" @click="save" :disabled="saving">
+            <Spinner v-if="saving" :style="'text-light'" size="1" class="me-1"/>
+            {{ $t('general.save') }}
+          </button>
+        </div>
+      </div>
+    </Card>
+  </div>
+</template>
+
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
 import {SessionStore} from '@/stores/SessionStore';
@@ -65,37 +99,3 @@ export default class Personal extends Vue {
   }
 }
 </script>
-
-<template>
-  <div>
-    <Card>
-      <Loading v-if="store.loading"/>
-      <Alert v-else-if="!store.isLoggedIn" type="alert-danger">
-        {{ $t('error.failedToLoad') }}
-      </Alert>
-      <div v-else>
-        <div class="mb-3">
-          <label :for="uid + 'name'" class="form-label">{{ $t('userinfo.model.name') }}</label>
-          <input type="text" class="form-control" :id="uid + 'name'" v-model="user.name"
-                 v-validate="{type: UserInfo, prop: 'name', i18n: $i18n}" :disabled="true">
-        </div>
-        <div class="mb-3">
-          <label :for="uid + 'displayName'" class="form-label">{{ $t('userinfo.model.displayName') }}</label>
-          <input type="text" class="form-control" :id="uid + 'displayName'" v-model="user.displayName"
-                 v-validate="{type: UserInfo, prop: 'displayName', i18n: $i18n}">
-        </div>
-        <div class="mb-3">
-          <label :for="uid + 'email'" class="form-label">{{ $t('userinfo.model.email') }}</label>
-          <input type="email" class="form-control" :id="uid + 'email'" v-model="user.email"
-                 v-validate="{type: UserInfo, prop: 'email', i18n: $i18n}">
-        </div>
-        <div class="d-flex flex-row">
-          <button class="btn btn-primary ms-auto" type="button" @click="save" :disabled="saving">
-            <Spinner v-if="saving" :style="'text-light'" size="1" class="me-1"/>
-            {{ $t('general.save') }}
-          </button>
-        </div>
-      </div>
-    </Card>
-  </div>
-</template>

@@ -1,23 +1,3 @@
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-facing-decorator';
-import CardBsCard from "@/components/cards/CardBsCard.vue";
-import {formatPrice} from '@/util/price';
-import type {CardDisplayCompound} from '@/components/usercards/UserCards.vue';
-
-@Component({
-  components: {
-    CardBsCard,
-  },
-  emits: ['open'],
-})
-export default class LegacyCardList extends Vue {
-  @Prop({required: true})
-  cards!: CardDisplayCompound[];
-
-  formatPrice = formatPrice;
-}
-</script>
-
 <template>
   <div class="flex-grow-1 d-flex flex-row flex-wrap overflow-auto">
     <div v-for="{userCard, card, priceValue, priceIgnore} in cards"
@@ -51,3 +31,23 @@ export default class LegacyCardList extends Vue {
     </div>
   </div>
 </template>
+
+<script lang="ts">
+import {Component, Prop, Vue} from 'vue-facing-decorator';
+import CardBsCard from "@/components/cards/CardBsCard.vue";
+import {formatPrice} from '@/util/price';
+import type {CardDisplayCompound} from '@/components/usercards/UserCards.vue';
+
+@Component({
+  components: {
+    CardBsCard,
+  },
+  emits: ['open'],
+})
+export default class LegacyCardList extends Vue {
+  @Prop({required: true})
+  cards!: CardDisplayCompound[];
+
+  formatPrice = formatPrice;
+}
+</script>

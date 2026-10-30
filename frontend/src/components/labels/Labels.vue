@@ -1,3 +1,54 @@
+<template>
+  <div class="d-flex flex-column">
+    <div class="d-flex flex-row mb-2">
+      <div class="btn-group ms-auto">
+        <button class="btn btn-success" @click="onNew()">
+          <i class="fa fa-plus"/>
+        </button>
+        <button class="btn btn-secondary" @click="store.reload()">
+          <i class="fa fa-refresh"/>
+        </button>
+      </div>
+    </div>
+
+    <Loading v-if="store.loading"/>
+    <div v-else class="flex-grow-1 overflow-auto">
+      <VueGoodTable :columns="columns" :rows="store.labels" :search-options="searchOptions" theme="bootstrap">
+        <template #table-row="props">
+          <div v-if="props.column.field === 'color'">
+            <div class="color-dot" :style="{'--color': props.row.color}"></div>
+          </div>
+          <div v-else-if="props.column.field === 'actions'">
+            <div class="btn-group">
+              <button class="btn btn-sm btn-secondary" @click="onEdit(props.row)">
+                <i class="fa fa-edit"></i>
+              </button>
+              <button class="btn btn-sm btn-danger" @click="onDelete(props.row)">
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <span v-else>
+            {{ props.formattedRow[props.column.field] }}
+          </span>
+        </template>
+      </VueGoodTable>
+    </div>
+    <EditLabelModal ref="editModal"/>
+    <LabelDeleteConfirmModal ref="deleteModal"/>
+  </div>
+</template>
+
+<style scoped>
+.color-dot {
+  --color: transparent;
+  width: 1.5em;
+  height: 1.5em;
+  border-radius: .75em;
+  background-color: var(--color);
+}
+</style>
+
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
 import {LabelStore} from '@/stores/LabelStore';
@@ -67,54 +118,3 @@ export default class Labels extends Vue {
   }
 }
 </script>
-
-<template>
-  <div class="d-flex flex-column">
-    <div class="d-flex flex-row mb-2">
-      <div class="btn-group ms-auto">
-        <button class="btn btn-success" @click="onNew()">
-          <i class="fa fa-plus"/>
-        </button>
-        <button class="btn btn-secondary" @click="store.reload()">
-          <i class="fa fa-refresh"/>
-        </button>
-      </div>
-    </div>
-
-    <Loading v-if="store.loading"/>
-    <div v-else class="flex-grow-1 overflow-auto">
-      <VueGoodTable :columns="columns" :rows="store.labels" :search-options="searchOptions" theme="bootstrap">
-        <template #table-row="props">
-          <div v-if="props.column.field === 'color'">
-            <div class="color-dot" :style="{'--color': props.row.color}"></div>
-          </div>
-          <div v-else-if="props.column.field === 'actions'">
-            <div class="btn-group">
-              <button class="btn btn-sm btn-secondary" @click="onEdit(props.row)">
-                <i class="fa fa-edit"></i>
-              </button>
-              <button class="btn btn-sm btn-danger" @click="onDelete(props.row)">
-                <i class="fa fa-trash"></i>
-              </button>
-            </div>
-          </div>
-          <span v-else>
-            {{ props.formattedRow[props.column.field] }}
-          </span>
-        </template>
-      </VueGoodTable>
-    </div>
-    <EditLabelModal ref="editModal"/>
-    <LabelDeleteConfirmModal ref="deleteModal"/>
-  </div>
-</template>
-
-<style scoped>
-.color-dot {
-  --color: transparent;
-  width: 1.5em;
-  height: 1.5em;
-  border-radius: .75em;
-  background-color: var(--color);
-}
-</style>

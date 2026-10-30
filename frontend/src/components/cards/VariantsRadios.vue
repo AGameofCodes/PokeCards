@@ -1,3 +1,27 @@
+<template>
+  <div>
+    <template v-for="variant in Object.keys(card.variants)">
+      <div class="d-flex flex-row" v-if="(card.variants as any)[variant]" :key="variant">
+        <div class="form-check" style="width: 8em">
+          <input class="form-check-input" type="radio"
+                 :id="uid + '_' + variant"
+                 :name="uid + '_variants'"
+                 :value="variant"
+                 :checked="variant === modelValue"
+                 @change="$emit('update:modelValue', variant)">
+          <label class="form-check-label no-select" :for="uid + '_' + variant">
+            {{ $t('card.model.variants.' + variant) }}
+          </label>
+        </div>
+        <a :href="url ?? undefined" target="_blank">
+          <span class="ms-4" v-if="variant.toLowerCase().includes('reverse')">{{ reverseHoloPrice }}</span>
+          <span class="ms-4" v-else>{{ normalOrHoloPrice }}</span>
+        </a>
+      </div>
+    </template>
+  </div>
+</template>
+
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-facing-decorator';
 import {CardVmV1} from 'pokecards-oas';
@@ -52,27 +76,3 @@ export default class VariantsRadios extends Vue {
   }
 }
 </script>
-
-<template>
-  <div>
-    <template v-for="variant in Object.keys(card.variants)">
-      <div class="d-flex flex-row" v-if="(card.variants as any)[variant]" :key="variant">
-        <div class="form-check" style="width: 8em">
-          <input class="form-check-input" type="radio"
-                 :id="uid + '_' + variant"
-                 :name="uid + '_variants'"
-                 :value="variant"
-                 :checked="variant === modelValue"
-                 @change="$emit('update:modelValue', variant)">
-          <label class="form-check-label no-select" :for="uid + '_' + variant">
-            {{ $t('card.model.variants.' + variant) }}
-          </label>
-        </div>
-        <a :href="url ?? undefined" target="_blank">
-          <span class="ms-4" v-if="variant.toLowerCase().includes('reverse')">{{ reverseHoloPrice }}</span>
-          <span class="ms-4" v-else>{{ normalOrHoloPrice }}</span>
-        </a>
-      </div>
-    </template>
-  </div>
-</template>

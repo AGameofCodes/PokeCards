@@ -1,17 +1,3 @@
-<script lang="ts">
-import {Component, Vue} from 'vue-facing-decorator';
-import Logo from '@/components/Logo.vue';
-import UserAccountDropdown from '@/components/navbar/UserAccountDropdown.vue';
-
-@Component({
-  name: 'SideBar',
-  components: {UserAccountDropdown, Logo},
-  emits: ['close'],
-})
-export default class SideBar extends Vue {
-}
-</script>
-
 <template>
   <nav class="navbar border-bottom shadow flex-nowrap">
     <div class="c-pointer d-flex flex-row align-items-center">
@@ -26,6 +12,7 @@ export default class SideBar extends Vue {
     </div>
   </nav>
 </template>
+
 <style lang="scss">
 @import 'bootstrap/scss/functions';
 @import 'bootstrap/scss/variables';
@@ -36,6 +23,19 @@ export default class SideBar extends Vue {
     display: none;
   }
 }
-
 </style>
+
+<script lang="ts">
+import {Component, Vue} from 'vue-facing-decorator';
+import Logo from '@/components/Logo.vue';
+import UserAccountDropdown from '@/components/navbar/UserAccountDropdown.vue';
+
+@Component({
+  name: 'SideBar',
+  components: {UserAccountDropdown, Logo},
+  emits: ['close'],
+})
+export default class SideBar extends Vue {
+}
+</script>
 

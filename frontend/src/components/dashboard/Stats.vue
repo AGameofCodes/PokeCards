@@ -1,3 +1,21 @@
+<template>
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">{{ $t('dashboard.stats') }}</h5>
+      <div class="card-text">
+        <template v-if="preloadFinished">
+          <div>{{ $t('dashboard.totalCards') }}: {{ userCardStore.userCards.length }}</div>
+          <div>{{ $t('dashboard.totalSets') }}: {{ setCount }}</div>
+          <div>{{ $t('price.price') }}: {{ priceSumFormatted }}</div>
+        </template>
+        <template v-else>
+          <Spinner/>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
 import {UserCardsStore} from "@/stores/UserCardsStore";
@@ -60,21 +78,3 @@ export default class Stats extends Vue {
   }
 }
 </script>
-
-<template>
-  <div class="card">
-    <div class="card-body">
-      <h5 class="card-title">{{ $t('dashboard.stats') }}</h5>
-      <div class="card-text">
-        <template v-if="preloadFinished">
-          <div>{{ $t('dashboard.totalCards') }}: {{ userCardStore.userCards.length }}</div>
-          <div>{{ $t('dashboard.totalSets') }}: {{ setCount }}</div>
-          <div>{{ $t('price.price') }}: {{ priceSumFormatted }}</div>
-        </template>
-        <template v-else>
-          <Spinner/>
-        </template>
-      </div>
-    </div>
-  </div>
-</template>

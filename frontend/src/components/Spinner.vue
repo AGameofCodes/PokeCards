@@ -1,3 +1,9 @@
+<template>
+  <div class="spinner-border" :class="[style]" :style="internalStyle" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+</template>
+
 <script lang="ts">
 import {Component, Prop, Vue} from 'vue-facing-decorator';
 
@@ -29,9 +35,3 @@ export default class Spinner extends Vue {
   }
 }
 </script>
-
-<template>
-  <div class="spinner-border" :class="[style]" :style="internalStyle" role="status">
-    <span class="visually-hidden">Loading...</span>
-  </div>
-</template>

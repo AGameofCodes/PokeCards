@@ -1,3 +1,9 @@
+<template>
+  <CenterOnParent>
+    <Spinner/>
+  </CenterOnParent>
+</template>
+
 <script lang="ts">
 import {Component, Vue} from 'vue-facing-decorator';
 import CenterOnParent from '@/components/CenterOnParent.vue';
@@ -13,9 +19,3 @@ import Spinner from '@/components/Spinner.vue';
 export default class Loading extends Vue {
 }
 </script>
-
-<template>
-  <CenterOnParent>
-    <Spinner/>
-  </CenterOnParent>
-</template>

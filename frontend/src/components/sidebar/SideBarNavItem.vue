@@ -1,18 +1,3 @@
-<script lang="ts">
-import {Component, Prop, Vue} from 'vue-facing-decorator';
-
-@Component({
-  name: 'SideBarNavItem',
-  components: {},
-})
-export default class SideBarNavItem extends Vue {
-  @Prop({required: false})
-  faIcon!: string;
-  @Prop({required: false})
-  text!: string;
-}
-</script>
-
 <template>
   <li class="nav-item sidebar-nav-item">
     <slot>
@@ -42,3 +27,18 @@ export default class SideBarNavItem extends Vue {
   text-align: center;
 }
 </style>
+
+<script lang="ts">
+import {Component, Prop, Vue} from 'vue-facing-decorator';
+
+@Component({
+  name: 'SideBarNavItem',
+  components: {},
+})
+export default class SideBarNavItem extends Vue {
+  @Prop({required: false})
+  faIcon!: string;
+  @Prop({required: false})
+  text!: string;
+}
+</script>
