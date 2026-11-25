@@ -47,7 +47,7 @@
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.41.0",
     "@rushstack/eslint-patch": "^1.16.1",
-    "@tsconfig/node24": "^24.0.5",
+    "@tsconfig/node26": "^26.0.0",
     "@types/bootstrap": "^5.2.11",
     "@types/gravatar": "^1.8.6",
     "@types/jsdom": "^30.0.0",
