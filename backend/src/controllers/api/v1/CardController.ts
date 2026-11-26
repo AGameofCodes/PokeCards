@@ -151,8 +151,8 @@ export class CardController extends Controller {
     let filter: string[] = [];
 
     const searchTerms = searchText.split(' ');
-    const searchNumbers = searchTerms.filter(e => e.match(/[0-9]+/g)).map(e => e.toLocaleUpperCase());
-    const searchTexts = searchTerms.filter(e => !e.match(/[0-9]+/g));
+    const searchNumbers = searchTerms.filter(e => e.match(/^[0-9]+$/g)).map(e => e.toLocaleUpperCase());
+    const searchTexts = searchTerms.filter(e => !e.match(/^[0-9]+$/g));
 
     //find sets
     const searchSets: SetModel[] = [];
