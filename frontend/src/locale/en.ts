@@ -20,12 +20,24 @@ export const messagesEn = {
         holo: 'Holo',
         normal: 'Normal',
         reverse: 'Reverse Holo',
-        variant: 'Variant',
+      },
+      variantsDetailed: {
+        foil: 'Foil',
+        sizes: {
+          standard: 'Standard',
+          jumbo: 'Jumbo',
+        },
+        stamp: 'Stamp',
+        types: {
+          holo: 'Holo',
+          normal: 'Normal',
+          reverse: 'Reverse Holo',
+        },
       },
     },
     search: {
       noCardsFound: 'No card found',
-    }
+    },
   },
   dashboard: {
     stats: 'Stats',

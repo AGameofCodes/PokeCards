@@ -22,7 +22,19 @@ export const messagesDe = {
         holo: 'Holo',
         normal: 'Normal',
         reverse: 'Reverse Holo',
-        variant: 'Variante',
+      },
+      variantsDetailed: {
+        foil: 'Folie',
+        sizes: {
+          standard: 'Standard',
+          jumbo: 'Jumbo',
+        },
+        stamp: 'Stempel',
+        types: {
+          holo: 'Holo',
+          normal: 'Normal',
+          reverse: 'Reverse Holo',
+        },
       },
     },
     search: {

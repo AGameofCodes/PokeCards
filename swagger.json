@@ -333,6 +333,133 @@
 						},
 						"type": "object"
 					},
+					"variants_detailed": {
+						"items": {
+							"properties": {
+								"pricing": {
+									"properties": {
+										"cardmarket": {
+											"properties": {
+												"avg30-holo": {
+													"type": "number",
+													"format": "double"
+												},
+												"avg7-holo": {
+													"type": "number",
+													"format": "double"
+												},
+												"avg1-holo": {
+													"type": "number",
+													"format": "double"
+												},
+												"trend-holo": {
+													"type": "number",
+													"format": "double"
+												},
+												"low-holo": {
+													"type": "number",
+													"format": "double"
+												},
+												"avg-holo": {
+													"type": "number",
+													"format": "double"
+												},
+												"avg30": {
+													"type": "number",
+													"format": "double"
+												},
+												"avg7": {
+													"type": "number",
+													"format": "double"
+												},
+												"avg1": {
+													"type": "number",
+													"format": "double"
+												},
+												"trend": {
+													"type": "number",
+													"format": "double"
+												},
+												"low": {
+													"type": "number",
+													"format": "double"
+												},
+												"avg": {
+													"type": "number",
+													"format": "double"
+												},
+												"idProduct": {
+													"type": "number",
+													"format": "double"
+												},
+												"unit": {
+													"type": "string"
+												},
+												"updatedAt": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"idProduct",
+												"unit",
+												"updatedAt"
+											],
+											"type": "object",
+											"nullable": true
+										}
+									},
+									"type": "object"
+								},
+								"variantId": {
+									"type": "string"
+								},
+								"thirdParty": {
+									"properties": {
+										"cardmarket": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"type": "object"
+								},
+								"stamp": {
+									"items": {
+										"type": "string"
+									},
+									"type": "array"
+								},
+								"foil": {
+									"type": "string"
+								},
+								"size": {
+									"type": "string",
+									"enum": [
+										"standard",
+										"jumbo"
+									]
+								},
+								"type": {
+									"type": "string",
+									"enum": [
+										"firstEdition",
+										"holo",
+										"normal",
+										"reverse",
+										"wPromo"
+									]
+								}
+							},
+							"required": [
+								"pricing",
+								"variantId",
+								"thirdParty",
+								"size",
+								"type"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					},
 					"pricing": {
 						"properties": {
 							"cardmarket": {
@@ -385,6 +512,10 @@
 										"type": "number",
 										"format": "double"
 									},
+									"idProduct": {
+										"type": "number",
+										"format": "double"
+									},
 									"unit": {
 										"type": "string"
 									},
@@ -392,6 +523,11 @@
 										"type": "string"
 									}
 								},
+								"required": [
+									"idProduct",
+									"unit",
+									"updatedAt"
+								],
 								"type": "object",
 								"nullable": true
 							}
@@ -412,6 +548,7 @@
 					"number",
 					"image",
 					"variants",
+					"variants_detailed",
 					"pricing",
 					"language"
 				],

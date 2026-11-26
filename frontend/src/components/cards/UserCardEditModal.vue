@@ -14,7 +14,7 @@
           <div>{{ $t('card.model.language') }}: {{ card.language }}</div>
           <div>{{ $t('card.model.rarity') }}: {{ card.rarity ?? '?' }}</div>
           <div>
-            {{ $t('card.model.variants.variant') }}:
+            {{ $t('card.model.variant') }}:
             <VariantsRadios :card="card" v-model="userCard.variant" />
           </div>
 

@@ -1,25 +1,25 @@
 <template>
-  <div>
-    <template v-for="variant in Object.keys(card.variants)">
-      <div class="d-flex flex-row" v-if="(card.variants as any)[variant]" :key="variant">
-        <div class="form-check" style="width: 8em">
-          <input class="form-check-input" type="radio"
-                 :id="uid + '_' + variant"
-                 :name="uid + '_variants'"
-                 :value="variant"
-                 :checked="variant === modelValue"
-                 @change="$emit('update:modelValue', variant)">
-          <label class="form-check-label no-select" :for="uid + '_' + variant">
-            {{ $t('card.model.variants.' + variant) }}
-          </label>
-        </div>
+  <table>
+    <tr v-for="variant in availableVariants" :key="variant.id">
+      <td class="form-check">
+        <input class="form-check-input" type="radio"
+               :id="uid + '_' + variant.id"
+               :name="uid + '_variants'"
+               :value="variant.id"
+               :checked="variant.id === modelValue"
+               @change="$emit('update:modelValue', variant.id)">
+        <label class="form-check-label no-select" :for="uid + '_' + variant.id">
+          {{ variant.label }}
+          <small v-if="variant.deprecated" class="vgt-text-disabled">(depr)</small>
+        </label>
+      </td>
+      <td>
         <a :href="url ?? undefined" target="_blank">
-          <span class="ms-4" v-if="variant.toLowerCase().includes('reverse')">{{ reverseHoloPrice }}</span>
-          <span class="ms-4" v-else>{{ normalOrHoloPrice }}</span>
+          <span class="ms-4">{{ variant.price && formatPrice(variant.price, $i18n.locale) }}</span>
         </a>
-      </div>
-    </template>
-  </div>
+      </td>
+    </tr>
+  </table>
 </template>
 
 <script lang="ts">
@@ -37,7 +37,43 @@ export default class VariantsRadios extends Vue {
   @Prop({required: true})
   modelValue!: string;
 
-  get normalOrHoloPrice(): string | null {
+  formatPrice = formatPrice;
+
+  get availableVariants(): { id: string, label: string, price: number | null, deprecated: boolean }[] {
+    return [
+      ...Object.entries(this.card.variants)
+          .filter(([variant, exists]) => exists)
+          .map(([variant, exists]) => ({
+            id: variant,
+            label: this.$t('card.model.variants.' + variant).toString(),
+            price: variant.toLowerCase().includes('reverse') ? this.reverseHoloPrice : this.normalOrHoloPrice,
+            deprecated: true,
+          })),
+      ...this.card.variantsDetailed
+          .map((variant) => {
+            const parts = [
+              this.$t('card.model.variantsDetailed.types.' + variant.type).toString(),
+              this.$t('card.model.variantsDetailed.sizes.' + variant.size).toString(),
+            ]
+            let foil = variant.foil ?? '';
+            if (foil) {
+              parts.push(this.$t('card.model.variantsDetailed.foil') + ': ' + foil);
+            }
+            let stamp = variant.stamp?.join(', ') ?? ''
+            if (stamp) {
+              parts.push(this.$t('card.model.variantsDetailed.stamp') + ': ' + stamp);
+            }
+            return ({
+              id: variant.variantId,
+              label: parts.join(', '),
+              price: findPrice(this.card, variant.variantId),
+              deprecated: false,
+            });
+          }),
+    ].toSorted((a, b) => a.label.localeCompare(b.label));
+  }
+
+  get normalOrHoloPrice(): number | null {
     if (!this.card) {
       return null;
     }
@@ -45,10 +81,10 @@ export default class VariantsRadios extends Vue {
     if (!priceValue) {
       return null;
     }
-    return formatPrice(priceValue, this.$i18n.locale);
+    return priceValue;
   }
 
-  get reverseHoloPrice(): string | null {
+  get reverseHoloPrice(): number | null {
     if (!this.card) {
       return null;
     }
@@ -56,7 +92,7 @@ export default class VariantsRadios extends Vue {
     if (!priceValue) {
       return null;
     }
-    return formatPrice(priceValue, this.$i18n.locale);
+    return priceValue;
   }
 
   get uid(): number {

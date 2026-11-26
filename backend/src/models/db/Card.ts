@@ -10,9 +10,24 @@ export type Variants = {
   wPromo?: boolean,
 };
 
+export type VariantDetailed = {
+  type: 'firstEdition' | 'holo' | 'normal' | 'reverse' | 'wPromo',
+  size: 'standard' | 'jumbo',
+  foil?: string,
+  stamp?: string[],
+  thirdParty: {
+    cardmarket: number | undefined,
+  },
+  variantId: string,
+  pricing: {
+    cardmarket: CardMarketPricing | undefined,
+  },
+}
+
 export type CardMarketPricing = {
-  updatedAt?: string;
-  unit?: string,
+  updatedAt: string;
+  unit: string,
+  idProduct: number,
   avg?: number,
   low?: number,
   trend?: number,
@@ -36,6 +51,7 @@ export default class Card extends BaseModel {
   image!: string; //min 1, max length 255
   rarity!: string | null | undefined; //max length 255
   variants!: Variants;
+  variants_detailed!: VariantDetailed[];
   pricing!: {
     cardmarket: CardMarketPricing | null | undefined,
   };
@@ -43,7 +59,7 @@ export default class Card extends BaseModel {
   updatedAt!: Date;
 
   static new(uid: UUID, id: string, name: string, setId: string, number: string, image: string,
-             rarity: string | null | undefined, variants: Variants,
+             rarity: string | null | undefined, variants: Variants, variants_detailed: VariantDetailed[] | undefined,
              pricing: { cardmarket: CardMarketPricing | null | undefined }, language: string): Card {
     const ret = new Card();
     ret.uid = uid;
@@ -54,6 +70,7 @@ export default class Card extends BaseModel {
     ret.image = image;
     ret.rarity = rarity;
     ret.variants = variants;
+    ret.variants_detailed = variants_detailed ?? [];
     ret.pricing = pricing;
     ret.language = language;
     ret.updatedAt = new Date();
@@ -92,14 +109,62 @@ export default class Card extends BaseModel {
             wPromo: {type: 'boolean'},
           },
         },
+        variants_detailed: {
+          type: 'array',
+          items: {
+            type: 'object',
+            required: ['type', 'size', 'thirdParty', 'variantId', 'pricing'],
+            properties: {
+              type: {enum: ['firstEdition', 'holo', 'normal', 'reverse', 'wPromo']},
+              size: {enum: ['standard', 'jumbo']},
+              foil: {type: 'string'},
+              stamp: {type: 'array', items: {type: 'string'}},
+              thirdParty: {
+                type: 'object',
+                properties: {
+                  cardmarket: {type: 'number'},
+                },
+              },
+              variantId: {type: 'string'},
+              pricing: {
+                type: 'object',
+                properties: {
+                  cardmarket: {
+                    type: 'object',
+                    required: ['updatedAt', 'unit', 'idProduct'],
+                    properties: {
+                      updatedAt: {type: 'string', format: 'date-time'},
+                      unit: {type: 'string'},
+                      idProduct: {type: 'number'},
+                      avg: {type: 'number'},
+                      low: {type: 'number'},
+                      trend: {type: 'number'},
+                      avg1: {type: 'number'},
+                      avg7: {type: 'number'},
+                      avg30: {type: 'number'},
+                      'avg-holo': {type: 'number'},
+                      'low-holo': {type: 'number'},
+                      'trend-holo': {type: 'number'},
+                      'avg1-holo': {type: 'number'},
+                      'avg7-holo': {type: 'number'},
+                      'avg30-holo': {type: 'number'},
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         pricing: {
           type: 'object',
           properties: {
             cardmarket: {
               type: 'object',
+              required: ['updatedAt', 'unit', 'idProduct'],
               properties: {
                 updatedAt: {type: 'string', format: 'date-time'},
                 unit: {type: 'string'},
+                idProduct: {type: 'number'},
                 avg: {type: 'number'},
                 low: {type: 'number'},
                 trend: {type: 'number'},

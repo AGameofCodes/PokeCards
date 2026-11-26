@@ -24,10 +24,64 @@ describe('Card model', () => {
       reverse: randomBoolean(),
       wPromo: randomBoolean(),
     };
+    card.variants_detailed = [
+      {
+        size: 'standard',
+        type: 'normal',
+        stamp: [randomString(10), randomString(10)],
+        variantId: randomString(10),
+        thirdParty: {cardmarket: randomNumber(1000)},
+        pricing: {
+          cardmarket: {
+            updatedAt: new Date().toISOString(),
+            unit: randomString(3),
+            idProduct: randomNumber(1000),
+            avg: randomNumber(1000),
+            low: randomNumber(1000),
+            trend: randomNumber(1000),
+            avg1: randomNumber(1000),
+            avg7: randomNumber(1000),
+            avg30: randomNumber(1000),
+            'avg-holo': randomNumber(1000),
+            'low-holo': randomNumber(1000),
+            'trend-holo': randomNumber(1000),
+            'avg1-holo': randomNumber(1000),
+            'avg7-holo': randomNumber(1000),
+            'avg30-holo': randomNumber(1000),
+          },
+        },
+      },
+      {
+        size: 'jumbo',
+        type: 'holo',
+        variantId: randomString(10),
+        thirdParty: {cardmarket: randomNumber(1000)},
+        pricing: {
+          cardmarket: {
+            updatedAt: new Date().toISOString(),
+            unit: randomString(3),
+            idProduct: randomNumber(1000),
+            avg: randomNumber(1000),
+            low: randomNumber(1000),
+            trend: randomNumber(1000),
+            avg1: randomNumber(1000),
+            avg7: randomNumber(1000),
+            avg30: randomNumber(1000),
+            'avg-holo': randomNumber(1000),
+            'low-holo': randomNumber(1000),
+            'trend-holo': randomNumber(1000),
+            'avg1-holo': randomNumber(1000),
+            'avg7-holo': randomNumber(1000),
+            'avg30-holo': randomNumber(1000),
+          },
+        },
+      },
+    ];
     card.pricing = {
       cardmarket: {
         updatedAt: new Date().toISOString(),
         unit: randomString(3),
+        idProduct: randomNumber(1000),
         avg: randomNumber(1000),
         low: randomNumber(1000),
         trend: randomNumber(1000),
@@ -73,14 +127,62 @@ describe('Card model', () => {
             wPromo: {type: 'boolean'},
           },
         },
+        variants_detailed: {
+          type: 'array',
+          items: {
+            type: 'object',
+            required: ['type', 'size', 'thirdParty', 'variantId', 'pricing'],
+            properties: {
+              type: {enum: ['firstEdition', 'holo', 'normal', 'reverse', 'wPromo']},
+              size: {enum: ['standard', 'jumbo']},
+              foil: {type: 'string'},
+              stamp: {type: 'array', items: {type: 'string'}},
+              thirdParty: {
+                type: 'object',
+                properties: {
+                  cardmarket: {type: 'number'},
+                },
+              },
+              variantId: {type: 'string'},
+              pricing: {
+                type: 'object',
+                properties: {
+                  cardmarket: {
+                    type: 'object',
+                    required: ['updatedAt', 'unit', 'idProduct'],
+                    properties: {
+                      updatedAt: {type: 'string', format: 'date-time'},
+                      unit: {type: 'string'},
+                      idProduct: {type: 'number'},
+                      avg: {type: 'number'},
+                      low: {type: 'number'},
+                      trend: {type: 'number'},
+                      avg1: {type: 'number'},
+                      avg7: {type: 'number'},
+                      avg30: {type: 'number'},
+                      'avg-holo': {type: 'number'},
+                      'low-holo': {type: 'number'},
+                      'trend-holo': {type: 'number'},
+                      'avg1-holo': {type: 'number'},
+                      'avg7-holo': {type: 'number'},
+                      'avg30-holo': {type: 'number'},
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
         pricing: {
           type: 'object',
           properties: {
             cardmarket: {
               type: 'object',
+              required: ['updatedAt', 'unit', 'idProduct'],
               properties: {
                 updatedAt: {type: 'string', format: 'date-time'},
                 unit: {type: 'string'},
+                idProduct: {type: 'number'},
                 avg: {type: 'number'},
                 low: {type: 'number'},
                 trend: {type: 'number'},
